@@ -3,290 +3,145 @@
 :page-role: tiles
 :!sectids:
 
-
 = Couchbase Tutorials
-++++
-<div class="card-row">
-++++
 
-[.column]
-====== {empty}
+[.col-2]
+==== {empty}
 [.content]
 The Couchbase SDK allows applications to access a Couchbase cluster. It offers traditional synchronous APIs as well as scalable asynchronous APIs to maximize performance
-
-[.column]
-====== {empty}
 [.media-left]
 icon:book-reader[set= fas]
 
-++++
-</div>
-++++
-
-
 == Tutorials
-++++
-<div class="card-row two-column-row">
-++++
-[.column]
-[.data-filter-column]
-====== {empty}
-++++
-<div  data-category="advanced java swift javascript developer" class="sub-heading two-column-heading">
-<h3 class="text-color-brand-blue-secondary">Lorem ipsum</h3>
-<div class="filter-info">
-<h5 >
-<img src="_/img/landing-page-icon/advanced-icon.svg" alt="" />
-Advanced</h5>
-<span>Developer</span>
-</div>
-</div>
-++++
-[.content]
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan mi a ligula imperdiet, et cursus lectus bibendum. Etiam metus magna, dapibus vitae ipsum vel, sollicitudin interdum metus. Phasellus quis rutrum enim. Vivamus euismod sem nec posuere accumsan. Praesent elementum lectus vitae magna pellentesque, a facilisis risus pulvinar. Donec scelerisque porttitor aliquet.
+// add filter keywords as a class with card class.
+[.card.beginner.java.nodejs.dotnet.developer]
 
-++++
-<div class="other-info-list">
-++++
+=== Developer
 
-[.box]
-[.link]
+[.card-level]
+[.level]#signal# [.level]#signal# [.level]#signal# Beginner
 
-* xref:#[Lorem ipsum]
-* xref:#[Lorem ipsum]
-* xref:#[Lorem ipsum]
+[.title]
+==== Developer Bootstrap Exercises
 
-[.box]
-[.component]
+[.tut-content]
+==== {empty}
+[.summary]
+Are you a developer interested in a fast start with Couchbase? This expanding set of basic first-steps exercises provide a fast track from zero to your substantial interactions with Couchbase Server using your favorite development frameworks and IDEs. 
 
+xref:quick-start:quickstart-docker-image-manual-cb65.adoc[Start Here]
+
+[.tut-list]
+==== {empty}
 .Component
-* Lorem ipsum
-* Lorem ipsum
-* Lorem ipsum
-
-[.box]
-[.languages]
+* Server 6.5 CE or EE
+* SDK 3.0 or 2.x
 
 .Languages
 * Java
-* Swift
-* Javascript
-
-++++
-</div>
-++++
-
-
-
-[.column]
-[.data-filter-column]
-====== {empty}
-++++
-    <div  data-category="intermediate c# node Python devOps"  class="sub-heading two-column-heading">
-        <h3 class="text-color-brand-blue-secondary">Lorem ipsum</h3>
-        <div class="filter-info">
-        <h5 >
-        <img src="_/img/landing-page-icon/intermediate-icon.svg" alt="" />
-        Intermediate</h5>
-        <span>DevOps</span>
-        </div>
-    </div>
-++++
-[.content]
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan mi a ligula imperdiet, et cursus lectus bibendum. Etiam metus magna, dapibus vitae ipsum vel, sollicitudin interdum metus. Phasellus quis rutrum enim. Vivamus euismod sem nec posuere accumsan. Praesent elementum lectus vitae magna pellentesque, a facilisis risus pulvinar. Donec scelerisque porttitor aliquet.
-
-++++
-<div class="other-info-list">
-++++
-
-[.box]
-
-* xref:#[Lorem ipsum]
-* xref:#[Lorem ipsum]
-
-
-[.box]
-.Component
-* Lorem ipsum
-
-[.box]
-.Languages
-* C#
-* Node
-* Python
-
-++++
-</div>
-++++
-
-[.column]
-[.data-filter-column]
-====== {empty}
-++++
-    <div  data-category="intermediate dotnet developer" class="sub-heading two-column-heading">
-        <h3 class="text-color-brand-blue-secondary">Lorem ipsum</h3>
-        <div class="filter-info">
-        <h5 >
-        <img src="_/img/landing-page-icon/intermediate-icon.svg" alt="" />
-        Intermediate</h5>
-        <span>Developer</span>
-        </div>
-    </div>
-++++
-[.content]
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan mi a ligula imperdiet, et cursus lectus bibendum. Etiam metus magna, dapibus vitae ipsum vel, sollicitudin interdum metus. Phasellus quis rutrum enim. Vivamus euismod sem nec posuere accumsan. Praesent elementum lectus vitae magna pellentesque, a facilisis risus pulvinar. Donec scelerisque porttitor aliquet.
-
-++++
-<div class="other-info-list">
-++++
-
-[.box]
-
-* xref:#[Lorem ipsum]
-* xref:#[Lorem ipsum]
-
-
-[.box]
-.Component
-* Lorem ipsum
-* Lorem ipsum
-
-[.box]
-.Languages
+* Node.js
 * .NET
 
-++++
-</div>
-++++
+// card 2
 
-[.column]
-[.data-filter-column]
-====== {empty}
-++++
-    <div data-category="beginner ascidoc java php architect" class="sub-heading two-column-heading">
-        <h3 class="text-color-brand-blue-secondary">Lorem ipsum</h3>
-        <div class="filter-info">
-        <h5 >
-        <img src="_/img/landing-page-icon/beginner-icon.svg" alt="" />
-        Beginner</h5>
-        <span>Architect</span>
-        </div>
-    </div>
-++++
-[.content]
+[.card.beginner.java.nodejs.developer]
+=== Developer 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan mi a ligula imperdiet, et cursus lectus bibendum. Etiam metus magna, dapibus vitae ipsum vel, sollicitudin interdum metus. Phasellus quis rutrum enim. Vivamus euismod sem nec posuere accumsan. Praesent elementum lectus vitae magna pellentesque, a facilisis risus pulvinar. Donec scelerisque porttitor aliquet.
+[.card-level]
+[.level]#signal# [.level]#signal# [.level]#signal# Beginner
 
-++++
-<div class="other-info-list">
-++++
+[.title]
+==== Get Started with Community Edition
 
-[.box]
+[.tut-content]
+==== {empty}
+[.summary]
+Just getting started with Couchbase and using Couchbase Community Edition(CE)? Start here. This currently covers basic installation and querying along with Java, NodeJS, and Mobile development. 
 
-* xref:#[Lorem ipsum]
+xref:getting-started-ce:index.adoc[Start Here]
 
-[.box]
+[.tut-list]
+==== {empty}
 .Component
-* Lorem ipsum
-* Lorem ipsum
-* Lorem ipsum
+* Server 6.5 Community Edition
+* Sync Gateway 2.7
+* Couchbase Lite 2.7
 
-[.box]
 .Languages
-* AsciiDoc
 * Java
-* PHP
+* Node.js
 
-++++
-</div>
-++++
+// card 3
 
-[.column]
-[.data-filter-column]
-====== {empty}
-++++
-    <div  data-category="intermediate react developer" class="sub-heading two-column-heading">
-        <h3 class="text-color-brand-blue-secondary">Lorem ipsum</h3>
-        <div class="filter-info">
-        <h5 >
-        <img src="_/img/landing-page-icon/intermediate-icon.svg" alt="" />
-        Intermediate</h5>
-        <span>Developer</span>
-        </div>
-    </div>
-++++
-[.content]
+[.card.intermediate.swift.mobile.developer]
+=== Mobile Developer 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan mi a ligula imperdiet, et cursus lectus bibendum. Etiam metus magna, dapibus vitae ipsum vel, sollicitudin interdum metus. Phasellus quis rutrum enim. Vivamus euismod sem nec posuere accumsan. Praesent elementum lectus vitae magna pellentesque, a facilisis risus pulvinar. Donec scelerisque porttitor aliquet.
+[.card-level]
+[.level]#signal# [.level]#signal# [.level]#signal# Intermediate
 
-++++
-<div class="other-info-list">
-++++
+[.title]
+==== Get Started with Couchbase Mobile on iOS
 
-[.box]
+[.tut-content]
+==== {empty}
+[.summary]
+The series of tutorials demonstrates the core capabilities of Couchbase Mobile with an iOS app:
 
-* xref:#[Lorem ipsum]
-* xref:#[Lorem ipsum]
+* "Standalone": database and CRUD operations.
+* "Query": querying capabilities.
+* "Sync": use of Sync Gateway for data sync between clients.
 
-[.box]
+
+[.tut-link]
+==== {empty}
+* xref:standalone@userprofile-couchbase-mobile:userprofile:userprofile_basic.adoc[Standalone]
+* xref:query@userprofile-couchbase-mobile:userprofile:userprofile_query.adoc[Query]
+* xref:sync@userprofile-couchbase-mobile:userprofile:userprofile_sync.adoc[Sync]
+
+[.tut-list]
+==== {empty}
 .Component
-* Lorem ipsum
-* Lorem ipsum
-* Lorem ipsum
+* Server 5.5
+* Couchbase Lite 2.1
+* Sync Gateway 2.1
 
-[.box]
 .Languages
-* React
+* Swift
 
-++++
-</div>
-++++
+// card 4
 
-[.column]
-[.data-filter-column]
-====== {empty}
-++++
-    <div  data-category="advanced angular react vue architect" class="sub-heading two-column-heading">
-        <h3 class="text-color-brand-blue-secondary">Lorem ipsum</h3>
-        <div class="filter-info">
-        <h5 >
-        <img src="_/img/landing-page-icon/advanced-icon.svg" alt="" />
-        Advanced</h5>
-        <span>Architect</span>
-        </div>
-    </div>
-++++
-[.content]
+[.card.advanced.android.mobile.developer]
+=== Mobile Developer
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras accumsan mi a ligula imperdiet, et cursus lectus bibendum. Etiam metus magna, dapibus vitae ipsum vel, sollicitudin interdum metus. Phasellus quis rutrum enim. Vivamus euismod sem nec posuere accumsan. Praesent elementum lectus vitae magna pellentesque, a facilisis risus pulvinar. Donec scelerisque porttitor aliquet.
+[.card-level]
+[.level]#signal# [.level]#signal# [.level]#signal# Advanced
 
-++++
-<div class="other-info-list">
-++++
+[.title]
+==== Get Started with Couchbase Mobile on Android
 
-[.box]
+[.tut-content]
+==== {empty}
+[.summary]
+The series of tutorials demonstrates the core capabilities of Couchbase Mobile with an Android app:
 
-* xref:#[Lorem ipsum]
+* "Standalone": database and CRUD operations.
+* "Query": querying capabilities.
+* "Sync": use of Sync Gateway for data sync between clients.
 
-[.box]
+
+[.tut-link]
+==== {empty}
+* xref:standalone@userprofile-couchbase-mobile:userprofile:android/userprofile_basic.adoc[Standalone]
+* xref:query@userprofile-couchbase-mobile:userprofile:android/userprofile_query.adoc[Query]
+* xref:sync@userprofile-couchbase-mobile:userprofile:android/userprofile_sync.adoc[Sync]
+
+[.tut-list]
+==== {empty}
 .Component
-* Lorem ipsum
-* Lorem ipsum
-* Lorem ipsum
+* Server 5.5
+* Couchbase Lite 2.6
+* Sync Gateway 2.6
 
-[.box]
 .Languages
-* Angular
-* React
-* Vue
-
-++++
-</div>
-++++
-
-++++
-</div>
-++++
+* Java
