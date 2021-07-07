@@ -1,7 +1,7 @@
 .view-source-button {
   color: var(--color-brand-gray4);
   display: inline-block;
-  margin-left: 0.5rem;
+  /* margin-left: 0.5rem; */
 }
 
 .view-source-button:hover::after {
@@ -43,8 +43,14 @@
   color: var(--color-brand-gray4);
   cursor: pointer;
   display: inline-block;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  /* margin-left: 0.5rem;
+  margin-right: 0.5rem; */
+  line-height: 1;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.copy-code-button:hover {
+  text-decoration: none;
 }
 
 a.view-source-button:focus,
@@ -159,4 +165,47 @@ code::-webkit-scrollbar {
 
 code::-webkit-scrollbar-thumb {
   background-color: var(--color-border);
+}
+
+/* New style code block */
+.source-type-box {
+  padding-left: 12px;
+  border: 1px solid #E5E5E5;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 20px;
+  color: #73768A;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.source-type-box .right-block {
+  display: flex;
+}
+
+.source-type-box .right-block> * {
+  border-right: 1px solid #E5E5E5;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+}
+.source-type-box .right-block> *:last-child {
+  border: none;
+}
+
+.copy-code-button .svg-inline--fa,
+.run-code  .svg-inline--fa {
+  margin-right: 5px;
+}
+
+.run-code {
+  background: #0074E0;
+  color: #fff;
+}
+
+.run-code:hover {
+  text-decoration: none;
+  color: #fff;
 }
