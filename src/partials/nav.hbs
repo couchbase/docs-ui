@@ -3,6 +3,16 @@
     <a href="#" class="menu-expand-toggle"><span>Navigation</span><i class="fas fa-times-circle"></i><i class="fas fa-chevron-circle-left"></i></a>
     {{#if (eq (nav-mode) 'template')}}
 {{> nav-menu}}
+    {{else}}
+    {{#with page.versions}}
+    <template id="page-versions" style="display: none">
+      <select class="version_list" data-component="{{{@root.page.component.name}}}">
+        {{#each this}}
+        <option value="{{./version}}" data-url="{{{relativize ./url}}}"{{#if (eq ./version @root.page.version)}} selected{{/if}}>{{./displayVersion}}</option>
+        {{/each}}
+      </select>
+    </template>
+    {{/with}}
     {{/if}}
   </div>
 </aside>

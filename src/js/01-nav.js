@@ -17,11 +17,18 @@
     var siteNavigationData = window.siteNavigationData.reduce(function (accum, entry) {
       return (accum[entry.name] = entry) && accum
     }, {})
+    var pageVersions = document.getElementById('page-versions')
     var pageNavigationGroup = document.getElementById('page-navigation-group')
     if (!pageNavigationGroup) return
-    buildNav(navContainer, getPage(), JSON.parse(pageNavigationGroup.innerText), siteNavigationData)
+    buildNav(
+      navContainer,
+      getPage(),
+      pageVersions,
+      JSON.parse(pageNavigationGroup.innerText),
+      siteNavigationData
+    )
   }
-  activateNav(navContainer)
+  activateNav(navContainer, getPage())
 
   function getPage () {
     var head = document.head
@@ -32,7 +39,7 @@
     }
   }
 
-  function buildNav (container, page, group, navData) {
+  function buildNav (container, page, pageVersions, group, navData) {
     var groupEl = createElement('div', 'components is-revealed')
     var singleComponent
     if (
@@ -65,14 +72,19 @@
       componentVersionsEl.appendChild(componentTitleEl)
       var versioned
       if ((versioned = selectedVersion && selectedVersion !== 'master')) {
-        var componentVersionSelectEl = createElement('select', 'version_list')
-        componentNavData.versions.forEach(function (componentVersion) {
-          var optionEl = createElement('option')
-          optionEl.value = componentVersion.version
-          if (componentVersion.version === selectedVersion) optionEl.setAttribute('selected', '')
-          optionEl.appendChild(document.createTextNode(componentVersion.displayVersion || componentVersion.version))
-          componentVersionSelectEl.appendChild(optionEl)
-        })
+        var componentVersionSelectEl
+        if (componentName === page.component) {
+          componentVersionSelectEl = pageVersions.content.querySelector('.version_list')
+        } else {
+          componentVersionSelectEl = createElement('select', 'version_list')
+          componentNavData.versions.forEach(function (componentVersion) {
+            var optionEl = createElement('option')
+            optionEl.value = componentVersion.version
+            if (componentVersion.version === selectedVersion) optionEl.setAttribute('selected', '')
+            optionEl.appendChild(document.createTextNode(componentVersion.displayVersion || componentVersion.version))
+            componentVersionSelectEl.appendChild(optionEl)
+          })
+        }
         componentVersionsEl.appendChild(componentVersionSelectEl)
       }
       componentsListItemsEl.appendChild(componentVersionsEl)
@@ -199,7 +211,7 @@
   }
 
   // FIXME integrate into nav builder
-  function activateNav (container) {
+  function activateNav (container, page) {
     // NOTE prevent text from being selected by double click
     container.addEventListener('mousedown', function (e) {
       if (e.detail > 1 && window.getComputedStyle(e.target).cursor === 'pointer') e.preventDefault()
@@ -254,6 +266,13 @@
 
     find('.version_list', container).forEach(function (versionListEl) {
       versionListEl.addEventListener('change', function () {
+        if (versionListEl.dataset.component === page.component) {
+          var selection = versionListEl.options[versionListEl.selectedIndex]
+          if (selection.dataset.url) {
+            window.location.href = selection.dataset.url
+            return
+          }
+        }
         var componentVersionEl = versionListEl.parentNode.parentNode
         var activeVersionEl = componentVersionEl.querySelector('.version_items:not(.hide)')
         if (activeVersionEl) activeVersionEl.classList.add('hide')
