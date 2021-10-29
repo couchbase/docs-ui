@@ -2,6 +2,8 @@
 :doctype: book
 :page-edition: enterprise
 :page-status: beta
+// Only add the following attribute to pages which should have Next and Previous buttons
+:page-pagination:
 // The following should be global document attributes
 :url-edition: https://www.couchbase.com/products/editions
 :enterprise: {url-edition}[ENTERPRISE EDITION]
@@ -512,3 +514,5 @@ http://packages.couchbase.com/clients/kafka/3.2.3/kafka-connect-couchbase-3.2.3.
 == `spec.volumeClaimTemplates.metadata`
 
 This section demonstrates what happens when the section title does not have any natural wrap opportunities.
+
+> Pages only include Next and Previous links when you set the `:page-pagination:` doc attribute.
