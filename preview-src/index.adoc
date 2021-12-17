@@ -530,7 +530,3 @@ If a heading starts with 3 equals signs `===` it is level2.
 
 This last section shouldn't show up in the nav.
 
-== Stem Test
-
-stem:[sqrt(4) = 2]
-
