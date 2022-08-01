@@ -588,10 +588,6 @@ ul ul ul {
   margin: 0;
 }
 
-.hdlist table .hdlist1 + .hdlist2 p {
-  margin-left: var(--base-space);
-}
-
 .hdlist table tr .hdlist1,
 .hdlist table tr .hdlist2 {
   padding: var(--base-small-space) 0;
