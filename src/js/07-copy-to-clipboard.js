@@ -1,7 +1,7 @@
 ;(function () {
   'use strict'
   var runCodeLangs = { cpp: 'cc', csharp: 'dotnet', js: 'nodejs', python: 'py', ruby: 'rb' }
-  var displayLangs = { sqlpp: 'sql++', n1ql: 'sql++' }
+  var displayLangs = { sqlpp: 'sql++' }
   var main = document.querySelector('main.article')
   document.querySelectorAll('pre > code').forEach(function (codeBlock) {
     var pre = codeBlock.parentNode
