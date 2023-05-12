@@ -20,7 +20,7 @@
     "@fortawesome/free-regular-svg-icons": "~5.13",
     "@fortawesome/free-solid-svg-icons": "~5.13",
     "@octokit/rest": "~18.0",
-    "asciidoctor.js": "1.5.9",
+    "@asciidoctor/core": "~2.2",
     "autoprefixer": "~9.8",
     "browser-pack-flat": "~3.4",
     "browserify": "~16.5",

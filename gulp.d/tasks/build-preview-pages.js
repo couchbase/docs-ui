@@ -1,12 +1,6 @@
 'use strict'
 
-// NOTE remove patch after upgrading from asciidoctor.js to @asciidoctor/core
-Error.call = (self, ...args) => {
-  const err = new Error(...args)
-  return Object.assign(self, { message: err.message, stack: err.stack })
-}
-
-const asciidoctor = require('asciidoctor.js')()
+const Asciidoctor = require('@asciidoctor/core')()
 const File = require('vinyl')
 const fs = require('fs-extra')
 const handlebars = require('handlebars')
@@ -84,7 +78,7 @@ module.exports =
                     uiModel.page = { layout: '404', title: 'Page Not Found' }
                   } else {
                     const pageModel = (uiModel.page = { ...uiModel.page })
-                    const doc = asciidoctor.load(file.contents, { safe: 'safe', attributes: ASCIIDOC_ATTRIBUTES })
+                    const doc = Asciidoctor.load(file.contents, { safe: 'safe', attributes: ASCIIDOC_ATTRIBUTES })
                     const attributes = doc.getAttributes()
                     pageModel.layout = doc.getAttribute('page-layout', 'default')
                     pageModel.title = doc.getDocumentTitle()
