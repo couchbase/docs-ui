@@ -21,6 +21,7 @@
     "@fortawesome/free-solid-svg-icons": "~5.13",
     "@octokit/rest": "~18.0",
     "@asciidoctor/core": "~2.2",
+    "@asciidoctor/tabs": "1.0.0-beta.3",
     "autoprefixer": "~9.8",
     "browser-pack-flat": "~3.4",
     "browserify": "~16.5",

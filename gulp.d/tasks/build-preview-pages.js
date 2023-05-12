@@ -59,7 +59,21 @@ module.exports =
           merge(compileLayouts(src), registerPartials(src), registerHelpers(src), copyImages(previewSrc, previewDest))
         ),
       ])
-        .then(([baseUiModel, { layouts }]) => [{ ...baseUiModel, env: process.env }, layouts])
+        .then(([baseUiModel, { layouts }]) => {
+          const extensions = ((baseUiModel.asciidoc || {}).extensions || []).map((request) => {
+            ASCIIDOC_ATTRIBUTES[request.replace(/^@|\.js$/, '').replace(/[/]/g, '-') + '-loaded'] = ''
+            const extension = require(request)
+            extension.register.call(Asciidoctor.Extensions)
+            return extension
+          })
+          const asciidoc = { extensions }
+          for (const component of Object.values(baseUiModel.site.components)) {
+            for (const version of component.versions || []) version.asciidoc = asciidoc
+          }
+          baseUiModel = { ...baseUiModel, env: process.env }
+          delete baseUiModel.asciidoc
+          return [baseUiModel, layouts]
+        })
         .then(([baseUiModel, layouts, iconDefs = new Map()]) =>
           vfs
             .src('**/*.adoc', { base: previewSrc, cwd: previewSrc })
@@ -171,7 +185,6 @@ module.exports =
 function loadSampleUiModel (src) {
   return fs.readFile(ospath.join(src, 'ui-model.yml'), 'utf8').then((contents) => {
     const uiModel = yaml.safeLoad(contents)
-    uiModel.env = process.env
     if (process.env.DEPLOY_PRIME_URL) uiModel.site.url = process.env.DEPLOY_PRIME_URL
     Object.entries(uiModel.site.components).forEach(([name, component]) => {
       component.name = name

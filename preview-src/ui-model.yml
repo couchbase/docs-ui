@@ -173,3 +173,6 @@ page:
     content: Liber Recusabo
     url: '#'
     urlType: 'internal'
+asciidoc:
+  extensions:
+  - '@asciidoctor/tabs'
