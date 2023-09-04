@@ -94,7 +94,7 @@ const packTask = createTask({
 
 const releasePublishTask = createTask({
   name: 'release:publish',
-  call: task.release(buildDir, bundleName, owner, repo, process.env.GITHUB_API_TOKEN, false),
+  call: task.release(buildDir, bundleName, owner, repo, process.env.GITHUB_API_TOKEN),
 })
 
 const releaseTask = createTask({
