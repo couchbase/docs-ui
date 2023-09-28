@@ -1,6 +1,11 @@
-/* Starting point:
- * Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License
- * Then hand-edited to match previous style as well as possible */
+/** tabs.css
+ *
+ * Style vendor css for @asciidoctor/tabs
+ *
+ * NB: we currently do NOT
+ *   @import "@asciidoctor/tabs"
+ * so this defines the full CSS rather than overriding.
+ */
 
 .tabs {
   margin-top: 2em;

@@ -1,0 +1,23 @@
+/** callouts.css
+ *
+ *  Format code callouts https://docs.asciidoctor.org/asciidoc/latest/verbatim/callouts/
+ *
+ *  Support for Ray's Externally defined callouts:
+ *      https://www.npmjs.com/package/asciidoctor-external-callout
+ *
+ *  Utility class `.no-callouts` lets you hide callouts in listing blocks.
+ *  Example:
+ *      [source.no-callouts,sqlpp]
+ *      --
+ *      SELECT foo from... <1>
+ *      --
+ */
+
+div.external-callout-block i.conum {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.no-callouts .conum {
+  display: none !important;
+}

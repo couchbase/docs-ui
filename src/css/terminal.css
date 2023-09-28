@@ -1,3 +1,9 @@
+/** terminal.css
+ *
+ * Style the Try It Now box
+ * (source code to couchbase.live integration)
+ */
+
 .action-panel {
   display: none;
   position: absolute;

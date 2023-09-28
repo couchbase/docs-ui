@@ -1,3 +1,10 @@
+/** feedback.css
+ *
+ *  I believe these elements are created by
+ *  Jira Issue Collector script.
+ *  e.g. we don't output these in docs-ui
+ */
+
 #atlwdg-trigger.atlwdg-trigger {
   display: none;
   background: linear-gradient(to right, var(--color-brand-pink) 0%, var(--color-brand-orange) 100%);

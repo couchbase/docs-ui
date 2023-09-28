@@ -1,10 +1,15 @@
+/** footer.css
+ *
+ *  Styles for footer
+ *  NB: we have a couple of 'float' declarations below, to investigate.
+ */
+
 .footer {
   background-color: var(--color-footer-bg);
   color: var(--color-footer-text);
   padding: 2.5rem 0;
   position: relative;
   z-index: var(--z-index-footer);
-  /* box-shadow: 0 0 10px -5px #999; FIX BELOW */
   border-top: 1px solid var(--color-border-table);
 }
 
@@ -162,8 +167,6 @@ h2.footer-column-title {
 
 .footer-terms {
   font-size: 0.575rem;
-
-  /*  font-size: 0.875rem; */
   line-height: 1;
   border-top: 1px solid var(--color-footer-text);
   padding: 2.125rem 0 0.3125rem;

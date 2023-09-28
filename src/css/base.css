@@ -1,3 +1,8 @@
+/** base.css
+ *
+ *  Resets and other basic CSS
+ */
+
 *,
 *::before,
 *::after {
@@ -95,7 +100,6 @@ i {
 .container,
 .container-fluid {
   margin: 0 auto;
-  /*  max-width: var(--width-container); */
   padding: 0 var(--width-container-gutter);
 }
 
@@ -123,16 +127,8 @@ i {
     padding-left: 0;
   }
 }
-/* .container-fluid {
-  max-width: var(--width-container-fluid);
-  padding: 0;
-  margin: 0 auto;
-} */
 
-/* checkbox css  */
-
-/* Base for label styling */
-
+/* Checkbox css  */
 [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked {
   position: absolute;
@@ -207,6 +203,7 @@ i {
   color: #aaa;
 }
 
+/* Labels */
 label:hover::before {
   border: 2px solid var(--color-brand-blue);
   outline: none;
@@ -219,219 +216,4 @@ label::before,
 label::after {
   outline: none;
   outline-width: 0;
-}
-
-/* Common margin padding css class */
-/* margin-top */
-.mt-0 {
-  margin-top: 0 !important;
-}
-
-.mt-1 {
-  margin-top: var(--base-extra-small-space) !important;  /* 8px */
-}
-
-.mt-2 {
-  margin-top: var(--base-small-space) !important;        /* 12px */
-}
-
-.mt-3 {
-  margin-top: var(--base-space) !important;             /* 16px */
-}
-
-.mt-4 {
-  margin-top: var(--base-medium-space) !important;    /* 24px */
-}
-
-.mt-5 {
-  margin-top: var(--base-large-space) !important;     /* 32px */
-}
-
-/* margin-bottom */
-.mb-0 {
-  margin-bottom: 0 !important;
-}
-
-.mb-1 {
-  margin-bottom: var(--base-extra-small-space) !important;   /* 8px */
-}
-
-.mb-2 {
-  margin-bottom: var(--base-small-space) !important;     /* 12px */
-}
-
-.mb-3 {
-  margin-bottom: var(--base-space) !important;         /* 16px */
-}
-
-.mb-4 {
-  margin-bottom: var(--base-medium-space) !important;   /* 24px */
-}
-
-.mb-5 {
-  margin-bottom: var(--base-large-space) !important;   /* 32px */
-}
-
-/* Responsive css */
-/* For tablet,ipad Portrait view mode 1024px screen */
-@media screen and (min-width: 740px) {
-  /* Spacing media query */
-  .mt-sm-0 {
-    margin-top: 0 !important;
-  }
-
-  .mt-sm-1 {
-    margin-top: var(--base-extra-small-space) !important;  /* 8px */
-  }
-
-  .mt-sm-2 {
-    margin-top: var(--base-small-space) !important;        /* 12px */
-  }
-
-  .mt-sm-3 {
-    margin-top: var(--base-space) !important;             /* 16px */
-  }
-
-  .mt-sm-4 {
-    margin-top: var(--base-medium-space) !important;    /* 24px */
-  }
-
-  .mt-sm-5 {
-    margin-top: var(--base-large-space) !important;     /* 32px */
-  }
-
-  /* margin-bottom */
-  .mb-sm-0 {
-    margin-bottom: 0 !important;
-  }
-
-  .mb-sm-1 {
-    margin-bottom: var(--base-extra-small-space) !important;   /* 8px */
-  }
-
-  .mb-sm-2 {
-    margin-bottom: var(--base-small-space) !important;     /* 12px */
-  }
-
-  .mb-sm-3 {
-    margin-bottom: var(--base-space) !important;         /* 16px */
-  }
-
-  .mb-sm-4 {
-    margin-bottom: var(--base-medium-space) !important;   /* 24px */
-  }
-
-  .mb-sm-5 {
-    margin-bottom: var(--base-large-space) !important;   /* 32px */
-  }
-}
-/* For tablet,ipad landscape mode 1024px screen */
-@media screen and (min-width: 993px) {
-  .container-fluid {
-    /*  max-width: var(--width-container-fluid); */
-    padding: 0;
-    margin: 0 auto;
-  }
-
-  /* Spacing media query */
-  .mt-md-0 {
-    margin-top: 0 !important;
-  }
-
-  .mt-md-1 {
-    margin-top: var(--base-extra-small-space) !important;  /* 8px */
-  }
-
-  .mt-md-2 {
-    margin-top: var(--base-small-space) !important;        /* 12px */
-  }
-
-  .mt-md-3 {
-    margin-top: var(--base-space) !important;             /* 16px */
-  }
-
-  .mt-md-4 {
-    margin-top: var(--base-medium-space) !important;    /* 24px */
-  }
-
-  .mt-md-5 {
-    margin-top: var(--base-large-space) !important;     /* 32px */
-  }
-
-  /* margin-bottom */
-  .mb-md-0 {
-    margin-bottom: 0 !important;
-  }
-
-  .mb-md-1 {
-    margin-bottom: var(--base-extra-small-space) !important;   /* 8px */
-  }
-
-  .mb-md-2 {
-    margin-bottom: var(--base-small-space) !important;     /* 12px */
-  }
-
-  .mb-md-3 {
-    margin-bottom: var(--base-space) !important;         /* 16px */
-  }
-
-  .mb-md-4 {
-    margin-bottom: var(--base-medium-space) !important;   /* 24px */
-  }
-
-  .mb-md-5 {
-    margin-bottom: var(--base-large-space) !important;   /* 32px */
-  }
-}
-/* For large desktop to small desktop screen */
-@media screen and (min-width: 1200px) {
-  /* Spacing media query */
-  .mt-lg-0 {
-    margin-top: 0 !important;
-  }
-
-  .mt-lg-1 {
-    margin-top: var(--base-extra-small-space) !important;  /* 8px */
-  }
-
-  .mt-lg-2 {
-    margin-top: var(--base-small-space) !important;        /* 12px */
-  }
-
-  .mt-lg-3 {
-    margin-top: var(--base-space) !important;             /* 16px */
-  }
-
-  .mt-lg-4 {
-    margin-top: var(--base-medium-space) !important;    /* 24px */
-  }
-
-  .mt-lg-5 {
-    margin-top: var(--base-large-space) !important;     /* 32px */
-  }
-
-  /* margin-bottom */
-  .mb-lg-0 {
-    margin-bottom: 0 !important;
-  }
-
-  .mb-lg-1 {
-    margin-bottom: var(--base-extra-small-space) !important;   /* 8px */
-  }
-
-  .mb-lg-2 {
-    margin-bottom: var(--base-small-space) !important;     /* 12px */
-  }
-
-  .mb-lg-3 {
-    margin-bottom: var(--base-space) !important;         /* 16px */
-  }
-
-  .mb-lg-4 {
-    margin-bottom: var(--base-medium-space) !important;   /* 24px */
-  }
-
-  .mb-lg-5 {
-    margin-bottom: var(--base-large-space) !important;   /* 32px */
-  }
 }

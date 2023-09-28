@@ -1,3 +1,8 @@
+/** crumbs.css
+ *
+ *  Format the breadcrumbs
+ */
+
 .crumbs {
   color: var(--color-muted);
   font-weight: var(--weight-light);

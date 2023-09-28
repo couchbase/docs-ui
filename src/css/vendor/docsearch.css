@@ -19,9 +19,6 @@
   display: grid !important;
   grid-template-columns: 5fr 2fr;
   grid-auto-rows: 1fr auto;
-  /*
-  max-height: calc(var(--viewport-height) - var(--navbar-height) - 4rem);
-  */
   max-height: calc(100vh - var(--height-navbar) + 1.5rem);
   max-width: none;
   min-width: auto;
@@ -217,16 +214,7 @@
 @media screen and (min-width: 1024px) {
   .algolia-autocomplete .ds-dropdown-menu.ds-with-1 {
     width: 40rem;
-    /*
-    width: 34rem;
-    */
   }
-
-  /*
-  .algolia-autocomplete .ds-dropdown-menu {
-    max-height: calc(var(--viewport-height) - var(--navbar-height));
-  }
-  */
 }
 
 @supports (scrollbar-width: thin) {

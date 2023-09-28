@@ -1,8 +1,12 @@
-/* NOTE min-width of flex: 1 container = content-width to prevent wrapping by default; min-width: 0 lets content wrap */
+/** body.css
+ *
+ *  Styles for body, main, and .nav
+ *  TODO: compare main.css and nav.css
+ */
+
 div.body {
   display: flex;
   margin-top: var(--height-to-body);
-  /* overflow-wrap: break-word; */
   word-wrap: break-word;
   /* IE only supports word-wrap, which is an alias of overflow-wrap */
 }
@@ -13,6 +17,9 @@ div.body {
   margin-top: var(--height-navbar);
 }
 
+/* NOTE
+  min-width of flex: 1 container = content-width to prevent wrapping by default;
+  min-width: 0 lets content wrap */
 main {
   flex: 1;
   min-width: 0;

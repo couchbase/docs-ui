@@ -1,3 +1,8 @@
+/** swagger-ui.css
+ *
+ * Style vendor css override for Swagger UI
+ */
+
 .doc .swagger-ui .topbar,
 .doc .swagger-ui .wrapper.information-container {
   display: none;

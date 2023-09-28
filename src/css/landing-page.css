@@ -1,4 +1,7 @@
-/* Landing Page CSS  */
+/** landing-page.css
+ *
+ *  Styles for Landing Pages
+ */
 
 .doc.landing-page-doc h1 {
   color: var(--color-brand-gray1);
@@ -41,10 +44,6 @@
 }
 
 .doc.landing-page-doc .sub-heading.two-column-heading {
-  /* display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap; */
   display: block;
 }
 
@@ -244,10 +243,6 @@
 .card-row.two-column-row .column.data-filter-column.hide {
   display: none;
 }
-
-/* .card-row.two-column-row .column:nth-child(even) {
-  padding-left: 5%;
-} */
 
 .doc.landing-page-doc iframe {
   width: 100%;

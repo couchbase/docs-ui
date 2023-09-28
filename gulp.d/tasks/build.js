@@ -47,7 +47,7 @@ module.exports = (src, dest, preview) => () => {
       },
     ]),
     // NOTE importFrom is for use in supplemental CSS files
-    postcssVar({ importFrom: path.join(src, 'css', 'vars.css'), preserve: preview }),
+    postcssVar({ importFrom: path.join(src, 'css', 'vars.css'), preserve: true }),
     preview ? postcssCalc : () => {},
     autoprefixer,
     preview ? () => {} : cssnano({ preset: 'default' }),

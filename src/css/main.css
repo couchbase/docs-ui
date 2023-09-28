@@ -1,15 +1,41 @@
+/** main.css
+ *
+ *  Styles for:
+
+  <main class="article" data-ceiling="topbar">
+    <div class="article-header">...
+    <article class="doc">...
+
+ */
+
 main {
   padding-bottom: 4rem;
 }
 
-/* IMPORTANT for this to work, the element cannot be display: flex and cannot have padding top or border top */
+/* This pseudo-element appears to be a home-brewed scroll-padding-top,
+  e.g. is to prevent navigation anchor links from being hidden behind the Menu bar.
+
+  For this to work, the element cannot be display: flex
+  and cannot have padding top or border top.
+
+  By default the var(--scroll-margin-top-space) is set to 7.1em
+  (e.g. the height of the navbar).
+  When a banner ("A newer version of this documentation is available")
+  is shown, this variable is dynamically replaced to account for the
+  banner height.
+  */
+
 main [id]::before {
   content: "";
   display: inherit;
-  height: var(--h2-heading-top-space);
-  margin-top: calc(-1 * var(--h2-heading-top-space));
+  height: var(--scroll-margin-top-space);
+  margin-top: calc(-1 * var(--scroll-margin-top-space));
   visibility: hidden;
   width: 0;
+}
+
+main.with-banner {
+  --scroll-margin-top-space: var(--scroll-margin-top-space-plus-banner);
 }
 
 main table[id]::before {
@@ -42,21 +68,26 @@ main p {
   hyphens: auto; /* NOTE in Chrome, hyphens: auto is only supported on macOS and Android */
 }
 
+/* The "You are viewing a pre-release" banner */
 .article-banner {
   align-items: center;
-  /* background: linear-gradient(to right, var(--color-brand-purple) 0%, var(--color-brand-light-blue) 100%); */
-  background: transparent;
+  background: white;
   border: 1px solid #1174e0;
   color: var(--color-brand-blue-secondary);
   display: flex;
   line-height: 1;
   margin: 1.25rem 0 0;
-  /* margin: calc(-1 * var(--height-spacer)) calc(-1 * var(--width-container-gutter)) var(--height-spacer); */
   padding: var(--base-space);
   border-radius: 3px;
   font-family: "Open Sans", sans-serif;
   font-weight: var(--weight-normal);
   flex-wrap: wrap;
+  /* sticky, 2px from the top menu.
+  Add a white shadow to top to avoid flashing moire as the text scrolls past. */
+  position: sticky;
+  z-index: 9;
+  top: calc(7.1rem + 2px);
+  box-shadow: 0 -2px white;
 }
 
 .article-banner p {
@@ -64,12 +95,6 @@ main p {
   margin: 0 1rem 0 0;
   color: var(--color-brand-blue-secondary);
 }
-
-/* .article-banner span {
-  font-size: var(--font-small);
-  margin: 0.5rem 1rem 0 0;
-  color: var(--color-brand-gray4);
-} */
 
 .article-banner svg {
   margin-right: 10px;
@@ -119,7 +144,7 @@ main p {
   min-width: 0;
 }
 
-/* color css  */
+/* color css  NB: unused? */
 .text-color-brand-blue {
   color: var(--color-brand-blue);
 }
@@ -141,9 +166,6 @@ main p {
   .toc {
     margin: 0 auto 0 0;
   }
-  /* .article-banner {
-    margin: var(--base-small-space) 0 var(--base-space);
-  } */
 
   .article-header {
     align-items: flex-start;

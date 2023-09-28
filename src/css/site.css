@@ -1,37 +1,47 @@
+/** site.css
+ *
+ *  Index of all CSS for site
+ */
+
+/* Font imports */
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600;700&display=swap');
-@import "common.css";
 @import "typeface-gotham.css";
 @import "typeface-roboto-mono.css";
-@import "vars.css";
+
+/* Foundation */
 @import "base.css";
+@import "common.css";
+@import "vars.css";
+
+/* Major structural components */
 @import "body.css";
 @import "nav.css";
-@import "toc.css";
-@import "main.css";
-@import "crumbs.css";
-@import "toolbar.css";
-@import "labels.css";
 @import "doc.css";
-/* @import "@asciidoctor/tabs"; */
-@import "tabs.css";
-@import "pagination.css";
-@import "swagger-ui.css";
-@import "home.css";
-@import "header.css";
 @import "footer.css";
-@import "optanon.css";
-@import "highlight.css";
-@import "feedback.css";
-@import "component-frame.css";
-@import "is-this-helpful.css";
-@import "clipboard.css";
-@import "table.css";
+@import "header.css";
+@import "main.css";
+@import "pagination.css";
+@import "toc.css";
+
+/* Landing pages */
+@import "home.css";
 @import "landing-page.css";
-@import "contributor.css";
-@import "terminal.css";
+
+/* Other components */
+@import "callouts.css";
+@import "clipboard.css";
+@import "component-frame.css";
+@import "crumbs.css";
 @import "external-link-icon.css";
-@import "disable-callouts.css";
-@import "asciidoctor-external-callout.css";
+@import "feedback.css";
+@import "highlight.css";
+@import "is-this-helpful.css";
 @import "info-banner.css";
+@import "labels.css";
+@import "optanon.css";
+@import "swagger-ui.css";
+@import "table.css";
+@import "tabs.css";
+@import "terminal.css";

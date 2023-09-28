@@ -1,9 +1,13 @@
+/** component-frame.css
+ *
+ *  .component-frame and .frame-body
+ *  NB: may be unused, deleted in 4d2db54746392090df7084978770f58f4709e56c ?
+ */
+
 .component-frame {
-  /* rgba(87, 160, 255, 1) */
   background: var(--color-brand-gray6);
   padding: 0 15px 0 15px;
   display: flex;
-  /* align-items: center; */
   justify-content: center;
   position: relative;
 }
@@ -20,7 +24,6 @@
 
 .frame-body {
   margin-left: var(--base-extra-small-space);
-  /* position: relative; */
   padding-top: 12px;
   padding-bottom: 12px;
   padding-right: 0;
@@ -48,9 +51,6 @@
 .component-frame .frame-link-dropdowns {
   display: inline-block;
   line-height: 1;
-  /* position: relative;
-  padding-bottom: 20px;
-  margin-bottom: -20px; */
 }
 
 .frame-body .frame-link {
@@ -99,7 +99,6 @@
 .frame-dropdown ul {
   background: var(--color-brand-white);
   border-radius: 0;
-  /* box-shadow: 0 3px 10px -4px var(--color-brand-gray8); */
   margin: 0;
 }
 
@@ -126,11 +125,6 @@
 .frame-dropdown .related {
   border-left: 3px solid var(--color-brand-gray8);
 }
-
-/* .frame-dropdown ul.frame-dropdown-list li,
-.frame-dropdown ul.related li {
-  border-bottom: 1px solid var(--color-brand-gray8);
-} */
 
 ul.frame-dropdown-list li:last-child,
 .frame-dropdown ul.related li:last-child {

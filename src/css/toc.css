@@ -1,3 +1,12 @@
+/** toc.css
+ *
+ *  Styles for Table of Contents
+ *  which also includes:
+ *   - Tools (edit on github)
+ *
+ *  See also: is-it-helpful.css
+ */
+
 .toc {
   font-size: 0.875rem;
 }
@@ -5,23 +14,6 @@
 .toc-menu {
   margin-top: var(--base-large-space);
   line-height: 1;
-}
-
-.sidebar-box {
-  position: fixed; /* for IE */
-  width: inherit; /* for position: fixed */
-  position: sticky; /* stylelint-disable-line declaration-block-no-duplicate-properties */
-  top: var(--height-to-body);
-  max-height: var(--height-toc-sidebar);
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  padding-right: var(--base-space);
-  padding-left: var(--base-space);
-}
-
-.sidebar-box::-webkit-scrollbar {
-  width: 0;
 }
 
 .toc.embedded .toc-menu {
@@ -58,10 +50,6 @@
   line-height: 1.2;
 }
 
-/* .toc .toc-menu h3,
-.toc .toc-menu ul {
-  margin-left: 0.75rem;
-} */
 .toc .toc-menu li {
   margin: 0;
 }
@@ -128,4 +116,58 @@
 
 .toc ul li[data-level="2"] a {
   padding-top: 2px;
+}
+
+/* Sidebar Box and Tools */
+
+.sidebar-box {
+  position: fixed; /* for IE */
+  width: inherit; /* for position: fixed */
+  position: sticky; /* stylelint-disable-line declaration-block-no-duplicate-properties */
+  top: var(--height-to-body);
+  max-height: var(--height-toc-sidebar);
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-right: var(--base-space);
+  padding-left: var(--base-space);
+}
+
+.sidebar-box::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Tools e.g. "Edit on Github" */
+
+.sidebar-box .tools {
+  padding-top: 1.25rem;
+  display: inline-block;
+  width: 100%;
+}
+
+.tools ul {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.tools .edit {
+  line-height: 1;
+  display: inline-block;
+  width: 100%;
+  list-style: none;
+}
+
+.tools .edit a {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  background: url(../img/edit.svg) no-repeat center left;
+  background-size: 15px;
+  vertical-align: top;
+  color: #999;
+  padding-left: 25px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-family: "Source Sans Pro", sans-serif;
 }

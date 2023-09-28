@@ -1,3 +1,9 @@
+/** clipboard.css
+ *
+ *  Styles for View Source code button
+ *  and other listing block formatting
+ */
+
 .view-source-button,
 .copy-code-button {
   color: var(--color-brand-gray4);

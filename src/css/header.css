@@ -1,3 +1,8 @@
+/** header.css
+ *
+ *  Styles for header
+ */
+
 .header-top-row {
   background: var(--color-brand-white);
   padding: 0 var(--width-container-gutter);
@@ -135,19 +140,6 @@
   display: inline-block;
 }
 
-.parent-site {
-  /* margin: 0 10px;
-  padding: 0 10px; */
-  /* border-right: 1px solid var(--color-brand-gray5);
-  border-left: 1px solid var(--color-brand-gray5); */
-}
-
-/* .parent-site a {
-  color: var(--color-brand-gray4);
-  font-size: 1rem;
-  font-family: "Source Sans Pro", sans-serif;
-} */
-
 .search {
   position: relative;
 }
@@ -208,7 +200,7 @@
 }
 
 .navbar-dropdown li.current a.navbar-item::before {
-  content: "\2023";
+  content: "\2023"; /* ‣ */
   position: absolute;
   left: -0.75em;
 }
@@ -254,11 +246,6 @@
   .search .query {
     width: 283px;
   }
-
-  /* .parent-site {
-    margin: 0;
-    padding: 0 var(--column-space);
-  } */
 
   .navbar.navbar-new-top {
     padding: 1.25rem 0;
@@ -318,13 +305,6 @@
     font-size: 18px;
     color: #ffffffbf;
   }
-  /* .parent-site {
-    border-left: none;
-  }
-
-  .parent-site a {
-    color: var(--color-brand-white);
-  } */
 
   .free-trial-link {
     background: var(--color-brand-white);

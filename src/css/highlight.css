@@ -1,4 +1,5 @@
-/**
+/** highlight.css
+
 Steps to change the highlight.js theme:
 
 1. View available themes on https://highlightjs.org/static/demo/
@@ -11,9 +12,9 @@ Other CSS rules for styling code blocks:
 - In doc.css, the `.doc pre:not(.highlight), .doc pre.highlight code` selector sets the code block `color` and `background-color`
 - In docs.css, the `.doc .listingblock code[data-lang]::before` selector sets the language label `color`
 */
+
 .hljs-comment,
 .hljs-meta {
-  /* color: #708090; */
   color: var(--color-brand-gray1);
 }
 
@@ -47,7 +48,6 @@ Other CSS rules for styling code blocks:
 
 .hljs-built_in,
 .hljs-function .hljs-title {
-  /* color: #e6db74; */
   color: var(--color-brand-orange);
 }
 
