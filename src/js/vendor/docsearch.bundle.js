@@ -299,6 +299,7 @@
         return accum
       }, {})
     )
+      .filter((a) => a[1].title)
       .sort(function (a, b) {
         return a[1].title.replace(/^\./, '').localeCompare(b[1].title.replace(/^\./, ''))
       })
@@ -321,20 +322,11 @@
   }
 
   function extractComponentVersionInfo (hit) {
-    var name, title, version
-    var componentVersion = hit.component_version
-    if (componentVersion) {
-      componentVersion = (Array.isArray(componentVersion) ? componentVersion[0] : componentVersion).split('@')
-      name = componentVersion[0]
-      version = componentVersion[1]
-      title = hit.component_title
-    } else {
-      name = hit.component
-      componentVersion = (hit.hierarchy.lvl0 || name).split(/ (?=\d+(?:\.|$))/)
-      title = componentVersion[0]
-      version = componentVersion[1]
+    return {
+      name: hit.component,
+      version: hit.cversion,
+      title: hit.component_title || hit.component || '',
     }
-    return { name: name, version: version, title: title }
   }
 
   function renderFilters (components, filters) {
