@@ -1,7 +1,7 @@
 .lex-web-ui-iframe {
   bottom: 1.5rem;
   display: none; /* hidden by default changed once iframe is loaded */
-  margin-bottom: 0px;
+  margin-bottom: 0;
   margin-left: 2px;
   margin-right: 3vw;
   margin-top: 2px;
@@ -15,6 +15,9 @@
 
 .lex-web-ui-iframe iframe {
   border-radius: 8px 8px 10px 10px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .lex-web-ui-iframe--show {
@@ -34,7 +37,6 @@
   min-width: calc(55vw - 3vw) !important;
 }
 
-
 /* disable box shadow when minimized */
 .lex-web-ui-iframe.lex-web-ui-iframe--minimize iframe {
   box-shadow: none;
@@ -42,11 +44,9 @@
 }
 
 /* hide on very small resolutions */
-@media only screen and (max-width: 240px),
-only screen and (max-height: 256px)
-{
+@media only screen and (max-width: 240px), only screen and (max-height: 256px) {
   .lex-web-ui-iframe {
-    display: none!important;
+    display: none !important;
   }
 
   .lex-web-ui-iframe--minimize {
@@ -54,10 +54,9 @@ only screen and (max-height: 256px)
     max-height: 185px !important;
   }
 }
+
 /* take most space on small resolutions (smart phones) */
-@media only screen
-and (min-width: 241px)
-and (max-width: 480px) {
+@media only screen and (min-width: 241px) and (max-width: 480px) {
   .lex-web-ui-iframe {
     min-width: 85vw !important;
     height: 84vh;
@@ -70,13 +69,10 @@ and (max-width: 480px) {
     height: 90vh; /* dynamically changed on iframe maximize/minimize */
     min-width: 96vw !important;
   }
-  
 }
 
 /* adjust down on medium resolutions */
-@media only screen
-and (min-width: 481px)
-and (max-width: 960px) {
+@media only screen and (min-width: 481px) and (max-width: 960px) {
   .lex-web-ui-iframe {
     max-width: 55vw;
     height: 80vh; /* dynamically changed on iframe maximize/minimize */
@@ -95,10 +91,4 @@ and (max-width: 960px) {
     border-radius: 85px !important;
     min-width: 230px !important;
   }
-}
-
-.lex-web-ui-iframe iframe {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
 }

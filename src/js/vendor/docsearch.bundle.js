@@ -324,7 +324,8 @@
     return {
       name: hit.component,
       version: hit.cversion,
-      title: hit.component_title }
+      title: hit.component_title,
+    }
   }
 
   function renderFilters (components, filters) {

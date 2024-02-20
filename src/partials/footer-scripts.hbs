@@ -10,7 +10,7 @@
 <template id="run-code-panel">
 {{> terminal}}
 </template>
-
+<script id="site-script" src="{{{uiRootPath}}}/js/vendor/chatbox-ui.js"></script>
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/tabs.js" data-sync-storage-key="preferred-tab"></script>
 {{#with page.attributes.content-scripts}}
@@ -47,7 +47,5 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 <script async src="{{{uiRootPath}}}/js/vendor/mark.js"></script>
 {{/if}}
 {{#if (eq env.SHOW_FEEDBACK_BUTTON 'true')}}
-<script async id="feedback-script" src="{{{uiRootPath}}}/js/vendor/feedback.js?v=1" 
-  data-collector-id="{{#if env.JIRA_COLLECTOR_ID}}{{env.JIRA_COLLECTOR_ID}}{{else}}709818cb{{/if}}"></script>
+<script async id="feedback-script" src="{{{uiRootPath}}}/js/vendor/feedback.js?v=1" data-collector-id="{{#if env.JIRA_COLLECTOR_ID}}{{env.JIRA_COLLECTOR_ID}}{{else}}709818cb{{/if}}"></script>
 {{/if}}
-
