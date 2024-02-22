@@ -49,6 +49,7 @@
     "highlight.js": "9.18.3",
     "jquery": "~3.5",
     "js-yaml": "~3.14",
+    "lex-web-ui": "github:couchbaselabs/lex-bot-ui#dist-only",
     "mark.js": "~8.11",
     "merge-stream": "~2.0",
     "postcss-calc": "~7.0",
