@@ -299,7 +299,7 @@
         return accum
       }, {})
     )
-      .filter(a => a[1].title)
+      .filter((a) => a[1].title)
       .sort(function (a, b) {
         return a[1].title.replace(/^\./, '').localeCompare(b[1].title.replace(/^\./, ''))
       })

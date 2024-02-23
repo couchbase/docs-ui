@@ -1,9 +1,10 @@
 ;(function () {
   var iframeLoader = new window.ChatBotUiLoader.IframeLoader()
 
+  const origin = window.parent.origin
   var chatbotUiconfig = {
     ui: {
-      parentOrigin: 'https://preview.docs-test.couchbase.com',
+      parentOrigin: origin,
       toolbarTitle: 'Couchbase',
       toolbarLogo: 'https://www.couchbase.com/wp-content/uploads/sites/3/2023/10/SDKs_Ottoman.svg',
       positiveFeedbackIntent: 'Thumbs up',
@@ -27,7 +28,7 @@
     iframe: {
       iframeOrigin: 'https://d2sozpdiqok6m4.cloudfront.net',
       shouldLoadIframeMinimized: true,
-      iframeSrcPath: '/#/?lexWebUiEmbed=true',
+      iframeSrcPath: '/#/?lexWebUiEmbed=true&parentOrigin=' + origin,
     },
   }
 
@@ -37,7 +38,7 @@
     .then(function () {
       iframeLoader.api.ping()
       // perform actions on the parent dependent on the chatbot loading.
-      document.getElementById('send-intent').setAttribute('disabled', false)
+      // document.getElementById('send-intent').setAttribute('disabled', false)
     })
     .catch(function (error) {
       console.error('chatbot UI failed to load', error)
