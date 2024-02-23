@@ -299,6 +299,7 @@
         return accum
       }, {})
     )
+      .filter(a => a[1].title)
       .sort(function (a, b) {
         return a[1].title.replace(/^\./, '').localeCompare(b[1].title.replace(/^\./, ''))
       })
@@ -324,7 +325,7 @@
     return {
       name: hit.component,
       version: hit.cversion,
-      title: hit.component_title,
+      title: hit.component_title || hit.component || '',
     }
   }
 
