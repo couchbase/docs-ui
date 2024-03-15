@@ -17,6 +17,7 @@
 
 .doc .edition,
 .doc .status,
+.doc .deprecated,
 .doc .edition.page-edition {
   /* max-width: fit-content; */
   font-size: var(--labels-font-size);
@@ -47,6 +48,7 @@
 .doc .labels li,
 .doc .edition,
 .doc .status,
+.doc .deprecated,
 .doc .edition.page-edition {
   /* color: #fff; */
   display: inline-block;
@@ -59,13 +61,15 @@
 .doc .labels li a,
 .doc .edition a,
 .doc .status a,
+.doc .deprecated,
 .doc .edition.page-edition a {
   text-decoration: none;
   font-family: "Source Sans Pro", sans-serif;
 }
 
 .doc .edition *,
-.doc .status * {
+.doc .status *,
+.doc .deprecated * {
   color: inherit;
 }
 
@@ -83,6 +87,13 @@
 .doc .status {
   color: var(--color-brand-caution);
   border: 1px solid var(--color-brand-caution);
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+.doc .deprecated {
+  color: var(--color-brand-red);
+  border: 1px solid var(--color-brand-red);
   border-radius: 3px;
   opacity: 0.6;
 }
