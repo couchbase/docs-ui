@@ -67,9 +67,9 @@
   --color-footer-text: var(--color-text);
 
   /* Color for code block  */
-  --hljs-attr: #407787;
-  --hljs-string: #295d1e;
-  --hljs-number: #0711ba;
+  --hljs-attr: var(--color-brand-light-blue);
+  --hljs-string: var(--color-brand-gray1);
+  --hljs-number: var(--color-brand-purple);
   /* --height-navbar: 4rem; */
   --height-spacer: 1.1rem;
   --height-navbar: 6rem;
