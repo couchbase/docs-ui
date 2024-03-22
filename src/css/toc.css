@@ -126,7 +126,8 @@
   padding-left: 0.5em;
 }
 
-.toc ul li[data-level="2"] a {
+.toc ul li[data-level="2"] a,
+.toc ul li[data-level="3"] a {
   padding-top: 2px;
 }
 
