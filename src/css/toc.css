@@ -129,3 +129,13 @@
 .toc ul li[data-level="2"] a {
   padding-top: 2px;
 }
+
+/* level 3 (experimental, for Richard) === */
+.toc .toc-menu li[data-level="3"] {
+  list-style-type: '=';
+  margin: 0;
+  margin-left: 1em;
+  font-size: 0.75em;
+  padding: 0;
+  padding-left: 0.5em;
+}

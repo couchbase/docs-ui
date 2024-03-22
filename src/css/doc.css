@@ -499,6 +499,8 @@ ul ul ul {
 
 .doc .abstract blockquote {
   margin: 0;
+  padding-left: 0.5em;
+  border-left: solid 1px var(--color-brand-accent);
 }
 
 .doc .quoteblock + .paragraph {
