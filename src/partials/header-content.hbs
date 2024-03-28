@@ -33,16 +33,17 @@
 
               <div class="navbar-collapse collapse" id="navbar2">
                 <ul class="navbar-nav w-100 justify-content-start">
-                  <li class="nav-item">
+                  <li class="nav-item {{#if (eq "home" page.component.name)}}nav-item-selected{{/if}}"">
                     <a href="{{#with (and site.url site.homeUrl)}}{{@root.site.url}}{{this}}{{else}}{{siteRootPath}}{{/with}}" class="nav-link">
                       <i class="fas fa-home"></i>
                     </a>
                   </li>
                   {{#each (nav-groups)}}
                   {{#if ./url}}
-                  <li class="nav-item">
+                  <li class="nav-item {{#if (or (eq ./url @root.page.url) (includes ./components @root.page.component.name))}}nav-item-selected{{/if}}">
                     <a class="nav-link" href="{{relativize ./url}}">
                       {{{./title}}}
+                      
                       {{#if (eq ./title 'Tutorials')}}
                       <span class="arrow">
                         <i class="fas fa-arrow-right"></i>

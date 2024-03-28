@@ -2,7 +2,7 @@
 
 module.exports = ({
   data: {
-    root: { contentCatalog = { resolvePage: () => undefined }, site },
+    root: { contentCatalog = { resolvePage: () => undefined }, site, page },
   },
 }) => {
   let navGroups = site.keys.navGroups
@@ -42,6 +42,8 @@ module.exports = ({
     }
   }
   navGroups._compiled = true
+  console.log(navGroups)
+  console.log(page)
   return (site.keys.navGroups = navGroups)
 }
 
