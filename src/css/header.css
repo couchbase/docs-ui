@@ -85,8 +85,8 @@
 }
 
 .navbar-new-bottom .nav-item {
-  margin: 0 var(--base-space);
-  padding: 0.5rem;
+  margin: 0 var(--base-extra-small-space);
+  padding: var(--base-extra-small-space) var(--base-space);
 }
 
 .navbar-nav .nav-link {
@@ -297,12 +297,6 @@
 
   .navbar-collapse {
     width: 100%;
-  }
-
-  .navbar-new-bottom .nav-item {
-    padding: 0 15px;
-    width: 100%;
-    margin: 10px 0;
   }
 
   .search {
