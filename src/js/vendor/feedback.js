@@ -6,7 +6,7 @@
     var config = document.getElementById('feedback-script').dataset
     var script = document.createElement('script')
     // eslint-disable-next-line max-len
-    script.src = 'https://issues.couchbase.com/s/4e5aeb929d05d6c94d980322c73e6ee4-T/n8ktcf/805004/be0e2f3d0946caa44cd62a35c9de2f18/4.0.0/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector-embededjs/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector-embededjs.js?locale=en-US&collectorId=' + config.collectorId // prettier-ignore
+    script.src = 'https://couchbasecloud-sandbox-881.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-vg1gsr/b/7/c95134bc67d3a521bb3f4331beb9b804/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=8cee3bf4' + config.collectorId // prettier-ignore
     document.body.appendChild(script)
   })
 })()
