@@ -1,0 +1,18 @@
+<div class="body container">
+{{#if (eq (nav-mode) 'client')}}
+{{#with (nav-group-for-page (nav-groups))}}
+{{#if ./components.length}}
+<aside class="nav left-sidebar">
+  <div class="nav-container">
+    <a href="#" class="menu-expand-toggle"><span>Navigation</span><i class="fas fa-times-circle"></i><i class="fas fa-chevron-circle-left"></i></a>
+  </div>
+</aside>
+{{/if}}
+{{/with}}
+{{/if}}
+<main class="article" data-ceiling="topbar">
+<article class="doc landing-page-doc">
+{{{page.contents}}}
+</article>
+</main>
+</div>

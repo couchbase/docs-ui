@@ -173,7 +173,7 @@
 }
 
 .doc.landing-page-doc img {
-  max-width: 100%;
+  overflow: visible;
 }
 
 .doc.landing-page-doc ul {
@@ -254,6 +254,85 @@
   height: 315px;
   margin-top: 8px;
   box-shadow: 0 0 15px -5px #ccc;
+}
+
+/* CSS for card-style landing page */
+
+.centered > h2 {
+  text-align: center;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  margin: 20px auto;
+}
+
+.card-box {
+  width: 30%;
+  margin: 1.66%;
+  padding: 2rem;
+  background-color: white;
+  border-bottom: 20px solid var(--color-brand-orange);
+  box-shadow: 0 0 29.48px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8.8px;
+}
+
+.card-box > .fa-regular {
+  color: var(--color-brand-red);
+}
+
+.card-box > h3 {
+  margin-block-start: 0;
+  padding-left: 0;
+  text-align: center;
+}
+
+.card-box > div.ulist > ul li {
+  list-style-type: disc;
+  color: var(--color-link);
+  font-weight: var(--weight-semibold);
+}
+
+.card-box > div.ulist > ul li:hover {
+  text-decoration: underline;
+}
+
+.ten-minutes-container {
+  display: flex;
+}
+
+.ten-minutes-container > .collapsible-section {
+  flex: 1;
+}
+
+.ten-minutes-container > .collapsible-section > .collapsible {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.ten-minutes-container > .collapsible-section > .collapsible h3 {
+  margin: 0;
+}
+
+.ten-minutes-container > .collapsible-section > .collapsible .content {
+  display: none;
+  margin-top: 10px;
+}
+
+.image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-section img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* CSS for nav filter */
