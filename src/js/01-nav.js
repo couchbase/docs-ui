@@ -410,8 +410,9 @@
       versionListEl.addEventListener('change', function () {
         if (versionListEl.dataset.component === page.component) {
           var selection = versionListEl.options[versionListEl.selectedIndex]
-          if (selection.dataset.url) {
-            window.location.href = selection.dataset.url
+          var selectionUrl = selection.dataset.url
+          if (selectionUrl) {
+            window.location.href = selectionUrl + (selectionUrl.startsWith('#') ? '' : window.location.hash)
             return
           }
         }
