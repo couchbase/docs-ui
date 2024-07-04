@@ -49,6 +49,3 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 {{#if (eq env.SHOW_FEEDBACK_BUTTON 'true')}}
 <script async id="feedback-script" src="{{{uiRootPath}}}/js/vendor/feedback.js?v=1" data-collector-id="{{#if env.JIRA_COLLECTOR_ID}}{{env.JIRA_COLLECTOR_ID}}{{else}}709818cb{{/if}}"></script>
 {{/if}}
-{{#if (eq page.layout 'landing-page-capella')}}
-<script async id="collapsible" src="{{{uiRootPath}}}/js/collapse.js"></script>
-{{/if}}
