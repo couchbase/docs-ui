@@ -366,6 +366,7 @@
 .doc.landing-page-capella .card-box > .svg-inline--fa {
   color: var(--color-brand-red);
   font-size: 2em;
+  margin-bottom: 0.5em;
 }
 
 .doc.landing-page-capella .card-box > h3 {
