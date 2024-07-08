@@ -268,36 +268,6 @@
   }
 }
 
-/* CSS for top section: H1, H2, and Capella Stars image */
-.doc.landing-page-capella .top-row {
-  display: flex;
-  flex-direction: row;
-  padding: 1rem;
-  margin-bottom: 2rem;
-  margin-top: -1rem;
-}
-
-.doc.landing-page-capella .top-row > .positioned-image {
-  flex-direction: row;
-  width: 35%;
-  min-width: 300px;
-  height: auto;
-  position: relative;
-  margin-top: -2.5rem; /* Adjust to position image right below the div */
-  margin-left: 1rem; /* Adjust to position image to the right of the div */
-}
-
-.doc.landing-page-capella .top-row > .top-row-text-container {
-  flex-direction: column;
-  padding-right: 1rem;
-  position: relative;
-}
-
-.doc.landing-page-capella .top-row > .top-row-text-container > h1 {
-  font-weight: 600;
-  margin-top: 1rem;
-}
-
 /* Adjusted CSS for Tabbed "Ten Minutes" Content */
 .doc.landing-page-capella .tabs {
   margin: 2rem 0 2rem 0;
@@ -346,6 +316,10 @@
   flex-wrap: wrap;
   width: 100%;
   margin: 20px auto;
+}
+
+.doc.landing-page-capella .card-container .sectionbody {
+  display: contents;
 }
 
 .doc.landing-page-capella .card-box {
@@ -402,11 +376,6 @@
 /* Screen size considerations */
 
 @media screen and (min-width: 340px) and (max-width: 499px) {
-  .doc.landing-page-capella .top-row > .positioned-image {
-    min-width: 130px;
-    margin-top: -37.5rem; /* Adjust to position image right below the div */
-  }
-
   .doc.landing-page-capella .tabs {
     margin: 2rem 0;
     width: 100%;
@@ -436,11 +405,6 @@
 }
 
 @media screen and (min-width: 500px) and (max-width: 700px) {
-  .doc.landing-page-capella .top-row > .positioned-image {
-    min-width: 130px;
-    margin-top: -29rem; /* Adjust to position image right below the div */
-  }
-
   .doc.landing-page-capella .tabs {
     margin: 2rem 0;
     width: 100%;
@@ -470,11 +434,6 @@
 }
 
 @media screen and (min-width: 701px) and (max-width: 1699px) {
-  .doc.landing-page-capella .top-row > .positioned-image {
-    min-width: 150px;
-    margin-top: -15rem; /* Adjust to position image right below the div */
-  }
-
   .doc.landing-page-capella .tabs {
     margin: 2rem 0;
     width: 100%;
