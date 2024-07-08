@@ -341,6 +341,7 @@
   color: var(--color-brand-red);
   font-size: 2em;
   margin-bottom: 0.5em;
+  display: block;
 }
 
 .doc.landing-page-capella .card-box > h3 {
