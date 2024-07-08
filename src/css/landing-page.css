@@ -337,7 +337,7 @@
   box-shadow: 5px 10px 29.48px 0 rgba(0, 0, 0, 0.4);
 }
 
-.doc.landing-page-capella .card-box > .svg-inline--fa {
+.doc.landing-page-capella .card-box .svg-inline--fa {
   color: var(--color-brand-red);
   font-size: 2em;
   margin-bottom: 0.5em;
