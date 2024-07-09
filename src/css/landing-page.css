@@ -353,20 +353,20 @@
   width: 10em; /* Adjust as needed */
   height: auto;
   display: block;
-  margin: -50px;
+  margin: 0 0 0 auto;
   position: relative;
   top: 150px; /* Adjust this value to control the amount of overlap */
   z-index: -1;
 }
 
 .doc.landing-page-capella .ending-image {
-  width: 100%; /* Adjust as needed */
+  width: 10em; /* Adjust as needed */
   height: auto;
   display: block;
-  margin: -100px auto;
+  margin: -50px;
   position: relative;
   top: 150px; /* Adjust this value to control the amount of overlap */
-  z-index: 1;
+  z-index: -1;
 }
 
 /* Screen size considerations */
