@@ -275,34 +275,19 @@
 }
 
 .doc.landing-page-capella .tabs .tablist > ul li {
-  align-content: space-around;
-  justify-content: space-between;
-  flex-wrap: wrap;
   margin-right: 1rem;
 }
 
-.doc.landing-page-capella .tablist.ulist {
-  display: flex;
-  justify-content: center;
-}
-
 .doc.landing-page-capella .tabpanel {
-  display: flex;
   padding: 2em 1.25em;
 }
 
 .doc.landing-page-capella .tabs.responsive .tabpanel {
-  flex-direction: column;
   padding: 2rem 4rem 2rem 1rem;
-  width: 50%;
 }
 
 .doc.landing-page-capella .tabs.responsive .tabpanel .paragraph > p > a {
   font-weight: var(--weight-semibold);
-}
-
-.doc.landing-page-capella .tabpanel > .tabs-image {
-  width: 50%;
 }
 
 /* CSS for How Do You Want To Start Building Today? section */
@@ -364,11 +349,21 @@
   text-decoration: underline;
 }
 
+.doc.landing-page-capella .opening-image {
+  width: 10em; /* Adjust as needed */
+  height: auto;
+  display: block;
+  margin: -50px;
+  position: relative;
+  top: 150px; /* Adjust this value to control the amount of overlap */
+  z-index: -1;
+}
+
 .doc.landing-page-capella .ending-image {
   width: 100%; /* Adjust as needed */
   height: auto;
   display: block;
-  margin: 0 auto;
+  margin: -100px auto;
   position: relative;
   top: 150px; /* Adjust this value to control the amount of overlap */
   z-index: 1;
@@ -376,23 +371,10 @@
 
 /* Screen size considerations */
 
-@media screen and (min-width: 340px) and (max-width: 499px) {
+@media screen and (max-width: 499px) {
   .doc.landing-page-capella .tabs {
     margin: 2rem 0;
     width: 100%;
-  }
-
-  .doc.landing-page-capella .tabpanel {
-    display: block;
-  }
-
-  .doc.landing-page-capella .tabs.responsive .tabpanel {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .doc.landing-page-capella .tabpanel > .tabs-image {
-    width: 250px;
   }
 
   .doc.landing-page-capella .card-container {
@@ -406,54 +388,12 @@
 }
 
 @media screen and (min-width: 500px) and (max-width: 700px) {
-  .doc.landing-page-capella .tabs {
-    margin: 2rem 0;
-    width: 100%;
-  }
-
-  .doc.landing-page-capella .tabpanel {
-    display: block;
-  }
-
-  .doc.landing-page-capella .tabs.responsive .tabpanel {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .doc.landing-page-capella .tabpanel > .tabs-image {
-    width: 275px;
-  }
-
-  .doc.landing-page-capella .card-container {
-    flex-direction: column;
-    width: 100%;
-  }
-
   .doc.landing-page-capella .card-box {
     width: 100%;
   }
 }
 
 @media screen and (min-width: 701px) and (max-width: 1699px) {
-  .doc.landing-page-capella .tabs {
-    margin: 2rem 0;
-    width: 100%;
-  }
-
-  .doc.landing-page-capella .tabpanel {
-    display: block;
-    padding: 2em 1.25em;
-  }
-
-  .doc.landing-page-capella .tabs.responsive .tabpanel {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .doc.landing-page-capella .tabpanel > .tabs-image {
-    width: 50%;
-  }
-
   .doc.landing-page-capella .card-container {
     width: 100%;
   }
@@ -464,14 +404,6 @@
 }
 
 @media screen and (min-width: 1700px) {
-  .doc.landing-page-capella .tabs.responsive .tabpanel {
-    width: 50%;
-  }
-
-  .doc.landing-page-capella .tabpanel > .tabs-image {
-    width: 50%;
-  }
-
   .doc.landing-page-capella .card-box {
     width: 30%;
   }
