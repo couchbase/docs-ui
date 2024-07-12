@@ -351,11 +351,9 @@
 
 .doc.landing-page-capella .opening-image {
   width: 10em; /* Adjust as needed */
+  float: right;
   height: auto;
   display: block;
-  margin: 0 0 0 auto;
-  position: relative;
-  top: 150px; /* Adjust this value to control the amount of overlap */
   z-index: -1;
 }
 
