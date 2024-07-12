@@ -299,6 +299,7 @@
 .doc.landing-page-capella .card-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
   width: 100%;
   margin: 20px auto;
 }
