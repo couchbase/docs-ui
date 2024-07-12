@@ -173,7 +173,7 @@
 }
 
 .doc.landing-page-doc img {
-  max-width: 100%;
+  overflow: visible;
 }
 
 .doc.landing-page-doc ul {
@@ -254,6 +254,157 @@
   height: 315px;
   margin-top: 8px;
   box-shadow: 0 0 15px -5px #ccc;
+}
+
+/* CSS for redesigned Capella Landing Page */
+
+/* Adjusting spacing gutters around the content */
+@media screen and (min-width: 769px) {
+  main.capella-article {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    margin: 0 auto;
+    max-width: clamp(55em, 60%, var(--width-page-area));
+  }
+}
+
+/* Adjusted CSS for Tabbed "Ten Minutes" Content */
+.doc.landing-page-capella .tabs {
+  margin: 2rem 0 2rem 0;
+  width: 80%;
+}
+
+.doc.landing-page-capella .tabs .tablist > ul li {
+  margin-right: 1rem;
+}
+
+.doc.landing-page-capella .tabpanel {
+  padding: 2em 1.25em;
+}
+
+.doc.landing-page-capella .tabs.responsive .tabpanel {
+  padding: 2rem 4rem 2rem 1rem;
+}
+
+.doc.landing-page-capella .tabs.responsive .tabpanel .paragraph > p > a {
+  font-weight: var(--weight-semibold);
+}
+
+/* CSS for How Do You Want To Start Building Today? section */
+.doc.landing-page-capella .centered > h2 {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.doc.landing-page-capella .card-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.doc.landing-page-capella .card-container .sectionbody {
+  display: contents;
+}
+
+.doc.landing-page-capella .card-box {
+  width: 30%;
+  margin: 1.66%;
+  padding: 2rem;
+  background-color: white;
+  border-bottom: 20px solid var(--color-brand-orange);
+  box-shadow: 0 0 29.48px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8.8px;
+}
+
+.doc.landing-page-capella .card-box:hover {
+  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: 5px 10px 29.48px 0 rgba(0, 0, 0, 0.4);
+}
+
+.doc.landing-page-capella .card-box .svg-inline--fa {
+  color: var(--color-brand-red);
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+.doc.landing-page-capella .card-box > h3 {
+  margin-block-start: 0;
+  padding-left: 1.5em;
+  text-align: left;
+}
+
+.doc.landing-page-capella .card-box > p {
+  margin-top: 1rem;
+}
+
+.doc.landing-page-capella .card-box > div.ulist > ul li {
+  list-style-type: disc;
+  color: var(--color-link);
+  font-weight: var(--weight-semibold);
+}
+
+.doc.landing-page-capella .card-box > div.ulist > ul li:hover {
+  text-decoration: underline;
+}
+
+.doc.landing-page-capella .opening-image {
+  width: 10em; /* Adjust as needed */
+  float: right;
+  height: auto;
+  display: block;
+  z-index: -1;
+}
+
+.doc.landing-page-capella .ending-image {
+  width: 10em; /* Adjust as needed */
+  height: auto;
+  display: block;
+  margin: -50px;
+  position: relative;
+  top: 150px; /* Adjust this value to control the amount of overlap */
+  z-index: -1;
+}
+
+/* Screen size considerations */
+
+@media screen and (max-width: 499px) {
+  .doc.landing-page-capella .tabs {
+    margin: 2rem 0;
+    width: 100%;
+  }
+
+  .doc.landing-page-capella .card-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .doc.landing-page-capella .card-box {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 700px) {
+  .doc.landing-page-capella .card-box {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 701px) and (max-width: 1699px) {
+  .doc.landing-page-capella .card-container {
+    width: 100%;
+  }
+
+  .doc.landing-page-capella .card-box {
+    width: 46%;
+  }
+}
+
+@media screen and (min-width: 1700px) {
+  .doc.landing-page-capella .card-box {
+    width: 30%;
+  }
 }
 
 /* CSS for nav filter */
