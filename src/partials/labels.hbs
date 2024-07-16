@@ -1,3 +1,19 @@
+{{#with page.attributes.capella-type}}
+<div class="labels">
+<ul>
+{{#if (eq this "Columnar")}}
+  <li class="columnar">
+    <i class="fas fa-chart-line"></i> 
+    Capella Columnar</li>
+{{else}}
+  <li class="operational">
+    <i class="fas fa-database"></i> 
+    Capella Operational</li>
+{{/if}}
+</ul>
+</div>
+{{/with}}
+
 {{#if (or page.attributes.topic-type)}}
 <div class="labels">
 <ul>{{#if (eq page.attributes.topic-type 'concept')}}
@@ -17,6 +33,7 @@
 </ul>
 </div>
 {{/if}}
+
 {{#if (or page.attributes.edition page.attributes.status)}}
 <div class="labels">
 <ul>
@@ -29,5 +46,4 @@
 </ul>
 </div>
 {{/if}}
-
 

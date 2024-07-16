@@ -221,6 +221,10 @@
   background-color: var(--color-brand-red);
 }
 
+.Columnar .nav-item-selected {
+  background-color: var(--color-brand-caution);
+}
+
 @media screen and (min-width: 1024px) {
   .navbar-start > a.navbar-item:hover,
   .navbar-start > .navbar-item:hover > .navbar-link {

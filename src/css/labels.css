@@ -126,6 +126,21 @@
   opacity: 0.6;
 }
 
+/* Capella types: columnar vs operational */
+.doc .columnar {
+  color: var(--color-brand-caution);
+  border: 1px solid var(--color-brand-caution);
+  border-radius: 3px;
+  opacity: 1;
+}
+
+.doc .operational {
+  color: var(--color-brand-red);
+  border: 1px solid var(--color-brand-red);
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
 .doc .edition.page-edition {
   color: #999;
   border: 1px solid #999;
