@@ -40,6 +40,15 @@ index-pair ::= '"' 'indexes' '"' ':' ( 'null'
 ----
 ====
 
+.Here is a bit of a Microsoft Windows Batch File
+====
+[,cmd]
+----
+cd couchbase-server-tools\bin
+cbq -u %USER% -p %PASSWORD% -e %BASE_URL% --cacert %CACERT% -skip-verify
+----
+====
+
 [[bucket-selection]]Bucket Selection::
 The [.ui]*Buckets* selection list lets you select which of the buckets configured on your cluster is to be used as the basis for the graph display.
 The statistics shown are aggregated over the whole cluster for the <<bucket-selection,selected bucket>>.
@@ -187,14 +196,12 @@ You could also use it to mark new features, but _only within the version in whic
 
 == Labels for a Section
 
-[.labels]
 [.edition]##{enterprise}##[.status]##{developer-preview}##
 
 To create an edition label, use a span with the role `edition`.
 To create a status label, use a span with the role `status`.
 
 To add edition and status labels at the start of a section or block, place the required spans in a single paragraph on its own.
-To add the "speech bubble tail" above the labels, the spans should be placed in a paragraph with the role `labels`.
 
 Global document attributes are available to insert the content for an edition or status label.
 The global document attribute `&lbrace;enterprise&rbrace;` inserts the content for an enterprise edition label.
@@ -436,7 +443,7 @@ POST http://nodename:8091/settings/viewUpdateDaemon
 updateInterval=10000&updateMinChanges=7000
 ----
 
-[.no-callouts,json5]
+[.no-callouts,json]
 ----
 {
    "_id": "_design/myddoc",
