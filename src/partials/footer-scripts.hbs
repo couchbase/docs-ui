@@ -10,7 +10,11 @@
 <template id="run-code-panel">
 {{> terminal}}
 </template>
+
+{{#unless page.attributes.disable-chatbot}}
 <script id="site-script" src="{{{uiRootPath}}}/js/vendor/chatbox-ui.js"></script>
+{{/unless}}
+
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/tabs.js" data-sync-storage-key="preferred-tab"></script>
 {{#with page.attributes.content-scripts}}
