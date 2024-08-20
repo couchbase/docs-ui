@@ -81,12 +81,5 @@
     },
   }
 
-  if (window.location.hash) {
-    var hash = window.location.hash
-    if ($(hash).length !== 0) {
-      var offSetValue = $(hash).offset().top
-      $('html, body').animate({ 'scrollTop': offSetValue }, 'slow')
-    }
-  }
   /*eslint-env jquery*/
 })(jQuery)
