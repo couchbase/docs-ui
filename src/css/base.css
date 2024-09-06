@@ -72,6 +72,11 @@ code {
   color: var(--color-brand-gray1);
 }
 
+#redoc code {
+  color: inherit;
+  background-color: inherit;
+}
+
 html code {
   hyphens: none;
 }
