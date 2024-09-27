@@ -342,6 +342,7 @@ ul ul ul {
 .doc .admonitionblock td.content > .title {
   display: inline;
   font-style: italic;
+  margin-left: var(--admonition-icon-text-space);
 }
 
 .doc .admonitionblock td.content > .title::after {
