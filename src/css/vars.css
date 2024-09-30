@@ -140,6 +140,7 @@
   --column-space: 2.5rem; /* ~ 40px */
   --admonition-icon-space: 1rem; /* ~ 16px */
   --admonition-content-space: 1rem; /* ~ 16px */
+  --admonition-icon-text-space: 0.1rem; /* ~ 1.6px */
 
   /* Heading fonts for responsive */
   --heading-h1-sm: 2.25rem; /* ~36px */
