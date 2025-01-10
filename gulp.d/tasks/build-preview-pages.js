@@ -48,6 +48,8 @@ const ASCIIDOC_ATTRIBUTES = {
   icons: 'font',
   sectanchors: '',
   'source-highlighter': 'highlight.js',
+  'page-watermark': '2025-01-09 docs-sdk-nodejs add-preview-metadata',
+  'page-show-preview-banner': true,
 }
 
 module.exports =

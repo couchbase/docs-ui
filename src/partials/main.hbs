@@ -1,4 +1,17 @@
 <main class="article" data-ceiling="topbar">
+0 vc{{#with page.attributes.watermark}}
+<div id="watermark">{{this}}</div>
+{{/with}}
+{{#if page.attributes.show-preview-banner}}
+<div class="article-banner">
+<i class="fas fa-cog"></i>
+<h2>{{#with page.attributes.watermark}}<tt>{{this}}</tt>
+{{else}}Preview{{/with}}</h2>
+<p>You are viewing a preview version of the documentation.</p>
+<p>Visit the <a href="{{ site.url }}/doctor/tree.html">preview landing page</a> for more details.</p>
+</div>
+{{/if}}
+
 {{#unless (or (ne page.attributes.hide-view-latest undefined) (eq page.componentVersion page.component.latest))}}
 {{#with page.latest}}
 {{#if ./missing}}

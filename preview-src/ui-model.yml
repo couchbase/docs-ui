@@ -176,5 +176,6 @@ page:
     url: '#'
     urlType: 'internal'
 asciidoc:
+  # attributes: defined in gulp.d
   extensions:
   - '@asciidoctor/tabs'
