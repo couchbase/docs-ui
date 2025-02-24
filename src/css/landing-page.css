@@ -407,6 +407,15 @@
   .doc.landing-page-capella .card-box {
     width: 30%;
   }
+
+  /* special case container with 4 cards to be 2x2 even on wide screen */
+  .doc.landing-page-capella .card-container:has(.card-box:nth-child(4)) .card-box {
+    width: 46%;
+  }
+
+  .doc.landing-page-capella .card-container:has(.card-box:nth-child(5)) .card-box {
+    width: 30%;
+  }
 }
 
 /* CSS for nav filter */
