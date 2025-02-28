@@ -72,6 +72,12 @@ code {
   color: var(--color-brand-gray1);
 }
 
+/* special case inside redocly div to avoid overwriting redocly managed code colours */
+#redoc code {
+  background-color: inherit;
+  color: inherit;
+}
+
 a code {
   color: var(--color-link);
   background-color: transparent;
