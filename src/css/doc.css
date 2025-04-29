@@ -475,6 +475,10 @@ ul ul ul {
   max-width: 100%;
 }
 
+.imageblock.kroki img {
+  width: 100%;
+}
+
 .doc span.image.icon {
   line-height: 1;
   vertical-align: -0.2em;
