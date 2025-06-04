@@ -9,9 +9,23 @@ module.exports = (
   }
 ) => {
   const pageUrl = page.url
-  const navGroupByUrl = navGroups.find(({ url }) => url === pageUrl)
-  if (navGroupByUrl) return navGroupByUrl
+
+  const navGroupsAndSubgroups = [
+    ...navGroups,
+    ...navGroups.flatMap(({ subGroups }) => subGroups || [])]
+
+  const navGroupByUrl =
+    navGroupsAndSubgroups.find(({ url }) => url === pageUrl)
+
+  if (navGroupByUrl) {
+    return navGroupByUrl
+  }
+
   const pageComponentName = page.component.name
-  if (pageComponentName === 'home' && page.module !== 'contribute') return
-  return navGroups.find(({ components }) => ~components.indexOf(pageComponentName))
+  if (pageComponentName === 'home' && page.module !== 'contribute') {
+    return
+  }
+
+  return navGroupsAndSubgroups.find(
+    ({ components }) => ~components.indexOf(pageComponentName))
 }
