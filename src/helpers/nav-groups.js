@@ -9,25 +9,35 @@ module.exports = ({
 
   if (!navGroups) return []
   if (navGroups._compiled) return navGroups
+  navGroups = JSON.parse(navGroups)
 
   const components = site.components
   const componentNames = Object.keys(components)
-  const claimed = []
+  const claimed = [] // mutable array to track claimed components
 
-  navGroups = JSON.parse(navGroups).map((navGroup) => {
+  function processNavGroup (navGroup) {
     const componentNamesInGroup =
       (navGroup.components || []).flatMap(
+        // componentNamesInGroup can be a name like 'couchbase-lite'
+        // or a glob pattern like '*-sdk'
         (componentName) => componentNames.filter(globbify(componentName)))
 
     claimed.push(...componentNamesInGroup)
+
+    const navSubgroups = navGroup.subGroups?.map(processNavGroup)
+    if (navSubgroups) {
+      navGroup.subGroups = navSubgroups
+      console.log(navSubgroups)
+    }
 
     return compileNavGroup(
       navGroup,
       componentNamesInGroup,
       contentCatalog,
       components)
-  })
+  }
 
+  navGroups = navGroups.map(processNavGroup)
   const orphaned = componentNames.filter((it) => !claimed.includes(it))
 
   if (orphaned.length) {
