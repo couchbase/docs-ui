@@ -1,0 +1,13 @@
+.anywhere-footnote {
+  vertical-align: super;
+  font-size: 75%;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+hr.footnote-separator {
+  margin-left: 0;
+  margin-right: auto;
+  margin-bottom: 10px;
+  width: 100px;
+}
