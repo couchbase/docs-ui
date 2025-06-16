@@ -1,0 +1,16 @@
+.anywhere-footnote-marker {
+  vertical-align: super;
+  text-decoration: none;
+}
+
+.anywhere-footnote-block {
+  vertical-align: super;
+  text-decoration: none;
+}
+
+hr.footnote-separator {
+  margin-left: 0;
+  margin-right: auto;
+  margin-bottom: 10px;
+  width: 100px;
+}
