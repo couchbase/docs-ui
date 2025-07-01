@@ -114,6 +114,15 @@
   visibility: visible;
 }
 
+.three-column-row h1:hover a.anchor,
+.three-column-row h2:hover a.anchor,
+.three-column-row h3:hover a.anchor,
+.three-column-row h4:hover a.anchor,
+.three-column-row h5:hover a.anchor,
+.three-column-row h6:hover a.anchor {
+  visibility: hidden;
+}
+
 .doc i.fa {
   font-style: normal;
 }
