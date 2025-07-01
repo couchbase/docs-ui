@@ -69,12 +69,17 @@ pre {
 code {
   background-color: var(--color-brand-peach);
   word-spacing: -0.125em;
-  color: var(--color-brand-gray1);
+  color: red; /* var(--color-brand-gray1); */
 }
 
 /* special case inside redocly div to avoid overwriting redocly managed code colours */
 #redoc code {
   background-color: inherit;
+  color: inherit;
+}
+
+#redoc .hljs-comment,
+#redoc .hljs-meta {
   color: inherit;
 }
 
