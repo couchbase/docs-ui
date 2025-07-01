@@ -324,14 +324,12 @@ You can create as many of these roles as you like simply by adding CSS scoped to
 
 === Tabs
 
-The playbook for the Couchbase documentation includes a tabs block extension.
+The playbook for the Couchbase documentation includes the [`@asciidoctor/tabs`](https://github.com/asciidoctor/asciidoctor-tabs/blob/main/docs/use-with-antora.adoc) extension.
 The extension takes care of converting the AsciiDoc for the tabs to HTML.
 The UI provides the interaction (JavaScript) and styles (CSS) that power these tabs.
 
-You can find the JavaScript for the tabs in the file [.path]_src/js/05-tabset.js_.
 You can find the styles for the tabs in the file [.path]_src/css/doc.css_.
-The preview site provides an example of these tabs in the file [.path]_preview-src/index.adoc_.
-Note that authors should never enter the HTML for tabs directly, but it is entered this way in the preview site to make it easier to work with.
+
 
 === Content Preview
 
