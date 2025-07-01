@@ -324,7 +324,7 @@ You can create as many of these roles as you like simply by adding CSS scoped to
 
 === Tabs
 
-The playbook for the Couchbase documentation includes the [`@asciidoctor/tabs`](https://github.com/asciidoctor/asciidoctor-tabs/blob/main/docs/use-with-antora.adoc) extension.
+The playbook for the Couchbase documentation includes the https://github.com/asciidoctor/asciidoctor-tabs/blob/main/docs/use-with-antora.adoc[`@asciidoctor/tabs`] extension.
 The extension takes care of converting the AsciiDoc for the tabs to HTML.
 The UI provides the interaction (JavaScript) and styles (CSS) that power these tabs.
 
