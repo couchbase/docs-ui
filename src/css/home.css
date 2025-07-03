@@ -184,6 +184,10 @@
   flex-wrap: wrap;
 }
 
+.tiles .full-width-tile {
+  flex-basis: 100%;
+}
+
 .home .tile {
   flex: 1;
   margin-top: 0;
