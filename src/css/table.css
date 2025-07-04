@@ -153,7 +153,7 @@ table.table-tutorial tr td:last-child {
 
 /* Responsive css  */
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1px /*768px*/) {
   table.tableblock {
     display: table;
     position: relative;
@@ -212,6 +212,7 @@ table.table-tutorial tr td:last-child {
   }
 }
 
+/* This "responsive" table CSS is a bit odd, I'm not sure it is needed any more:
 @media screen and (max-width: 767px), print {
   table.tableblock td,
   table.tableblock th {
@@ -242,3 +243,4 @@ table.table-tutorial tr td:last-child {
     max-width: 120px;
   }
 }
+*/
