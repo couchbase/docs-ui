@@ -31,12 +31,14 @@
   margin-right: 0;
   margin-bottom: 0.2em;
   width: calc(100% - 3em);
+  vertical-align: top; /* Added to ensure top alignment */
 }
 
 .anywhere-footnote-horizontal.dlist dd p {
   display: inline;
   margin: 0;
   line-height: 1.2;
+  vertical-align: top; /* Added to ensure top alignment */
 }
 
 .anywhere-footnote-block .anywhere-footnote-horizontal.dlist {
@@ -49,6 +51,7 @@
 .anywhere-footnote-horizontal.dlist > dd {
   display: block;
   width: 100%;
+  vertical-align: top; /* Added to ensure top alignment */
 }
 
 /* Put the term and description on the same line but force a new line after each pair */
@@ -56,18 +59,21 @@
   display: inline-block;
   width: auto;
   margin-right: 0.5em;
+  vertical-align: top; /* Reinforced top alignment */
 }
 
 .anywhere-footnote-horizontal.dlist > dd {
   display: inline-block;
   width: auto;
   margin-bottom: 0.2em;
+  vertical-align: top; /* Added to ensure top alignment */
 }
 
 /* Force each dt+dd pair to be on a new line with less spacing */
 .anywhere-footnote-horizontal.dlist dt + dd {
   display: inline-block;
   margin-bottom: 0.3em;
+  vertical-align: top; /* Added to ensure top alignment */
 }
 
 /* Compact spacing between entries */
