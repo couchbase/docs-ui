@@ -1,4 +1,5 @@
 .anywhere-footnote-marker {
+  vertical-align: super;
   font-size: 90%;
   text-decoration: none;
 }
@@ -23,31 +24,31 @@
 /* Force each dt and dd to be on the same line */
 .anywhere-footnote-horizontal.dlist dt,
 .anywhere-footnote-horizontal.dlist dd {
-  display: inline !important;
-  vertical-align: top !important;
+  display: inline;
+  vertical-align: top;
 }
 
 /* Add a narrow gap between dt and dd */
 .anywhere-footnote-horizontal.dlist dt {
-  margin-right: 0.2em !important;
+  margin-right: 0.2em;
 }
 
 /* Force a line break after each dd */
 .anywhere-footnote-horizontal.dlist dd {
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0;
+  padding: 0;
 }
 
 /* Create a line break after each entry */
 .anywhere-footnote-horizontal.dlist dd::after {
   content: '';
   display: block;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.2em;
 }
 
 /* Remove margins from paragraphs inside dd */
 .anywhere-footnote-horizontal.dlist dd p {
-  display: inline !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  display: inline;
+  margin: 0;
+  padding: 0;
 }
