@@ -4,6 +4,14 @@
   text-decoration: none;
 }
 
+.afnote-marker::before {
+  content: "[";
+}
+
+.afnote-marker::after {
+  content: "]";
+}
+
 .afnote-block {
   text-decoration: none;
 }
