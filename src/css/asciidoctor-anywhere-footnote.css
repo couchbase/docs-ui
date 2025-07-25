@@ -26,7 +26,7 @@
 
 div.afnote-horizontal dl {
   display: grid;
-  grid-template-columns: 25px auto;
+  grid-template-columns: 30px auto;
   grid-column-gap: 1px;
 }
 
