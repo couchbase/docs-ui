@@ -19,5 +19,6 @@ module.exports = module.exports = (navGroup, {
 
 function selected (navGroup, page) {
   return (navGroup.url === page?.url) ||
-    (navGroup.components?.includes(page.component?.name))
+    (navGroup.components?.includes(page.component?.name)) ||
+    (navGroup.subGroups?.some((it) => selected(it, page)))
 }

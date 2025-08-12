@@ -42,7 +42,7 @@
                     </a>
                   </li>
                   {{#each this}}
-                  {{#if ./url}}
+                  {{#if (or ./url ./subGroups)}}
                   <li class="nav-item {{#if (nav-group-selected this)}}nav-item-selected{{/if}}">
                     <a class="nav-link" href="{{relativize ./url}}">
                       {{{./title}}}
@@ -53,6 +53,17 @@
                       </span>
                       {{/if}}
                     </a>
+                    {{#with ./subGroups}}
+                    <ul class="nav-submenu">
+                      {{#each this}}
+                      <li class="nav-item nav-submenu-item {{#if (nav-group-selected this)}}nav-submenu-item-selected{{/if}}">
+                        <a class="nav-link nav-submenu-link" href="{{relativize ./url}}">
+                          {{{./title}}}
+                        </a>
+                      </li>
+                      {{/each}}
+                    </ul>
+                    {{/with}}
                   </li>
                   {{/if}}
                   {{/each}}

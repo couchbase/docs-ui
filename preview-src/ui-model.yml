@@ -8,8 +8,22 @@ site:
     navGroups: |
       [
         { "title": "Server", "startPage": "home::server.adoc", "components": ["server", "*-connector"], "url": "/index.html" },
-        { "title": "Mobile", "startPage": "home::mobile.adoc", "components": ["couchbase-lite", "sync-gateway"], "url": "#" },
-        { "title": "Cloud", "startPage": "home::cloud.adoc", "components": ["operator"], "url": "#" }
+        { "title": "Develop",
+          "subPages": [
+            {
+              "title": "Mobile",
+              "startPage": "home::mobile.adoc",
+              "components": ["couchbase-lite", "sync-gateway"],
+              "url": "#"
+            },
+            {
+              "title": "Cloud",
+              "startPage": "home::cloud.adoc",
+              "components": ["operator"],
+              "url": "#"
+            }
+          ]
+        }
       ]
   components:
     server:
