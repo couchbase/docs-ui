@@ -87,10 +87,12 @@
 .navbar-new-bottom .nav-item {
   margin: 0 var(--base-extra-small-space);
   padding: var(--base-extra-small-space) var(--base-space);
+  list-style-type: none;
 }
 
 .navbar-nav .nav-item .nav-submenu {
   display: none;
+  margin-top: 8px;
   padding-inline-start: 0;
   position: absolute;
   background-color: #333; /* var(--color-brand-black); */
@@ -99,6 +101,10 @@
 
 .navbar-nav .nav-item:hover .nav-submenu {
   display: block;
+}
+
+.nav-item .nav-submenu .nav-item {
+  margin: 0;
 }
 
 .navbar-nav .nav-link {
@@ -231,13 +237,15 @@
 
 .nav-item-selected,
 .nav-submenu-item-selected,
-.nav-item-selected:hover .nav-submenu-item:hover {
+.nav-submenu-item:hover {
   background-color: var(--color-brand-red);
 }
 
+/*
 .nav-item-selected:hover {
   background-color: inherit;
 }
+*/
 
 .nav-item-selected:hover .nav-submenu-item-selected {
   background-color: #f99;
