@@ -13,3 +13,23 @@ a.add-ext-icon::after {
 a.add-ext-icon > .svg-inline--fa {
   margin-left: 0.25em;
 }
+
+.doc a[href*=".adoc"]::after {
+  font-family: "Font Awesome Light", serif;
+  content: "⚠";
+  font-size: inherit;
+  color: red;
+}
+
+.doc a[href*=".adoc"] {
+  font-weight: bold;
+  color: red;
+}
+
+.doc a[href*=".adoc"]:hover {
+  color: inherit;
+}
+
+.doc a[href*=".adoc"]:hover::after {
+  content: "⚠ - " attr(href);
+}
