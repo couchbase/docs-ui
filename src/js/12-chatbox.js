@@ -1,6 +1,10 @@
 ;(function () {
   var iframeLoader = new window.ChatBotUiLoader.IframeLoader()
 
+  const iframeOrigin = document.head.querySelector(
+    'meta[name="page-chatbot-origin"]')?.content ||
+      'https://d2sozpdiqok6m4.cloudfront.net'
+
   const origin = window.parent.origin
   var chatbotUiconfig = {
     ui: {
@@ -26,7 +30,7 @@
       enableLiveChat: false,
     },
     iframe: {
-      iframeOrigin: 'https://d2sozpdiqok6m4.cloudfront.net',
+      iframeOrigin,
       shouldLoadIframeMinimized: true,
       iframeSrcPath: '/#/?lexWebUiEmbed=true&parentOrigin=' + origin,
     },
