@@ -45,6 +45,6 @@
       // document.getElementById('send-intent').setAttribute('disabled', false)
     })
     .catch(function (error) {
-      console.error('chatbot UI failed to load', error)
+      console.error('chatbot UI failed to load', error, iframeOrigin)
     })
 })()
