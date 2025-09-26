@@ -78,6 +78,11 @@ code {
   color: inherit;
 }
 
+#redoc .hljs-comment,
+#redoc .hljs-meta {
+  color: inherit;
+}
+
 a code {
   color: var(--color-link);
   background-color: transparent;
