@@ -9,9 +9,16 @@
 {{/if}}
 
 <script>
+  // return all meta items as customData
+  const customData =
+    Object.fromEntries(
+      Array.from(document.querySelectorAll('meta[name]')).map(
+        a => [a.name, a.content]))
+
   window.markerConfig = {
     project: '6911fff96c3b61c1fb3a0678', 
-    source: 'snippet'
+    source: 'snippet',
+    customData
   };
 
   !function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};["show","hide","isVisible","capture","cancelCapture","unload","reload","isExtensionInstalled","setReporter","clearReporter","setCustomData","on","off"].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement("script");s.async=1,s.src="https://edge.marker.io/latest/shim.js";var i=r.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}(window,document);
