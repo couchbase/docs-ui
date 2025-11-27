@@ -78,7 +78,6 @@
 <meta name="docsearch:edition" content="{{page.attributes.edition}}">
 <meta name="docsearch:page_rank" content="{{page.attributes.rank}}">
 
-
 {{#with page.attributes.meta-zd-site-verification}}
 <meta name="zd-site-verification" content="{{this}}">
 {{/with}}
@@ -86,3 +85,6 @@
 <meta name="generator" content="Antora {{antoraVersion}}">
 <link rel="icon" href="{{{uiRootPath}}}/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="{{{uiRootPath}}}/img/favicon.ico" type="image/x-icon" sizes="any">
+{{#with page.attributes.markdown-alt}}
+<link rel="alternate" type="text/markdown" href="{{.}}">
+{{/with}}
