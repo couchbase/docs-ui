@@ -63,6 +63,13 @@
 <meta name="page-url" content="{{page.url}}">
 <meta name="page-nav-header-levels" content="{{or page.attributes.nav-header-levels 0}}">
 <meta name="page-chatbot-origin" content="{{page.attributes.chatbot-origin}}">
+{{#with page.attributes.jira-ticket}}
+<meta name="page-jira-ticket" content="{{page.attributes.jira-ticket}}">
+{{/with}}
+{{#with page.attributes.jira-component}}
+<meta name="page-jira-component" content="{{page.attributes.jira-component}}">
+{{/with}}
+
 
 {{! meta tags starting docsearch: are automatically extracted by Algolia }}
 {{! docsearch:version has special handling so we use `cversion` }}
