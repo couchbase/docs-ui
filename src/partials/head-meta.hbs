@@ -18,6 +18,10 @@
     {{/with}}
 {{/unless}}
 
+{{#with page.attributes.service-desc}}
+<link rel="service-desc" href="{{relativize .}}" type="{{@root.page.attributes.service-desc-type}}">
+{{/with}}
+
 {{#unless (eq page.attributes.pagination undefined)}}
 
     {{#if (or page.previous page.next)}}
