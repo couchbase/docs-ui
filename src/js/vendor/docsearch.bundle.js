@@ -13,7 +13,7 @@
 
   function activateSearch (docsearch, config) {
     appendStylesheet(config.stylesheet)
-    var baseAlgoliaOptions = { hitsPerPage: parseInt(config.pageSize) || 25 }
+    var baseAlgoliaOptions = { hitsPerPage: parseInt(config.pageSize) || 25, clickAnalytics: true }
     var searchField = document.getElementById(config.searchFieldId || 'search')
     searchField.appendChild(Object.assign(document.createElement('div'), { className: 'algolia-autocomplete-results' }))
     var controller = docsearch({
