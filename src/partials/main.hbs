@@ -23,5 +23,67 @@
 <div class="article-header">
 {{> crumbs}}
 </div>
+{{#if env.DEBUG}}
+<dl>
+    <dt>page.component = {{page.component.name}}</dt>
+    <dd>
+        <dl>
+            <dt>title</dt>
+            <dd>{{page.component.title}}</dd>
+            <dt>url</dt>
+            <dd>{{page.component.url}}</dd>
+            <dt>latest</dt>
+            <dd>{{page.component.latest}}</dd>
+            <dt>versions</dt>
+            <dd>{{page.component.versions}}</dd>
+        </dl>
+    </dd>
+
+    
+    <dt>page.componentVersion</dt>
+    <dd>
+        <dl>
+            {{#each page.componentVersion}}
+            <dt>{{@key}}</dt>
+            <dd>{{this}}</dd>
+            {{/each}}
+        </dl>
+    </dd>
+
+    <dt>page.version</dt>
+    <dd>{{page.version}}</dd>
+    
+    <dt>page</dt>
+    <dd>
+        <dl>
+            <dt>module</dt>
+            <dd>{{page.module}}</dd>
+            <dt>url</dt>
+            <dd>{{page.url}}</dd>
+            <dt>version</dt>
+            <dd>{{page.version}}</dd>
+            <dt>fileUri</dt>
+            <dd>{{page.fileUri}}</dd>
+        </dl>
+    </dd>
+
+    <dt>antoraVersion</dt>
+    <dd>{{antoraVersion}}</dd>
+    
+    <dt>site.components</dt>
+    <dd>        
+        <dl>
+            {{#each site.components}}
+            <dt>{{@key}}</dt>
+            <dd>{{this}}</dd>
+            {{/each}}
+        </dl>
+    </dd>
+    
+    <dt>site.ui</dt>
+    <dd>{{site.ui.defaultLayout}} {{site.ui.url}}</dd>
+    
+</dl>
+{{/if}}
 {{> article}}
 </main>
