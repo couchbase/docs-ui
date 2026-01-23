@@ -20,6 +20,8 @@
   --color-link: var(--color-brand-blue-secondary);
   --color-link-active: var(--color-brand-blue-secondary-light);
   --color-link-hover: var(--color-brand-blue-secondary-extra-light);
+  --color-brand-green-secondary: #366407;
+  --color-brand-purple-secondary: #76309e;
 
   /* legacy secondary */
   --color-blue-rgb: 87, 160, 255;

@@ -126,7 +126,7 @@
   opacity: 0.6;
 }
 
-/* Capella types: columnar vs operational */
+/* Capella types: columnar,  operational, ai, app-services */
 .doc .columnar {
   color: var(--color-brand-caution);
   border: 1px solid var(--color-brand-caution);
@@ -137,6 +137,20 @@
 .doc .operational {
   color: var(--color-brand-red);
   border: 1px solid var(--color-brand-red);
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+.doc .app-services {
+  color: var(--color-brand-purple-secondary);
+  border: 1px solid var(--color-brand-purple-secondary);
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+.doc .ai {
+  color: var(--color-brand-green-secondary);
+  border: 1px solid var(--color-brand-green-secondary);
   border-radius: 3px;
   opacity: 0.6;
 }
