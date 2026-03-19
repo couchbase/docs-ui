@@ -1,5 +1,9 @@
-<link rel="llms-txt" href="/llms.txt"> <!-- custom rel type, following Mintlify -->
-<link rel="manifest" href="/llms.txt"> <!-- fallback for systems expecting manifest -->
+{{#with page.url}}
+<link rel="alternate" type="text/markdown" href="{{to-markdown .}}">
+{{/with}}
+<link rel="llms-txt" type="text/markdown" href="/llms.txt"> <!-- custom rel type, following Mintlify -->
+<link rel="search" type="text/markdown" href="/llms.txt"> <!-- fallback for systems that don't accept custom types-->
+
 {{#with page.attributes.meta-robots}}
 <meta name="robots" content="{{this}}">
 {{/with}}
