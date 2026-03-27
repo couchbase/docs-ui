@@ -1,4 +1,5 @@
 <main class="article" data-ceiling="topbar">
+{{> llms-guidance }}
 {{> watermark}}
 {{#unless (or (ne page.attributes.hide-view-latest undefined) (eq page.componentVersion page.component.latest))}}
 {{#with page.latest}}
