@@ -1,0 +1,202 @@
+= Services Overview
+:page-layout: landing-page  
+:page-role: tiles
+:!sectids:
+
+++++
+<div class="landing-hero">
+  <div class="landing-hero-content">
+    <h1>Couchbase Services</h1>
+    <p>Powerful, scalable services that can be deployed independently across your cluster for optimal performance and resource utilization.</p>
+    <div class="landing-hero-actions">
+      <a href="/server/learn/services-and-indexes/services/services.html" class="landing-btn landing-btn--primary">
+        <i class="fas fa-book"></i>
+        Learn About Services
+      </a>
+      <a href="/server/manage/manage-services/services.html" class="landing-btn landing-btn--secondary">  
+        <i class="fas fa-cogs"></i>
+        Manage Services
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="landing-filter" id="landing-filter">
+  <div class="landing-filter__header landing-filter__header--with-clear">
+    <div class="landing-filter__title">Filter Services</div>
+    <button class="landing-filter__clear">Clear All Filters</button>
+  </div>
+  <div class="landing-filter__groups">
+    <div class="landing-filter__group">
+      <div class="landing-filter__group-title">Service Type</div>
+      <div class="landing-filter__options">
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="core">
+          <input type="checkbox" value="core" name="product" style="display: none;">
+          Core Services
+        </label>
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="query">
+          <input type="checkbox" value="query" name="product" style="display: none;">
+          Query & Search
+        </label>
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="analytics">
+          <input type="checkbox" value="analytics" name="product" style="display: none;">
+          Analytics
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="landing-grid landing-grid--cols-3">
+++++
+
+[.landing-card.landing-card--interactive.landing-card--featured]
+====
+++++
+<div data-product="core" data-topic="database" onclick="window.location.href='/server/learn/data/data.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-database"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Data Service</h3>
+    <p class="landing-card__description">The foundation of Couchbase - handles document storage, retrieval, and memory management with built-in replication and persistence.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-core">Core</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/server/learn/data/data.html" class="landing-card__link">Explore Data Service</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="query" data-topic="sql" onclick="window.location.href='/server/n1ql/n1ql-language-reference/index.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-search"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Query Service</h3>
+    <p class="landing-card__description">Execute SQL-like N1QL queries against JSON documents with support for joins, subqueries, and complex expressions.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-query">Query</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/server/n1ql/n1ql-language-reference/index.html" class="landing-card__link">Learn N1QL</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="query" data-topic="performance" onclick="window.location.href='/server/learn/services-and-indexes/indexes/indexes.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-list-ol"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Index Service</h3>
+    <p class="landing-card__description">Create and maintain secondary indexes for lightning-fast query performance with Global Secondary Indexes (GSI).</p>
+    <div class="landing-card__tags">  
+      <span class="landing-card__tag landing-card__tag--product-query">Query</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/server/learn/services-and-indexes/indexes/indexes.html" class="landing-card__link">Index Overview</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]  
+====
+++++
+<div data-product="query" data-topic="search" onclick="window.location.href='/server/fts/fts-introduction.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-search-plus"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Search Service</h3>
+    <p class="landing-card__description">Full-text search with faceting, highlighting, and geo-spatial capabilities powered by the Bleve search engine.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-query">Query</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/server/fts/fts-introduction.html" class="landing-card__link">Full-Text Search</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="analytics" data-topic="automation" onclick="window.location.href='/server/eventing/eventing-overview.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-bolt"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Eventing Service</h3>
+    <p class="landing-card__description">Real-time server-side JavaScript functions that automatically respond to data mutations for business logic automation.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-analytics">Analytics</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/server/eventing/eventing-overview.html" class="landing-card__link">Eventing Guide</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="analytics" data-difficulty="advanced" data-topic="analytics" onclick="window.location.href='/server/analytics/introduction.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-chart-line"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Analytics Service</h3>
+    <p class="landing-card__description">Parallel query processing for complex analytical workloads using SQL++ without impacting operational performance.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--difficulty-advanced">Advanced</span>
+      <span class="landing-card__tag landing-card__tag--product-analytics">Analytics</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/server/analytics/introduction.html" class="landing-card__link">Analytics SQL++</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+++++
+</div>
+
+<div class="landing-media landing-media--center">
+  <div class="landing-media__visual">
+    <img src="{{{uiRootPath}}}/img/landing-icon.svg" alt="Multi-Dimensional Scaling Architecture" loading="lazy">
+  </div>
+  <div class="landing-media__content">
+    <h3>Multi-Dimensional Scaling</h3>
+    <p>Deploy services independently across cluster nodes for optimal resource utilization. Scale specific workloads based on your application's unique performance requirements.</p>
+    <div class="landing-hero-actions">
+      <a href="/server/learn/architecture-overview/architecture-intro.html" class="landing-btn landing-btn--secondary">
+        <i class="fas fa-sitemap"></i>
+        Architecture Guide
+      </a>
+      <a href="/server/install/get-started.html" class="landing-btn landing-btn--accent">
+        <i class="fas fa-rocket"></i>
+        Quick Start
+      </a>
+    </div>
+  </div>
+</div>
+++++

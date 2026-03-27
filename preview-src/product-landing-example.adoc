@@ -1,0 +1,294 @@
+= SDK Landing Page
+:page-layout: landing-page-sdk  
+:page-role: tiles
+:!sectids:
+
+// This example shows two ways to create landing cards with FontAwesome icons:
+//
+// 1. Using the landing-card-grid helper (recommended):
+// {{#landing-card-grid columns=3 items=myCardData}}{{/landing-card-grid}}
+// 
+// Where myCardData is an array of objects with:
+// - title: Card title text
+// - description: Card description text  
+// - icon: FontAwesome icon class (e.g., "fas fa-database")
+// - href: Link URL
+// - tags: Array of tag strings
+// - difficulty/product/topic: Filter attributes
+//
+// 2. Manual HTML approach (shown below):
+// Use <i class="landing-card__title-icon [icon-class]"></i> before the title text
+
+++++
+<div class="landing-hero">
+  <div class="landing-hero-content">
+    <h1>Couchbase SDKs</h1>
+    <p>Connect your applications to Couchbase with our comprehensive SDKs. Choose from multiple programming languages with both synchronous and asynchronous APIs for maximum performance.</p>
+    <div class="landing-hero-actions">
+      <a href="/server/sdk/overview.html" class="landing-btn landing-btn--primary">
+        <i class="fas fa-code"></i>
+        SDK Overview
+      </a>
+      <a href="/server/sdk/sample-application.html" class="landing-btn landing-btn--secondary">
+        <i class="fas fa-play"></i>
+        Sample Apps
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="landing-filter" id="landing-filter">
+  <div class="landing-filter__header landing-filter__header--with-clear">
+    <div class="landing-filter__title">Filter SDKs</div>
+    <button class="landing-filter__clear">Clear All Filters</button>
+    <button class="landing-filter__toggle" aria-expanded="true" aria-controls="landing-filter-groups">
+      <span class="landing-filter__toggle-text">Collapse</span>
+      <span class="landing-filter__toggle-icon">▼</span>
+    </button>
+  </div>
+  <div class="landing-filter__groups" id="landing-filter-groups">
+    <div class="landing-filter__group">
+      <div class="landing-filter__group-title">Language Type</div>
+      <div class="landing-filter__options">
+        <label class="landing-filter__option" data-filter-type="topic" data-filter-value="compiled">
+          <input type="checkbox" value="compiled" name="topic" style="display: none;">
+          Compiled Languages
+        </label>
+        <label class="landing-filter__option" data-filter-type="topic" data-filter-value="managed">
+          <input type="checkbox" value="managed" name="topic" style="display: none;">
+          Managed/VM Languages
+        </label>
+        <label class="landing-filter__option" data-filter-type="topic" data-filter-value="scripting">
+          <input type="checkbox" value="scripting" name="topic" style="display: none;">
+          Scripting Languages  
+        </label>
+      </div>
+    </div>
+    <div class="landing-filter__group">
+      <div class="landing-filter__group-title">Product</div>
+      <div class="landing-filter__options">
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="server">
+          <input type="checkbox" value="server" name="product" style="display: none;">
+          Server
+        </label>
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="enterprise-analytics">
+          <input type="checkbox" value="enterprise-analytics" name="product" style="display: none;">
+          Enterprise Analytics
+        </label>
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="capella-analytics">
+          <input type="checkbox" value="capella-analytics" name="product" style="display: none;">
+          Capella Analytics  
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="landing-section-divider"></div>
+
+<h2>Couchbase Server SDKs</h2>
+<div class="landing-grid landing-grid--cols-3">
+++++
+
+[.landing-card.landing-card--interactive.landing-card--featured]
+====
+++++
+<div data-product="server" data-topic="managed" onclick="window.location.href='/java-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fab fa-java"></i>
+      Java SDK
+    </h3>
+    <p class="landing-card__description">Enterprise-grade Java SDK with comprehensive async support, reactive extensions, and Spring Data integration for scalable applications.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+      <span class="landing-card__tag landing-card__tag--topic-managed">JVM</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/java-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with Java</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="server" data-topic="scripting" onclick="window.location.href='/nodejs-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fab fa-node-js"></i>
+      Node.js SDK
+    </h3>
+    <p class="landing-card__description">Native JavaScript SDK with Promise and async/await support, perfect for modern web applications and serverless functions.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+      <span class="landing-card__tag landing-card__tag--topic-scripting">JavaScript</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/nodejs-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with Node.js</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="server" data-topic="scripting" onclick="window.location.href='/python-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fab fa-python"></i>
+      Python SDK
+    </h3>
+    <p class="landing-card__description">Pythonic SDK with asyncio support, perfect for data science, web applications, and rapid prototyping with clean, readable code.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+      <span class="landing-card__tag landing-card__tag--topic-scripting">Python</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/python-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with Python</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="server" data-topic="managed" onclick="window.location.href='/dotnet-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fab fa-microsoft"></i>
+      .NET SDK
+    </h3>
+    <p class="landing-card__description">Full-featured .NET SDK supporting C#, F#, and VB.NET with async/await patterns and comprehensive LINQ integration.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+      <span class="landing-card__tag landing-card__tag--topic-managed">.NET</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/dotnet-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with .NET</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="server" data-topic="compiled" onclick="window.location.href='/go-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fab fa-golang"></i>
+      Go SDK
+    </h3>
+    <p class="landing-card__description">High-performance Go SDK optimized for concurrent applications with excellent memory efficiency and simple deployment.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+      <span class="landing-card__tag landing-card__tag--topic-compiled">Compiled</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/go-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with Go</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="server" data-topic="compiled" onclick="window.location.href='/c-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fas fa-c"></i>
+      C SDK
+    </h3>
+    <p class="landing-card__description">Low-level C SDK (libcouchbase) for maximum performance and control. Foundation for other language SDKs and custom implementations.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+      <span class="landing-card__tag landing-card__tag--topic-compiled">C/C++</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/c-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with C</a>
+    </div>
+  </div>
+</div>
+</div>
+++++
+====
+
+++++
+<h2>Enterprise Analytics SDKs</h2>
+<div class="landing-grid landing-grid--cols-3">
+++++
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="enterprise-analytics" data-topic="compiled" onclick="window.location.href='/go-sdk/current/hello-world/start-using-sdk.html'">
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">
+      <i class="landing-card__title-icon fab fa-golang"></i>
+      Go SDK
+    </h3>
+    <p class="landing-card__description">High-performance Go SDK optimized for concurrent applications with excellent memory efficiency and simple deployment.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-enterprise-analytics">Enterprise Analytics</span>
+      <span class="landing-card__tag landing-card__tag--topic-compiled">Compiled</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/go-sdk/current/hello-world/start-using-sdk.html" class="landing-card__link">Start with Go</a>
+    </div>
+  </div>
+</div>
+++++
+====
+
+++++
+</div>
+
+<div class="landing-section-divider"></div>
+
+<div class="landing-media">
+  <div class="landing-media__visual">
+    <img src="{{{uiRootPath}}}/img/sdk-architecture.svg" alt="SDK Architecture Overview" loading="lazy">
+  </div>
+  <div class="landing-media__content">
+    <h3>Consistent API Design</h3>
+    <p>All Couchbase SDKs share a consistent API design pattern, making it easy to switch between languages or work in polyglot environments. Core concepts like Collections, Scopes, and CRUD operations work the same way across all platforms.</p>
+    <ul>
+      <li><strong>Unified Operations:</strong> Same methods for Key-Value, N1QL, and FTS</li>
+      <li><strong>Error Handling:</strong> Consistent exception patterns across languages</li>
+      <li><strong>Configuration:</strong> Similar connection and cluster management</li>
+      <li><strong>Async Support:</strong> Native async/await patterns where available</li>
+    </ul>
+  </div>
+</div>
+
+<div class="landing-section-divider"></div>
+
+<div class="landing-media landing-media--reverse">
+  <div class="landing-media__visual">
+    <img src="{{{uiRootPath}}}/img/performance-chart.svg" alt="SDK Performance Comparison" loading="lazy">
+  </div>
+  <div class="landing-media__content">
+    <h3>Performance Optimized</h3>
+    <p>Each SDK is optimized for its language's strengths and common usage patterns. Connection pooling, efficient serialization, and smart retry logic ensure optimal performance in production environments.</p>
+    <div class="landing-hero-actions">
+      <a href="/server/sdk/performance-guide.html" class="landing-btn landing-btn--secondary">
+        <i class="fas fa-tachometer-alt"></i>
+        Performance Tips
+      </a>
+      <a href="/server/sdk/best-practices.html" class="landing-btn landing-btn--accent">
+        <i class="fas fa-star"></i>
+        Best Practices
+      </a>
+    </div>
+  </div>
+</div>
+++++

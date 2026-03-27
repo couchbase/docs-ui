@@ -145,6 +145,13 @@ main #watermark {
     max-width: clamp(55em, 60%, var(--width-container));
   }
 
+  /* Landing pages need more width for their components */
+  main.article .landing-page-doc {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   main.home {
     padding-right: var(--width-container-gutter);
     padding-left: var(--width-container-gutter);

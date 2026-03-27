@@ -1,0 +1,401 @@
+= Landing Page Component Guide
+:page-layout: landing-page
+:page-role: tiles  
+:!sectids:
+
+++++
+<div class="landing-hero">
+  <div class="landing-hero-content">
+    <h1>Landing Page Component System</h1>
+    <p>A comprehensive guide to creating modern, interactive landing pages using the new component-based system. Learn how to build engaging experiences with filtering, animations, and responsive design.</p>
+    <div class="landing-hero-actions">
+      <a href="#components" class="landing-btn landing-btn--primary">
+        <i class="fas fa-cubes"></i>
+        Explore Components
+      </a>
+      <a href="#examples" class="landing-btn landing-btn--secondary">
+        <i class="fas fa-code"></i>
+        View Examples
+      </a>
+    </div>
+  </div>
+</div>
+++++
+
+== Component Overview
+
+The new landing page system provides a comprehensive set of components for creating modern, interactive documentation pages:
+
+++++
+<div class="landing-grid landing-grid--cols-2">
+  <div class="landing-card">
+    <div class="landing-card__content">
+      <h3 class="landing-card__title">🎨 Visual Components</h3>
+      <ul>
+        <li><strong>Hero Sections:</strong> Eye-catching header areas with calls-to-action</li>
+        <li><strong>Card Grids:</strong> Flexible layouts with 1-4 column support</li>
+        <li><strong>Media Blocks:</strong> Image and content combinations</li>
+        <li><strong>Buttons:</strong> Multiple styles with hover effects</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="landing-card">
+    <div class="landing-card__content">
+      <h3 class="landing-card__title">⚡ Interactive Features</h3>
+      <ul>
+        <li><strong>Content Filtering:</strong> Filter by product, difficulty, topic</li>
+        <li><strong>Animations:</strong> Smooth transitions and hover effects</li>
+        <li><strong>Progressive Loading:</strong> Lazy images and skeleton states</li>
+        <li><strong>Accessibility:</strong> Keyboard navigation and screen reader support</li>
+      </ul>
+    </div>
+  </div>
+</div>
+++++
+
+== Hero Section {#hero}
+
+The hero component creates an engaging header area with gradient background and action buttons:
+
+.Basic Hero
+[source,asciidoc]
+----
+++++
+<div class="landing-hero">
+  <div class="landing-hero-content">
+    <h1>Your Page Title</h1>
+    <p>Compelling description that explains what users will find on this page.</p>
+    <div class="landing-hero-actions">
+      <a href="/primary-action" class="landing-btn landing-btn--primary">
+        <i class="fas fa-rocket"></i>
+        Get Started
+      </a>
+      <a href="/secondary-action" class="landing-btn landing-btn--secondary">
+        <i class="fas fa-book"></i>
+        Learn More
+      </a>
+    </div>
+  </div>
+</div>
+++++
+----
+
+== Content-Aware Filtering {#filtering}
+
+The filtering system allows users to find relevant content by multiple criteria:
+
+.Filter Component
+[source,asciidoc]
+----
+++++
+<div class="landing-filter" id="landing-filter">
+  <div class="landing-filter__header">
+    <div class="landing-filter__title">Filter Content</div>
+    <button class="landing-filter__toggle" aria-expanded="true" aria-controls="landing-filter-groups">
+      <span class="landing-filter__toggle-text">Collapse</span>
+      <span class="landing-filter__toggle-icon">▼</span>
+    </button>
+  </div>
+  <div class="landing-filter__groups" id="landing-filter-groups">
+    <div class="landing-filter__group">
+      <div class="landing-filter__group-title">Product</div>
+      <div class="landing-filter__options">
+        <label class="landing-filter__option" data-filter-type="product" data-filter-value="server">
+          <input type="checkbox" value="server" name="product" style="display: none;">
+          Couchbase Server
+        </label>
+        <!-- Add more filter options -->
+      </div>
+    </div>
+    <div class="landing-filter__group">
+      <button class="landing-filter__clear">Clear All Filters</button>
+    </div>
+  </div>
+</div>
+++++
+----
+
+*Key Attributes:*
+
+* `data-filter-type`: Category of filter (product, topic)
+* `data-filter-value`: Specific value to filter by
+* Auto-generates filter state and applies to matching cards
+
+== Interactive Cards {#cards}
+
+Cards are the primary content containers with hover animations and filtering support:
+
+.Interactive Card
+[source,asciidoc]
+----
+[.landing-card.landing-card--interactive]
+====
+++++
+<div data-product="server" data-topic="database" 
+     onclick="window.location.href='/target-page.html'">
+  <div class="landing-card__icon">
+    <i class="icon fas fa-database"></i>
+  </div>
+  <div class="landing-card__content">
+    <h3 class="landing-card__title">Card Title</h3>
+    <p class="landing-card__description">Brief description of the content or feature.</p>
+    <div class="landing-card__tags">
+      <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+    </div>
+    <div class="landing-card__actions">
+      <a href="/learn-more" class="landing-card__link">Learn More</a>
+    </div>
+  </div>
+</div>
+++++
+====
+----
+
+*Card Types:*
+
+* `landing-card--interactive`: Clickable with hover animations
+* `landing-card--featured`: Highlighted with gradient background  
+* Standard card: Static content container
+
+*Data Attributes for Filtering:*
+
+* `data-product`: server, mobile, capella, etc.
+* `data-topic`: database, analytics, search, mobile, etc.
+* `data-tags`: Space-separated list of tags
+
+== Grid Layouts {#grids}
+
+Responsive grid system with automatic column adjustment:
+
+.Grid Examples
+[source,asciidoc]
+----
+++++
+<div class="landing-grid landing-grid--cols-3">
+++++
+
+[.landing-card]
+====
+<!-- Card 1 content -->
+====
+
+[.landing-card] 
+====
+<!-- Card 2 content -->
+====
+
+[.landing-card]
+====
+<!-- Card 3 content -->  
+====
+
+++++
+</div>
+++++
+----
+
+*Grid Options:*
+
+* `landing-grid--cols-1`: Single column
+* `landing-grid--cols-2`: Two columns (responsive to 1 on mobile)
+* `landing-grid--cols-3`: Three columns (responsive to 2 on tablet, 1 on mobile)
+* `landing-grid--cols-4`: Four columns (responsive to 2 on tablet, 1 on mobile)
+
+== Media Blocks {#media}
+
+Combine images with content in flexible arrangements:
+
+.Media Block Examples  
+[source,asciidoc]
+----
+++++
+<div class="landing-media">
+  <div class="landing-media__visual">
+    <img src="/img/feature-image.svg" alt="Feature illustration" loading="lazy">
+  </div>
+  <div class="landing-media__content">
+    <h3>Feature Title</h3>
+    <p>Detailed explanation of the feature with benefits and use cases.</p>
+    <div class="landing-hero-actions">
+      <a href="/learn-more" class="landing-btn landing-btn--secondary">Learn More</a>
+    </div>
+  </div>
+</div>
+++++
+----
+
+*Media Variations:*
+
+* `landing-media--reverse`: Image on right, content on left
+* `landing-media--center`: Vertically centered alignment  
+* `landing-media--stack`: Stacked layout (good for mobile)
+
+== Buttons & Actions {#buttons}
+
+Consistent button system with multiple styles:
+
+.Button Examples
+[source,asciidoc]
+----
+++++
+<a href="/action" class="landing-btn landing-btn--primary">
+  <i class="fas fa-rocket"></i>
+  Primary Action
+</a>
+
+<a href="/action" class="landing-btn landing-btn--secondary">
+  <i class="fas fa-book"></i>
+  Secondary Action  
+</a>
+
+<a href="/action" class="landing-btn landing-btn--accent">
+  <i class="fas fa-star"></i>
+  Accent Action
+</a>
+++++
+----
+
+*Button Types:*
+
+* `landing-btn--primary`: Main call-to-action (blue)
+* `landing-btn--secondary`: Secondary action (outline) 
+* `landing-btn--accent`: Special emphasis (orange)
+
+== Tag System {#tags}
+
+Visual indicators for content categorization:
+
+.Tag Examples
+[source,asciidoc]
+----
+++++
+<div class="landing-card__tags">
+  <span class="landing-card__tag landing-card__tag--difficulty-beginner">Beginner</span>
+  <span class="landing-card__tag landing-card__tag--product-server">Server</span>
+  <span class="landing-card__tag landing-card__tag--topic-database">Database</span>
+</div>
+++++
+----
+
+*Tag Categories:*
+
+* **Product:** `server`, `mobile`, `capella`
+* **Topic:** `database`, `analytics`, `search`, `mobile`, etc.
+* **Custom:** Any additional categorization needed
+
+== Best Practices {#best-practices}
+
+++++
+<div class="landing-grid landing-grid--cols-1">
+  <div class="landing-card">
+    <div class="landing-card__content">
+      <h3 class="landing-card__title">📝 Content Guidelines</h3>
+      <ul>
+        <li><strong>Hero Descriptions:</strong> Keep under 160 characters for impact</li>
+        <li><strong>Card Titles:</strong> Use action-oriented language (3-7 words)</li>
+        <li><strong>Card Descriptions:</strong> Explain benefits, not just features (1-2 sentences)</li>
+        <li><strong>Filter Labels:</strong> Use clear, non-technical terms</li>
+        <li><strong>Alt Text:</strong> Always provide meaningful image descriptions</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="landing-card">
+    <div class="landing-card__content">
+      <h3 class="landing-card__title">🎯 UX Guidelines</h3>
+      <ul>
+        <li><strong>Progressive Disclosure:</strong> Start with essentials, allow drilling down</li>
+        <li><strong>Logical Grouping:</strong> Group related content together</li>
+        <li><strong>Clear Hierarchy:</strong> Use consistent heading levels</li>
+        <li><strong>Actionable Content:</strong> Every card should have a clear next step</li>
+        <li><strong>Performance:</strong> Use lazy loading for images below the fold</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="landing-card">
+    <div class="landing-card__content">
+      <h3 class="landing-card__title">📱 Responsive Design</h3>
+      <ul>
+        <li><strong>Mobile First:</strong> Design for smallest screen, enhance up</li>
+        <li><strong>Touch Targets:</strong> Ensure buttons/links are at least 44px</li>
+        <li><strong>Readable Text:</strong> Maintain 16px minimum font size</li>
+        <li><strong>Loading Performance:</strong> Optimize images and use webp format</li>
+        <li><strong>Test Thoroughly:</strong> Check on multiple devices and screen sizes</li>
+      </ul>
+    </div>
+  </div>
+</div>
+++++
+
+== Advanced Features {#advanced}
+
+=== Custom Animations
+
+Add staggered entrance animations by including cards in grids:
+
+[source,asciidoc]
+----
+++++
+<div class="landing-grid landing-grid--cols-3">
+  <!-- Cards automatically get staggered animation delays -->
+</div>
+++++
+----
+
+=== Skeleton Loading States 
+
+For performance, show loading placeholders:
+
+[source,asciidoc]
+----
+++++
+<div class="landing-skeleton landing-skeleton--card"></div>
+++++
+----
+
+=== Progress Indicators
+
+The system automatically adds a progress bar for long pages.
+
+=== Accessibility Features
+
+* **Keyboard Navigation:** Tab through interactive elements
+* **Screen Reader Support:** Proper ARIA labels and semantic HTML
+* **Reduced Motion:** Respects user preference for reduced animations  
+* **High Contrast Mode:** Enhanced borders and focus states
+
+== Migration Guide {#migration}
+
+Converting existing hardcoded landing pages:
+
+1. **Replace static HTML** with AsciiDoc content structure
+2. **Add filter attributes** to existing cards (`data-product`, `data-difficulty`, etc.)  
+3. **Update CSS classes** to use new component system
+4. **Add hero section** for better visual hierarchy
+5. **Include interactive JavaScript** (`13-landing-interactions.js` loads automatically)
+
+== Getting Help {#help}
+
+++++
+<div class="landing-media landing-media--center">
+  <div class="landing-media__visual">
+    <img src="{{{uiRootPath}}}/img/help-icon.svg" alt="Help and Support" loading="lazy">
+  </div>
+  <div class="landing-media__content">
+    <h3>Need Help?</h3>
+    <p>Questions about implementing these components or need custom functionality? The documentation team is here to help.</p>
+    <div class="landing-hero-actions">
+      <a href="mailto:docs@couchbase.com" class="landing-btn landing-btn--secondary">
+        <i class="fas fa-envelope"></i>
+        Contact Docs Team
+      </a>
+      <a href="/contributing/style-guide.html" class="landing-btn landing-btn--accent">
+        <i class="fas fa-book"></i>
+        Style Guide  
+      </a>
+    </div>
+  </div>
+</div>
+++++
