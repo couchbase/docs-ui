@@ -1,0 +1,20 @@
+{{#if page.attributes.step-number}}
+  <div class="trial-progress">
+    <div class="trial-progress-fill" style="width: {{math page.attributes.step-number '/' page.attributes.step-total '*' 100}}%"></div>
+    </div>
+
+  <div class="trial-step-header">
+    <div class="trial-step-badge {{#if (eq page.attributes.step-number page.attributes.step-total)}}done{{/if}}">
+     {{#if (eq page.attributes.step-number page.attributes.step-total)}}
+      ✓
+     {{else}}
+      {{page.attributes.step-number}}
+     {{/if}}
+    </div>
+    <h1>{{page.title}}</h1>
+    </div>
+
+    {{#if page.attributes.duration}}
+      <div class="trial-step-duration">{{page.attributes.duration}}</div>
+    {{/if}}
+    {{/if}}

@@ -1,0 +1,23 @@
+{{#if page.attributes.step-number}}
+  <div class="trial-nav-buttons">
+
+    {{#if page.attributes.prev-page}}
+      <a class="trial-btn trial-btn-prev" href="{{ relativize (resolvePageURL page.attributes.prev-page)}}">
+        ← Previous  
+      </a>
+    {{else}}
+    <span></span>
+    {{/if}}
+
+    {{#if page.attributes.next-page}}
+      <a class="trial-btn trial-btn-next" href="{{ relativize (resolvePageURL page.attributes.next-page)}}">
+        {{#if page.attributes.step-number equal page.attributes.step-total}}
+          Finish ✓
+        {{else}}
+          Next →
+        {{/if}}
+      </a>
+    {{/if}}
+
+  </div>
+{{/if}}
