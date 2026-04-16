@@ -1,8 +1,9 @@
 ;(function () {
   var iframeLoader = new window.ChatBotUiLoader.IframeLoader()
 
-  const iframeOrigin = document.head.querySelector(
-    'meta[name="page-chatbot-origin"]')?.content ||
+  const qs = (q) => document.head.querySelector(q)?.content
+
+  const iframeOrigin = qs('meta[name="page-chatbot-origin"]') ||
       'https://d2sozpdiqok6m4.cloudfront.net'
 
   const origin = window.parent.origin
@@ -36,29 +37,44 @@
     },
   }
 
+  const clientContext = {
+    product: {
+      value: qs('meta[name="docsearch:component"]'),
+      description: qs('meta[name="docsearch:component_title"]'),
+    },
+    surface: { value: 'docs', description: 'Couchbase Docs' },
+    service: {
+      value: qs('meta[name="docsearch:component"]'),
+      description: qs('meta[name="docsearch:component_title"]'),
+    },
+    page: {
+      route: {
+        value: qs('meta[name="page-url"]'),
+        description: qs('meta[name="docsearch:breadcrumbs"]'),
+      },
+      description: qs('meta[name="docsearch:breadcrumbs"]'),
+    },
+    component: {
+      id: {
+        value: qs('meta[name="docsearch:component"]'),
+        description: qs('meta[name="docsearch:component_title"]'),
+      },
+      edition: { value: qs('meta[name="docsearch:edition"]') },
+      version: { value: qs('meta[name="docsearch:cversion"]') },
+      description: qs('meta[name="docsearch:component_title"]'),
+    },
+  }
+
   // load the iframe
   iframeLoader
     .load(chatbotUiconfig)
     .then(function () {
       iframeLoader.api.ping()
-      // perform actions on the parent dependent on the chatbot loading.
-      // document.getElementById('send-intent').setAttribute('disabled', false)
 
-      iframeLoader.api.setClientContext({
-        product: { value: 'capella', description: 'Couchbase Capella' },
-        surface: { value: 'docs', description: 'Couchbase Docs' },
-        service: { value: 'query', description: 'N1QL query service' },
-        page: {
-          route: { value: '/query', description: 'Query workbench' },
-          description: 'Query execution and tuning page',
-        },
-        component: {
-          id: { value: 'server', description: 'Couchbase Server' },
-          edition: { value: 'enterprise', description: 'Edition' },
-          version: { value: '7.6.2', description: 'Server version' },
-          description: 'Target runtime component',
-        },
-      })
+      // perform actions on the parent dependent on the chatbot loading.
+      iframeLoader.api.setClientContext(clientContext)
+
+      // document.getElementById('send-intent').setAttribute('disabled', false)
     })
     .catch(function (error) {
       console.error('chatbot UI failed to load', error, iframeOrigin)
