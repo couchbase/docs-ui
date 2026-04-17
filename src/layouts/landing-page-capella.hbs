@@ -1,13 +1,1 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-{{> head-first}}
-<title>{{{detag (or page.title 'landing page')}}}{{#if site.title}} | {{{site.title}}}{{/if}}</title>
-{{> head-last}}
-</head>
-<body class="landing-page">
-{{> header}}
-{{> body-landing-page-capella}}
-{{> footer}}
-</body>
-</html>
+{{> layout-landing-page nav="sidebar" mainClass="capella-article" articleClass="landing-page-capella" capellaImages=true}}

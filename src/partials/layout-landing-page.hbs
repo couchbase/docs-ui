@@ -1,4 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{> head-first}}
+<title>{{{detag (or page.title 'landing page')}}}{{#if site.title}} | {{{site.title}}}{{/if}}</title>
+{{> head-last}}
+</head>
+<body class="landing-page">
+{{> header}}
 <div class="body container">
+{{#if (eq nav 'full')}}
+{{> nav}}
+{{> toc}}
+{{else if (eq nav 'sidebar')}}
 {{#if (eq (nav-mode) 'client')}}
 {{#with (nav-group-for-page (nav-groups))}}
 {{#if ./components.length}}
@@ -10,15 +23,21 @@
 {{/if}}
 {{/with}}
 {{/if}}
-<main class="capella-article" data-ceiling="topbar">
+{{/if}}
+<main class="{{or mainClass 'article'}}" data-ceiling="topbar">
 {{> llms-guidance}}
 {{> watermark}}
-<article class="doc landing-page-doc landing-page-capella">
+<article class="doc landing-page-doc{{#if articleClass}} {{articleClass}}{{/if}}">
+{{#if capellaImages}}
 <img class="opening-image" src="{{{uiRootPath}}}/img/stars.svg" />
-
+{{/if}}
 {{{page.contents}}}
-
+{{#if capellaImages}}
 <img class="ending-image" src="{{{uiRootPath}}}/img/lineplus.svg" />
+{{/if}}
 </article>
 </main>
 </div>
+{{> footer}}
+</body>
+</html>
