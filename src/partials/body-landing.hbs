@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-{{> head-first}}
-<title>{{{detag (or page.title 'landing page')}}}{{#if site.title}} | {{{site.title}}}{{/if}}</title>
-{{> head-last}}
-</head>
-<body class="landing-page">
-{{> header}}
 <div class="body container">
 {{#if (eq nav 'full')}}
 {{> nav}}
 {{> toc}}
+{{else if (eq nav 'tutorials-filter')}}
+{{> tutorials-filter}}
 {{else if (eq nav 'sidebar')}}
 {{#if (eq (nav-mode) 'client')}}
 {{#with (nav-group-for-page (nav-groups))}}
@@ -38,6 +31,3 @@
 </article>
 </main>
 </div>
-{{> footer}}
-</body>
-</html>

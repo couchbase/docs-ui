@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{> head-first}}
+<title>{{#if siteTitleOnly}}{{{site.title}}}{{else}}{{{detag (or page.title defaultTitle)}}}{{#with site.title}} | {{{.}}}{{/with}}{{/if}}</title>
+{{#with additionalHeadTemplate}}{{> .}}{{/with}}
+{{> head-last}}
+</head>
+<body class="{{or bodyClass 'article'}}">
+{{> header}}
+{{> (or bodyTemplate 'body') nav=nav mainClass=mainClass articleClass=articleClass capellaImages=capellaImages}}
+{{> footer}}
+</body>
+</html>

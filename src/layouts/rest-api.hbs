@@ -1,26 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-{{> head-first}}
-
-<title>{{{detag (or page.title 'REST API')}}}{{#if site.title}} | {{{site.title}}}{{/if}}</title>
-{{> head-last}}
-<style>
-#redoc { width: 100%} 
-</style>
-<meta name='viewport' content='width=device-width, initial-scale=1' />
-</head>
-<body class="rest-api">
-{{> header}}
-
-<div class="body container">
-
-
-{{{page.contents}}}
-
-</div>
-
-
-{{> footer}}
-</body>
-</html>
+{{> layout-shell
+    defaultTitle="REST API"
+    bodyClass="rest-api"
+    bodyTemplate="body-rest-api"
+    additionalHeadTemplate="head-rest-api"}}

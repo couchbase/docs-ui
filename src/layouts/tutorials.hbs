@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-{{> head-first}}
-<title>Tutorials{{#with site.title}} | {{this}}{{/with}}</title>
-{{> head-last}}
-</head>
-<body class="tutorials body tiles">
-{{> header}}
-{{> body-tutorials}}
-{{> footer}}
-</body>
-</html>
+{{> layout-shell
+    defaultTitle="Tutorials"
+    bodyClass="tutorials body tiles"
+    bodyTemplate="body-tutorials"}}
