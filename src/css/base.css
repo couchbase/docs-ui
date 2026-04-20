@@ -78,6 +78,8 @@ code {
   color: inherit;
 }
 
+#redoc { width: 100%; }
+
 a code {
   color: var(--color-link);
   background-color: transparent;

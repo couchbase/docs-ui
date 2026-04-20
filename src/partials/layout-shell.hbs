@@ -3,7 +3,6 @@
 <head>
 {{> head-first}}
 <title>{{#if siteTitleOnly}}{{{site.title}}}{{else}}{{{detag (or page.title defaultTitle)}}}{{#with site.title}} | {{{.}}}{{/with}}{{/if}}</title>
-{{#with additionalHeadTemplate}}{{> .}}{{/with}}
 {{> head-last}}
 </head>
 <body class="{{or bodyClass 'article'}}">
