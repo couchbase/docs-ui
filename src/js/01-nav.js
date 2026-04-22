@@ -236,7 +236,7 @@
         // Depending on depth, we may wish to collapse the level.
         // originally we would collapse everything, but we can set :page-nav-header-levels: 1 to have
         // up to the bold subheadings kept open
-        if (currentPath.length > page.navHeaderLevels) {
+        if (currentPath.length >= page.navHeaderLevels) {
           if (!navItemEl.querySelector('a.is-current-page')) {
             navItemEl.classList.add('closed')
           }
