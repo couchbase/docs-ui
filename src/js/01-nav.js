@@ -76,7 +76,7 @@
       component: head.querySelector('meta[name="dcterms.subject"]').getAttribute('content'),
       version: head.querySelector('meta[name="dcterms.identifier"]').getAttribute('content'),
       url: head.querySelector('meta[name=page-url]').getAttribute('content'),
-      navHeaderLevels: head.querySelector('meta[name="page-nav-header-levels"]')?.content || 0,
+      navHeaderLevels: parseInt(head.querySelector('meta[name="page-nav-header-levels"]')?.content) || 0,
     }
   }
 
@@ -177,8 +177,8 @@
 
         // create `items` to pass to build to buildNavTree
         var items = componentVersion.sets
-        if (items.length === 1 && !items[0].content) {
-          items = items[0].items
+        if (items.every(function (s) { return !s.content })) {
+          items = Array.prototype.concat.apply([], items.map(function (s) { return s.items || [] }))
         }
         if (items.length && items[0].content && items[0].content.endsWith(' Home')) {
           items.splice.apply(items, [0, 1].concat(items[0].items || []))
@@ -236,7 +236,7 @@
         // Depending on depth, we may wish to collapse the level.
         // originally we would collapse everything, but we can set :page-nav-header-levels: 1 to have
         // up to the bold subheadings kept open
-        if (currentPath.length >= page.navHeaderLevels) {
+        if (currentPath.length > page.navHeaderLevels) {
           if (!navItemEl.querySelector('a.is-current-page')) {
             navItemEl.classList.add('closed')
           }
