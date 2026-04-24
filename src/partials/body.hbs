@@ -1,5 +1,41 @@
 <div class="body container{{#with (or page.role page.attributes.role)}} {{{this}}}{{/with}}">
 {{> nav}}
 {{> toc}}
-{{> main}}
+<main class="article" data-ceiling="topbar">
+{{> llms-guidance}}
+{{> watermark}}
+{{#unless (or (ne page.attributes.hide-view-latest undefined) (eq page.componentVersion page.component.latest))}}
+{{#with page.latest}}
+{{#if ./missing}}
+{{#if (and @root.page.componentVersion.prerelease (not ./prerelease))}}
+<div class="article-banner">
+<i class="fas fa-file-alt"></i> <p>You are viewing the documentation for a prerelease version.</p>
+</div>
+{{/if}}
+{{else}}
+<div class="article-banner">
+{{#if (and @root.page.componentVersion.prerelease (not ./prerelease))}}
+<i class="fas fa-file-alt"></i> <p>You are viewing the documentation for a prerelease version.</p>
+{{else}}
+<i class="fas fa-file-alt"></i> <p>A newer version of this documentation is available.</p>
+{{/if}}
+<a class="btn" href="{{relativize ./url}}">View Latest</a>
+</div>
+{{/if}}
+{{/with}}
+{{/unless}}
+<div class="article-header">
+{{> crumbs}}
+</div>
+<article class="doc">
+{{#if page.title}}
+<div class="page-heading-title">
+<h1 class="page">{{{page.title}}}</h1>
+{{> labels}}
+</div>
+{{/if}}
+{{{page.contents}}}
+{{> pagination}}
+</article>
+</main>
 </div>
