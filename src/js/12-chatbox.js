@@ -39,28 +39,45 @@
 
   const clientContext = {
     product: {
-      value: qs('meta[name="docsearch:component"]'),
-      description: qs('meta[name="docsearch:component_title"]'),
+      value: qs('meta[name="docsearch:component_title"]'),
+      description: 'The specific product the user is reading about',
     },
-    surface: { value: 'docs', description: 'Couchbase Docs' },
+    surface: {
+      value: 'docs',
+      description: 'The user is reading the Couchbase Docs',
+    },
     service: {
-      value: qs('meta[name="docsearch:component"]'),
-      description: qs('meta[name="docsearch:component_title"]'),
+      value: qs('meta[name="docsearch:component_title"]'),
+      description: 'The specific product the user is reading about.',
     },
     page: {
       route: {
         value: qs('meta[name="page-url"]'),
-        description: qs('meta[name="docsearch:breadcrumbs"]'),
+        description: 'The URL of the current page the user is reading',
       },
-      description: qs('meta[name="docsearch:breadcrumbs"]'),
+      breadcrumbs: {
+        value: qs('meta[name="docsearch:breadcrumbs"]'),
+        description: 'The navigation path to the current page',
+      },
+      title: {
+        value: qs('title'),
+        description: 'The title of the current page the user is reading',
+      },
+      description: 'The specific page the user is on, which can give context for their query',
     },
     component: {
       id: {
         value: qs('meta[name="docsearch:component"]'),
-        description: qs('meta[name="docsearch:component_title"]'),
+        description: `The user is reading about ${qs('meta[name="docsearch:component_title"]')}`,
       },
-      edition: { value: qs('meta[name="docsearch:edition"]') },
-      version: { value: qs('meta[name="docsearch:cversion"]') },
+      edition: {
+        value: qs('meta[name="docsearch:edition"]'),
+        description: 'The edition (e.g. Enterprise or Community) of the product the user is reading about',
+      },
+      version: {
+        value: qs('meta[name="docsearch:cversion"]'),
+        description: 'The version of the product the user is reading about',
+      },
       description: qs('meta[name="docsearch:component_title"]'),
     },
   }
