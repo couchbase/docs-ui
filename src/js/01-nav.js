@@ -76,7 +76,6 @@
       component: head.querySelector('meta[name="dcterms.subject"]').getAttribute('content'),
       version: head.querySelector('meta[name="dcterms.identifier"]').getAttribute('content'),
       url: head.querySelector('meta[name=page-url]').getAttribute('content'),
-      navHeaderLevels: parseInt(head.querySelector('meta[name="page-nav-header-levels"]')?.content) || 0,
     }
   }
 
@@ -183,10 +182,12 @@
         if (items.length && items[0].content && items[0].content.endsWith(' Home')) {
           items.splice.apply(items, [0, 1].concat(items[0].items || []))
         }
+
+        const expandHeaderLevels = group.expandHeaderLevels || 0
         // build the navTree.
         // At least one of these componentVersions must return a navTree in order for us to
         // use this componentVersionNavEl
-        if (buildNavTree(items, componentVersionNavEl, page, [])) {
+        if (buildNavTree(items, componentVersionNavEl, page, [], expandHeaderLevels)) {
           hasNavTrees = true
         }
 
@@ -199,7 +200,7 @@
     container.appendChild(groupEl)
   }
 
-  function buildNavTree (items, parent, page, currentPath) {
+  function buildNavTree (items, parent, page, currentPath, expandHeaderLevels) {
     if (!(items || []).length) return
 
     var navListEl = createElement('ul', 'menu_row')
@@ -226,7 +227,7 @@
       navTextEl.innerHTML = item.content || ''
       navLineEl.appendChild(navTextEl)
       navItemEl.appendChild(navLineEl)
-      var childNavListEl = buildNavTree(item.items, navItemEl, page, currentPath)
+      var childNavListEl = buildNavTree(item.items, navItemEl, page, currentPath, expandHeaderLevels)
       if (childNavListEl) {
         if (currentPath.length > 1) {
           navLineEl.insertBefore(Object.assign(document.createElement('span'), { className: 'in-toggle' }), navTextEl)
@@ -234,9 +235,9 @@
         navItemEl.classList.add('is-parent')
 
         // Depending on depth, we may wish to collapse the level.
-        // originally we would collapse everything, but we can set :page-nav-header-levels: 1 to have
+        // originally we would collapse everything, but we can set nav's expandHeaderLevels: 1 to have
         // up to the bold subheadings kept open
-        if (currentPath.length > page.navHeaderLevels) {
+        if (currentPath.length > expandHeaderLevels) {
           if (!navItemEl.querySelector('a.is-current-page')) {
             navItemEl.classList.add('closed')
           }
