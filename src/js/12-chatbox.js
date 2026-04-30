@@ -60,7 +60,7 @@
         description: 'The navigation path to the current page',
       },
       title: {
-        value: qs('title'),
+        value: document.head.querySelector('title')?.innerHTML,
         description: 'The title of the current page the user is reading',
       },
       description: 'The specific page the user is on, which can give context for their query',
