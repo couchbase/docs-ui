@@ -1,8 +1,11 @@
 {{!-- NOTE add entry for current component, but not the home component or if the title matches the first breadcrumb.
 Logic extracted from crumbs.hbs --}}
-{{~#unless (eq page.component.name 'home')~}}
-{{~#unless (or (eq page.breadcrumbs.0.content page.component.title) (eq page.breadcrumbs.0.content page.componentVersion.title))~}}
-    {{{page.component.title}}}
-{{~/unless~}}
-{{~/unless~}}
-{{~#each page.breadcrumbs}} / {{{./content}}}{{~/each}}
+{{~#unless (or 
+    (eq page.component.name 'home')
+    (eq page.breadcrumbs.0.content page.component.title) 
+    (eq page.breadcrumbs.0.content page.componentVersion.title))~}}
+    {{{page.component.title}}} {{{page.componentVersion.version}}} / {{/unless~}}
+{{~#each page.breadcrumbs}} 
+    {{~#unless @first}} / {{/unless~}}
+    {{{content}}}
+{{~/each}}
