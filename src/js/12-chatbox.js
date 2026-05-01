@@ -67,8 +67,8 @@
     },
     component: {
       id: {
-        value: qs('meta[name="docsearch:component"]'),
-        description: `The user is reading about ${qs('meta[name="docsearch:component_title"]')}`,
+        value: qs('meta[name="docsearch:component_title"]'),
+        description: 'The component that the user is reading about',
       },
       edition: {
         value: qs('meta[name="docsearch:edition"]'),
@@ -78,7 +78,7 @@
         value: qs('meta[name="docsearch:cversion"]'),
         description: 'The version of the product the user is reading about',
       },
-      description: qs('meta[name="docsearch:component_title"]'),
+      description: 'The component that the user is reading about',
     },
   }
 
