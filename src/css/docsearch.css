@@ -1,0 +1,56 @@
+.primary-action {
+  position: relative;
+}
+
+.search-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0; /* the container wants to be transparent to clicks */
+  font-size: 75%;
+}
+
+#searchbox input {
+  padding: 8px;
+  position: relative;
+  left: -145px;
+  border: none;
+  border-bottom: 1px solid var(--color-brand-grey);
+}
+
+#searchbox button {
+  display: none;
+}
+
+.search-panel {
+  background-color: whitesmoke;
+  border: 1px solid var(--color-brand-grey);
+  border-radius: 4px;
+  padding: 0.5rem;
+  width: 1000px;
+  position: relative;
+  left: -800px;
+  display: flex;
+}
+
+#component-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ol.ais-Hits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li.ais-Hits-item {
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-brand-grey);
+  padding-bottom: 0.5rem;
+}
+
+.ais-Hits-list details {
+  display: none;
+}

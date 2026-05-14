@@ -1,3 +1,7 @@
 {{#with site.keys.googleAnalytics}}
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{{this}}}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {{/with}}
+{{#if env.ALGOLIA_API_KEY}}
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.94.0"></script>
+{{/if}}

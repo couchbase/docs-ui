@@ -71,11 +71,27 @@
                 </ul>
               </div>
               <div class="primary-action">
+
                 {{#if env.ALGOLIA_API_KEY}}
-                <div class="navbar-item search" id="search">
-                  <input class="dataLayer query" type="text" placeholder="Search Docs"{{#if page.home}} autofocus{{/if}}><i class="fas fa-search"></i>
-                </div>
+  <div class="search-container">
+    <div class="navbar-item search" id="searchbox">
+    <i class="fas fa-search search-icon"></i>
+    </div>
+  
+    <div class="search-panel">
+      <div class="search-panel__filters">
+        <div id="dynamic-widgets"></div>
+        <div id="clear-refinements"></div>
+        <div id="component-list"></div>
+      </div>
+      <div class="search-panel__results">
+        <div id="hits"></div>
+        <div id="pagination"></div>
+      </div>
+    </div>
+  </div>
                 {{/if}}
+
                 <a class="btn btn-primary btn-grey-reverse" onclick="(window.dataLayer=window.dataLayer||[]).push({'event':'customEvent', 'category':'CTA', 'action':'Button Click',  'label':'Download'});" href="https://www.couchbase.com/downloads">
                   Downloads
                   <i class="far fa-arrow-to-bottom fa-fw"></i>

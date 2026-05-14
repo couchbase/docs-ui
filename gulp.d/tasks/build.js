@@ -97,7 +97,7 @@ module.exports = (src, dest, preview) => () => {
       .pipe(map((file, enc, next) => next(null, Object.assign(file, { extname: '' }, { extname: '.js' })))),
     vfs.src(require.resolve('jquery/dist/jquery.min.js'), opts).pipe(concat('js/vendor/jquery.js')),
     vfs
-      .src(['css/site.css', 'css/vendor/docsearch.css'], { ...opts, sourcemaps })
+      .src(['css/site.css'], { ...opts, sourcemaps })
       .pipe(postcss((file) => ({ plugins: postcssPlugins, options: { file } }))),
     vfs.src('font/*.{ttf,woff*(2)}', opts),
     vfs
