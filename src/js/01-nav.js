@@ -20,6 +20,8 @@
     return
   }
 
+  let expandHeaderLevels = 0
+
   // buildNav creates .components
   // Presumably this routine may be called multiple times, so we check if the div already exists before calling it.
   if (!navContainer.querySelector('.components')) {
@@ -54,16 +56,20 @@
 
     var pageVersions = document.getElementById('page-versions')
 
+    const group = JSON.parse(pageNavigationGroup.innerText)
+    group.expandHeaderLevels = group.expandHeaderLevels || 0
+    expandHeaderLevels = group.expandHeaderLevels
+
     buildNav(
-      navContainer, // container
-      getPage(), // page
-      pageVersions, // pageVersions
-      JSON.parse(pageNavigationGroup.innerText), //group
-      siteNavigationData // navData
+      navContainer,
+      getPage(),
+      pageVersions,
+      group,
+      siteNavigationData
     )
   } // else Presumably Components already/now exist
 
-  activateNav(navContainer, getPage())
+  activateNav(navContainer, getPage(), expandHeaderLevels)
 
   ///////
   // Helper functions
@@ -76,7 +82,6 @@
       component: head.querySelector('meta[name="dcterms.subject"]').getAttribute('content'),
       version: head.querySelector('meta[name="dcterms.identifier"]').getAttribute('content'),
       url: head.querySelector('meta[name=page-url]').getAttribute('content'),
-      navHeaderLevels: parseInt(head.querySelector('meta[name="page-nav-header-levels"]')?.content) || 0,
     }
   }
 
@@ -127,6 +132,9 @@
                 <ul> childNavListEl (via recursive buildNavTree)
                   .....
     */
+
+    const expandHeaderLevels = group.expandHeaderLevels || 0
+
     group.components.forEach(function (componentName) {
       var componentNavData = navData[componentName]
       var componentsListItemsEl = createElement('li', 'components_list-items')
@@ -183,10 +191,11 @@
         if (items.length && items[0].content && items[0].content.endsWith(' Home')) {
           items.splice.apply(items, [0, 1].concat(items[0].items || []))
         }
+
         // build the navTree.
         // At least one of these componentVersions must return a navTree in order for us to
         // use this componentVersionNavEl
-        if (buildNavTree(items, componentVersionNavEl, page, [])) {
+        if (buildNavTree(items, componentVersionNavEl, page, [], expandHeaderLevels)) {
           hasNavTrees = true
         }
 
@@ -199,7 +208,7 @@
     container.appendChild(groupEl)
   }
 
-  function buildNavTree (items, parent, page, currentPath) {
+  function buildNavTree (items, parent, page, currentPath, expandHeaderLevels) {
     if (!(items || []).length) return
 
     var navListEl = createElement('ul', 'menu_row')
@@ -226,7 +235,7 @@
       navTextEl.innerHTML = item.content || ''
       navLineEl.appendChild(navTextEl)
       navItemEl.appendChild(navLineEl)
-      var childNavListEl = buildNavTree(item.items, navItemEl, page, currentPath)
+      var childNavListEl = buildNavTree(item.items, navItemEl, page, currentPath, expandHeaderLevels)
       if (childNavListEl) {
         if (currentPath.length > 1) {
           navLineEl.insertBefore(Object.assign(document.createElement('span'), { className: 'in-toggle' }), navTextEl)
@@ -234,9 +243,9 @@
         navItemEl.classList.add('is-parent')
 
         // Depending on depth, we may wish to collapse the level.
-        // originally we would collapse everything, but we can set :page-nav-header-levels: 1 to have
+        // originally we would collapse everything, but we can set nav's expandHeaderLevels: 1 to have
         // up to the bold subheadings kept open
-        if (currentPath.length > page.navHeaderLevels) {
+        if (currentPath.length > expandHeaderLevels) {
           if (!navItemEl.querySelector('a.is-current-page')) {
             navItemEl.classList.add('closed')
           }
@@ -341,7 +350,7 @@
   }
 
   // FIXME integrate into nav builder
-  function activateNav (container, page) {
+  function activateNav (container, page, expandHeaderLevels) {
     // NOTE prevent text from being selected by double click
     container.addEventListener('mousedown', function (e) {
       if (e.detail > 1 && window.getComputedStyle(e.target).cursor === 'pointer') e.preventDefault()
@@ -396,7 +405,7 @@
       var menuList = findAncestorWithClass('menu_list', menuTitleEl, container)
 
       if (!menuList.classList.contains('is-parent') || menuTitleEl.href) return
-      if (menuList.dataset.depth < page.navHeaderLevels) {
+      if (menuList.dataset.depth < expandHeaderLevels) {
         return
       }
 
