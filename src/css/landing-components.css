@@ -661,14 +661,33 @@
 .landing-btn--secondary {
   background: transparent;
   color: var(--color-brand-black);
-  border: 2px solid var(--color-brand-black);
+  border: none;
+  padding-bottom: 9px;
+}
+
+.landing-btn--secondary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  top: auto;
+  width: 30%;
+  height: 2px;
+  margin: 0;
+  background: var(--color-brand-black);
+  transition: width var(--landing-transition-btn), background var(--landing-transition-btn);
 }
 
 .landing-btn--secondary:hover {
   transform: translateY(-2px);
   color: var(--color-brand-orange);
-  border: 2px solid var(--color-brand-orange);
   text-decoration: none;
+}
+
+.landing-btn--secondary:hover::after {
+  width: 100%;
+  background: var(--color-brand-orange);
 }
 
 .landing-btn--accent {
