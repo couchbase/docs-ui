@@ -10,9 +10,13 @@ module.exports = (
 ) => {
   const pageUrl = page.url
 
-  const navGroupsAndSubgroups = [
-    ...navGroups,
-    ...navGroups.flatMap(({ subGroups }) => subGroups || [])]
+  const subGroups = navGroups.flatMap(({ subGroups, title }) => {
+    return (subGroups || []).map((sg) => {
+      return { ...sg, parent: title }
+    })
+  })
+
+  const navGroupsAndSubgroups = [...navGroups, ...subGroups]
 
   const navGroupByUrl =
     navGroupsAndSubgroups.find(({ url }) => url === pageUrl)

@@ -86,6 +86,9 @@
 <meta name="docsearch:status" content="{{page.attributes.status}}">
 <meta name="docsearch:edition" content="{{page.attributes.edition}}">
 <meta name="docsearch:page_rank" content="{{page.attributes.rank}}">
+{{#with (nav-group-for-page (nav-groups))}}
+<meta name="docsearch:nav_group" content="{{#with ./parent}}{{.}} / {{/with}}{{./title}}">
+{{/with}}
 
 
 {{#with page.attributes.meta-zd-site-verification}}
