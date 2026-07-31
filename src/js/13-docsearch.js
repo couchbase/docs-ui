@@ -123,17 +123,34 @@
     return undefined
   }
 
+  // A continuously-deployed/unversioned component (Capella, AI Data Plane,
+  // etc.) has a genuine version of "" in Antora, not a missing one -- a
+  // plain truthiness check would silently drop it (same reasoning as the
+  // ['', 'master'].includes(...) checks elsewhere in this file, just
+  // inverted: there, '' means "don't show a redundant version picker";
+  // here, '' must still count as "this component has a real, includable
+  // version").
+  function hasVersion (versionMap, name) {
+    return versionMap && Object.prototype.hasOwnProperty.call(versionMap, name)
+  }
+
   function computeDefaultRefinement () {
     var pageUrl = metaContent('page-url')
     var landingGroup = pageUrl ? findGroupByUrl(componentCatalog.navGroups, pageUrl) : undefined
     if (landingGroup) {
-      return landingGroup.components
-        .filter(function (c) { return landingGroup.latestVersions && landingGroup.latestVersions[c.name] })
+      return (landingGroup.components || [])
+        .filter(function (c) { return hasVersion(landingGroup.latestVersions, c.name) })
         .map(function (c) { return c.name + '@' + landingGroup.latestVersions[c.name] })
     }
     var component = metaContent('docsearch:component')
     var version = metaContent('docsearch:cversion')
-    return component && version ? [component + '@' + version] : []
+    // "home" pages are landing/informational content (the site index, and
+    // every home::*.adoc category landing page not already caught above by
+    // its own group's url match) -- nav-group-for-page.js already treats
+    // these as belonging to no specific group for the same reason, so don't
+    // default search to "home"'s own (largely meaningless) component here.
+    if (!component || component === 'home' || version === undefined) return []
+    return [component + '@' + version]
   }
 
   // The refinementList widget only ever exposes component_version values that

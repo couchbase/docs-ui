@@ -87,12 +87,18 @@ module.exports = (
   // playbook) -- subGroups/components deliberately carry none of their own
   // here, and the client is what walks this tree inheriting a parent's color
   // down, same as this data looked when it was still a hand-maintained mock.
+  //
+  // components is only set when the group actually has direct components
+  // (never an empty array) -- the client tells "leaf group" apart from
+  // "subGroups-holding group" with a plain truthiness check, and an empty
+  // array is truthy in JS, so a subGroups-only group like "Develop" would
+  // otherwise wrongly look like an (empty) leaf and never recurse.
   function serializeGroup (group) {
     return {
       title: group.title,
       url: group.url,
       color: group.color,
-      components: (group.components || []).map(serializeComponent),
+      components: group.components && group.components.length ? group.components.map(serializeComponent) : undefined,
       latestVersions: group.latestVersions,
       subGroups: group.subGroups ? group.subGroups.map(serializeGroup) : undefined,
     }

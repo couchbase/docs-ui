@@ -9,7 +9,7 @@ site:
       [
         { "title": "Server", "startPage": "home::server.adoc", "components": ["server", "*-connector"], "url": "/index.html", "color": "#c41016" },
         { "title": "Develop",
-          "subPages": [
+          "subGroups": [
             {
               "title": "Mobile",
               "startPage": "home::mobile.adoc",
@@ -19,8 +19,8 @@ site:
             {
               "title": "Cloud",
               "startPage": "home::cloud.adoc",
-              "components": ["operator"],
-              "url": "#"
+              "components": ["cloud"],
+              "url": "/cloud/index.html"
             }
           ]
         }
@@ -167,6 +167,15 @@ site:
       url: /couchbase-lite/2.1/index.html
     sync-gateway:
       url: /sync-gateway/2.1/index.html
+    cloud:
+      # continuously-deployed/unversioned component -- exercises the search
+      # catalog's handling of a genuine empty-string version (e.g. Capella)
+      versions:
+      - &latest_cloud
+        version: ''
+        title: Capella
+        url: /cloud/index.html
+      latest: *latest_cloud
     home:
       latest: &home_latest
         version: ''
