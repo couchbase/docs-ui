@@ -233,7 +233,7 @@ function registerHelpers (src) {
   handlebars.registerHelper('resolvePageURL', resolvePageURL)
   return vfs.src('helpers/*.js', { base: src, cwd: src }).pipe(
     map((file, enc, next) => {
-      handlebars.registerHelper(file.stem, requireFromString(file.contents.toString()))
+      handlebars.registerHelper(file.stem, requireFromString(file.contents.toString(), file.path))
       next()
     })
   )

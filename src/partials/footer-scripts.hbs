@@ -15,6 +15,16 @@
 <script id="site-script" src="{{{uiRootPath}}}/js/vendor/chatbox-ui.js"></script>
 {{/unless}}
 
+{{#if env.ALGOLIA_API_KEY}}
+{{!-- the real, Antora-driven catalog of navGroups/components/colors that drives the search facet tree --}}
+<script id="search-catalog" type="application/json">
+{{{stringify (search-catalog (nav-groups))}}}
+</script>
+{{!-- vendor/algolia.js pulls in react (an unused side effect of instantsearch.js re-exporting every widget) whose dev build reads process.env.NODE_ENV unguarded; this repo's vendor bundles have no Node-global shims, so give it one before it loads --}}
+<script>window.process = window.process || { env: { NODE_ENV: 'production' } }</script>
+{{!-- must load synchronously, before site.js (which contains 13-docsearch.js), so window.algoliasearch/window.instantsearch are set before it runs --}}
+<script src="{{{uiRootPath}}}/js/vendor/algolia.js"></script>
+{{/if}}
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/tabs.js" data-sync-storage-key="preferred-tab"></script>
 {{#with page.attributes.content-scripts}}
@@ -44,9 +54,6 @@ MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
     {{/unless}}
 {{/with}}
-{{#if env.ALGOLIA_API_KEY}}
-<script async id="search-script" src="{{{uiRootPath}}}/js/vendor/docsearch.js" data-app-id="{{env.ALGOLIA_APP_ID}}" data-api-key="{{env.ALGOLIA_API_KEY}}" data-index-name="{{or env.ALGOLIA_IDX_NAME env.ALGOLIA_INDEX_NAME}}" data-stylesheet="{{{uiRootPath}}}/css/vendor/docsearch.css"></script>
-{{/if}}
 {{#if (eq page.layout 'tutorials')}}
 <script async src="{{{uiRootPath}}}/js/vendor/mark.js"></script>
 {{/if}}

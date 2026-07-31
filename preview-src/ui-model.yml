@@ -7,7 +7,7 @@ site:
   keys:
     navGroups: |
       [
-        { "title": "Server", "startPage": "home::server.adoc", "components": ["server", "*-connector"], "url": "/index.html" },
+        { "title": "Server", "startPage": "home::server.adoc", "components": ["server", "*-connector"], "url": "/index.html", "color": "#c41016" },
         { "title": "Develop",
           "subPages": [
             {

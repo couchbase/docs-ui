@@ -1,246 +1,392 @@
-@import "docsearch.js/dist/cdn/docsearch.css";
+@import "instantsearch.css/themes/satellite-min.css";
 
-.algolia-autocomplete-results {
+/* The search input/results live inside the header's ".search" navbar item
+ * (position: relative, see header.css), so the whole panel can float below
+ * it as a dropdown -- same positioning approach the old widget used for its
+ * ".algolia-autocomplete-results" dropdown. */
+.search-container {
+  position: relative;
+}
+
+#searchbox .ais-SearchBox-input {
+  border: none;
+  border-bottom: 1px solid var(--color-brand-gray5);
+  color: var(--color-brand-gray4);
+  font-size: 1rem;
+  width: 283px;
+  padding-right: 20px;
+}
+
+@media screen and (max-width: 992px) {
+  #searchbox .ais-SearchBox-input {
+    width: 100%;
+  }
+}
+
+.search-panel {
+  visibility: hidden;
   position: absolute;
   top: 100%;
-  width: 100%;
-}
-
-.algolia-autocomplete {
-  left: auto !important;
-  width: inherit;
-}
-
-.algolia-autocomplete .ds-dropdown-menu {
+  right: 0;
+  z-index: var(--z-index-navbar-dropdown);
+  display: flex;
+  gap: 1.5rem;
+  width: min(760px, 90vw);
+  max-height: calc(100vh - var(--height-navbar) + 1.5rem);
+  overflow-y: auto;
   background: var(--color-brand-white);
+  color: var(--color-text);
   border: 1px solid #e1e1e1;
   border-radius: 0;
-  box-shadow: none;
-  display: grid !important;
-  grid-template-columns: 5fr 2fr;
-  grid-auto-rows: 1fr auto;
-  /*
-  max-height: calc(var(--viewport-height) - var(--navbar-height) - 4rem);
-  */
-  max-height: calc(100vh - var(--height-navbar) + 1.5rem);
-  max-width: none;
-  min-width: auto;
-  position: absolute;
-  top: 6px;
-  width: inherit;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.25rem;
+  font-size: var(--font-small);
 }
 
-.algolia-autocomplete .ds-dropdown-menu::before {
-  border-color: #e1e1e1;
-  border-radius: 0;
+.search-panel__filters {
+  flex: 0 0 190px;
 }
 
-.algolia-autocomplete .ds-dropdown-menu .ds-dataset-1 {
-  background: none;
-  border: 0;
-  border-radius: 0;
-  overscroll-behavior: none;
-  padding: 0 8px;
-  line-height: 1.2;
+.search-panel__results {
+  flex: 1;
+  min-width: 0;
 }
 
-.algolia-autocomplete .ds-dropdown-menu .ds-suggestions {
-  margin: 4px 0 8px;
+#component-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.algolia-autocomplete .algolia-docsearch-suggestion {
-  background: none;
+/* base.css has a site-wide custom-checkbox pattern that unconditionally
+ * moves every [type="checkbox"] off-screen and expects a sibling
+ * `+ label::before/::after` to paint a replacement -- built for markup
+ * where the checkbox and label are siblings. Ours nests the checkbox
+ * inside the label instead (so each row's own per-category accent-color
+ * can drive a normal native checkbox), which never matches that sibling
+ * selector, so the checkbox gets hidden with no replacement drawn. Reset
+ * back to normal, native rendering within the facet tree specifically. */
+#component-list [type="checkbox"]:not(:checked),
+#component-list [type="checkbox"]:checked {
+  position: static;
+  left: auto;
 }
 
-.algolia-autocomplete .algolia-docsearch-suggestion--title {
-  font-weight: var(--weight-semibold);
+.facet-item {
+  margin-bottom: 0.5rem;
 }
 
-.algolia-autocomplete .algolia-docsearch-suggestion:hover .algolia-docsearch-suggestion--title,
-.algolia-autocomplete .ds-suggestion.ds-cursor .algolia-docsearch-suggestion--title {
-  text-decoration: underline;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion .algolia-docsearch-suggestion--subcategory-column {
-  font-weight: normal;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column::after {
-  display: none;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column-text::after {
-  content: "|";
-  padding: 0 0.5em;
-}
-
-.algolia-autocomplete .ds-filter {
-  padding: 8px 6px 8px 10px;
-  font-size: 0.9em;
-  box-shadow: 5px 0 5px -5px inset #ddd;
-  line-height: 1;
-  overflow: auto;
-}
-
-.algolia-autocomplete .ds-filter::before {
-  content: "Filter Results";
-  display: block;
-  font-weight: var(--weight-semibold);
-  border-bottom: 1px solid #eee;
-  padding-bottom: 4px;
-}
-
-.algolia-autocomplete .ds-filter > div {
-  display: grid;
-  align-items: flex-start;
-  grid-template-columns: auto;
-  margin: 8px 0;
-}
-
-.algolia-autocomplete .ds-filter input[type=checkbox],
-.algolia-autocomplete .ds-filter label {
+.facet-item label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
   cursor: pointer;
 }
 
-.algolia-autocomplete .ds-filter input[type=checkbox] {
-  transform: scale(0.9);
-  margin: 0 4px 0 0;
+.facet-item input[type="checkbox"] {
+  margin: 0;
+  /* --pill-color is set inline per row from the catalog's per-category
+   * color (grey when the row itself has 0 current hits, even if it's
+   * refined) -- replaces the browser default blue tick/mixed-sign fill. */
+  /* accent-color is a standard, well-supported property; this stylelint config's known-properties list just predates it */
+  /* stylelint-disable-next-line property-no-unknown */
+  accent-color: var(--pill-color, #737373);
 }
 
-.algolia-autocomplete .ds-filter input[type=checkbox] + label {
-  padding-left: 1.5rem;
+/* A component with nothing matching the current search text still gets a
+ * row (from the catalog, not from Algolia's facet response) -- greyed
+ * rather than removed, so the tree doesn't reflow as the query changes. */
+.facet-item--empty {
+  opacity: 0.45;
 }
 
-.algolia-autocomplete .ds-filter input[type=checkbox] + label::before,
-.algolia-autocomplete .ds-filter input[type=checkbox] + label::after {
-  width: 1rem;
-  height: 1rem;
-  top: 0.1em;
+.facet-item label:has(input:disabled),
+.facet-item input[type="checkbox"]:disabled {
+  cursor: not-allowed;
 }
 
-.algolia-autocomplete .ds-filter label {
-  line-height: 1.2;
+.facet-label {
+  flex: 1;
 }
 
-.algolia-autocomplete .ds-filter select {
-  margin-left: 1.5rem;
-  max-width: min-content;
-  margin-top: 4px;
-  display: none;
-  appearance: none;
-  font-size: 0.9em;
-  line-height: 2;
-  padding: 0 1.5em 0 0.5em;
-  border: 1px solid #e5e5e5;
-  border-radius: 0.25em;
-  box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.05);
-  background: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20448%20512%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M207.029%20381.476L12.686%20187.132c-9.373-9.373-9.373-24.569%200-33.941l22.667-22.667c9.357-9.357%2024.522-9.375%2033.901-.04L224%20284.505l154.745-154.021c9.379-9.335%2024.544-9.317%2033.901.04l22.667%2022.667c9.373%209.373%209.373%2024.569%200%2033.941L240.971%20381.476c-9.373%209.372-24.569%209.372-33.942%200z%22%2F%3E%3C%2Fsvg%3E) no-repeat right 0.5em top 55% / 0.75em auto, #fff repeat;
-  background-color: #fff;
+.facet-count {
+  color: #999;
+  font-size: 0.8em;
 }
 
-.algolia-autocomplete .ds-filter input[type=checkbox]:checked ~ select {
-  display: initial;
+.facet-item select {
+  margin: 0.25rem 0 0 1.4rem;
+  max-width: calc(100% - 1.4rem);
+  font-size: 0.8rem;
 }
 
-.algolia-autocomplete .ds-dropdown-menu.ds-without-1 .ds-dataset-1 {
-  grid-column: 1 / -1;
+@supports (appearance: base-select) {
+  .facet-item select {
+    appearance: base-select;
+  }
+
+  /* ::picker() is part of the new customizable-select spec, too new for this stylelint config to know about */
+  /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+  .facet-item select::picker(select) {
+    appearance: base-select;
+  }
+
+  .facet-item select button {
+    padding: 0.1rem 0.3rem;
+    border: 1px solid #ddd;
+  }
+
+  .facet-item option {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .option-count {
+    color: #999;
+    font-size: 0.85em;
+  }
 }
 
-.algolia-autocomplete .ds-dropdown-menu.ds-without-1 .ds-filter {
-  display: none;
+.facet-group {
+  margin-bottom: 0.6rem;
 }
 
-.algolia-autocomplete .ds-footer {
+.facet-group--empty > label {
+  opacity: 0.45;
+}
+
+.facet-group > label {
   display: flex;
-  justify-content: space-between;
-  background-color: rgba(164, 167, 174, 0.1);
-  border-top: 1px solid rgba(225, 225, 225, 0.5);
-  grid-column: 1 / -1;
-  padding: 8px;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
 }
 
-.algolia-autocomplete .ds-pagination {
+.facet-group > label input[type="checkbox"] {
+  margin: 0;
+  /* stylelint-disable-next-line property-no-unknown */
+  accent-color: var(--pill-color, #737373);
+}
+
+#component-list .facet-group > ul {
+  margin-top: 0.4rem;
+  margin-left: 1em;
+}
+
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted {
+  background: none;
+  color: inherit;
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-color: var(--color-brand-red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+#searchbox {
+  margin-bottom: 1rem;
+}
+
+.current-refinements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.refinement-pill {
+  /* --pill-color is set inline per pill from the catalog's per-category
+   * color; this default only applies to the "Clear all" pill, which sets
+   * no color of its own. */
+
+  --pill-color: #737373;
+
   display: flex;
   align-items: center;
-  font-size: 0.8em;
+  gap: 0.3rem;
+  background: color-mix(in sRGB, var(--pill-color) 16%, white);
+  color: color-mix(in sRGB, var(--pill-color) 75%, black);
+  border-radius: 999px;
+  padding: 0.25rem 0.4rem 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: var(--weight-semibold);
+}
+
+.refinement-pill-remove {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9rem;
   line-height: 1;
+  color: inherit;
+  opacity: 0.65;
+  padding: 0.15rem 0.35rem;
 }
 
-.algolia-autocomplete .ds-pagination > :not(:first-child) {
-  margin-left: 0.5em;
+.refinement-pill-remove:hover {
+  opacity: 1;
 }
 
-.algolia-autocomplete .ds-pagination a {
-  color: #174d8c;
+.refinement-pill--clear-all {
+  background: none;
+  padding: 0.25rem 0;
 }
 
-.algolia-autocomplete .ds-pagination a.inactive {
-  color: currentColor;
-  pointer-events: none;
-  opacity: 0.2;
+.refinement-pill--clear-all button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: var(--weight-normal);
+  color: var(--color-brand-red);
+  padding: 0;
 }
 
-.algolia-autocomplete .ds-pagination--prev::before,
-.algolia-autocomplete .ds-pagination--next::after {
-  display: inline-block;
-  width: 0.5em;
-  font-size: 1.2em;
-  line-height: 0;
+.refinement-pill--clear-all button:hover {
+  text-decoration: underline;
 }
 
-.algolia-autocomplete .ds-pagination--prev::before {
-  content: "\2039";
+.ais-Stats {
+  color: #737373;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
-.algolia-autocomplete .ds-pagination--next::after {
-  content: "\203a";
-  text-align: right;
+#pagination {
+  margin: 1.5rem auto 0;
+  text-align: center;
 }
 
-.algolia-autocomplete .algolia-docsearch-footer {
+/* The theme's own rules for this reach it through combined selectors like
+ * ".ais-Pagination-item--selected .ais-Pagination-link" -- all more
+ * specific than a plain class, so a same-specificity override here only
+ * ever wins for the resting state. !important flattens every state at
+ * once, scoped narrowly to the handful of properties giving it its
+ * 3D look. */
+.ais-Pagination-link {
+  background-image: none !important;
+  background-color: #fff;
+  box-shadow: none !important;
+  border: 1px solid #e0e0e0;
+}
+
+.ais-Pagination-item--selected .ais-Pagination-link {
+  background-color: var(--color-brand-red-tint);
+  border-color: var(--color-brand-red);
+  color: var(--color-brand-red);
+}
+
+.ais-Hits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hit-product {
+  /* Same catalog-driven per-category color as .refinement-pill above. */
+
+  --pill-color: #737373;
+
+  font-size: 0.85rem;
+  font-weight: var(--weight-bold);
+  color: color-mix(in sRGB, var(--pill-color) 75%, black);
+  background: color-mix(in sRGB, var(--pill-color) 12%, white);
+  padding: 0.35rem 0.75rem;
+  margin: 0.5rem 0 0.75rem -1rem;
+  border-radius: 3px;
+}
+
+.ais-Hits-item {
+  /* the imported theme sets display:flex here, which we never override --
+   * as the sole flex child, .hit (and anything inside it, like the product
+   * pill) was sizing to its own content instead of stretching to the
+   * column's full width. It also puts a box-shadow "border" on every item
+   * by default, which would otherwise survive even when border-bottom is
+   * removed below. */
+  display: block;
+  box-shadow: none;
+  padding: 0.9rem 0 0.9rem 1rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.ais-Hits-item:has(+ .ais-Hits-item .hit-product) {
+  border-bottom: none;
+}
+
+.ais-Hits-item:first-child .hit-product {
   margin-top: 0;
-  width: 112px;
-  height: 16px;
 }
 
-@media screen and (min-width: 769px) {
-  .algolia-autocomplete-results {
-    right: 0;
-    min-width: 50vw;
-  }
-
-  .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column-text::after {
-    display: none;
-  }
+.ais-Hits-item:first-child {
+  padding-top: 0;
 }
 
-@media screen and (min-width: 1024px) {
-  .algolia-autocomplete .ds-dropdown-menu.ds-with-1 {
-    width: 40rem;
-    /*
-    width: 34rem;
-    */
-  }
-
-  /*
-  .algolia-autocomplete .ds-dropdown-menu {
-    max-height: calc(var(--viewport-height) - var(--navbar-height));
-  }
-  */
+.ais-Hits-item:last-child {
+  border-bottom: none;
 }
 
-@supports (scrollbar-width: thin) {
-  .algolia-autocomplete * {
-    scrollbar-width: thin;
-    scrollbar-color: #c1c1c1 transparent;
-  }
+.hit-breadcrumbs {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #737373;
+  margin-bottom: 0.3rem;
 }
 
-.algolia-autocomplete ::-webkit-scrollbar {
-  height: 0.25rem;
-  width: 0.25rem;
+.breadcrumb-sep {
+  opacity: 0.5;
 }
 
-.algolia-autocomplete ::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
+.hit-name {
+  font-size: 1rem;
+  font-weight: var(--weight-semibold);
+  line-height: 1.3;
+  margin: 0 0 0.4rem;
+}
+
+.hit-name a {
+  color: var(--color-brand-red);
+  text-decoration: none;
+}
+
+.hit-name a:hover {
+  text-decoration: underline;
+}
+
+.hit-snippet {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--color-text);
+  margin: 0 0 0.4rem;
+}
+
+.also-relevant {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.also-relevant summary {
+  cursor: pointer;
+  color: #737373;
+}
+
+.also-relevant ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--color-text);
+}
+
+.also-relevant ul a {
+  color: var(--color-brand-red);
+  text-decoration: none;
+}
+
+.also-relevant ul a:hover {
+  text-decoration: underline;
 }

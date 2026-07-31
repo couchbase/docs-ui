@@ -1,0 +1,14 @@
+<div class="search-container" data-app-id="{{env.ALGOLIA_APP_ID}}" data-api-key="{{env.ALGOLIA_API_KEY}}" data-index-name="{{or env.ALGOLIA_IDX_NAME env.ALGOLIA_INDEX_NAME}}">
+  <div id="searchbox"></div>
+  <div class="search-panel">
+    <div class="search-panel__filters">
+      <div id="component-list"></div>
+    </div>
+    <div class="search-panel__results">
+      <div id="current-refinements"></div>
+      <div id="stats"></div>
+      <div id="hits"></div>
+      <div id="pagination"></div>
+    </div>
+  </div>
+</div>
