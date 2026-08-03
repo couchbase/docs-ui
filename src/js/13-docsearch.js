@@ -63,13 +63,28 @@
   // it," so they'd win by accident over the real (possibly unmatchable)
   // phrase.
   //
-  // Split on newlines before taking a line, not the whole attribute value --
-  // the crawler can join disparate blocks of a page into one attribute
-  // value this way (e.g. every asciidoctor-tabs panel's own paragraph,
-  // observed firsthand: one `content` value contained both a Capella
-  // tab's instructions and a Local Server tab's instructions back to back),
-  // and text that was never actually contiguous on the page can never be
-  // found as one phrase.
+  // From _snippetResult, not _highlightResult, for content/description --
+  // the hit template's own visible snippet (components.Snippet) already
+  // reads from _snippetResult, which Algolia pre-windows to a short excerpt
+  // around the actual match. _highlightResult holds the FULL, untruncated
+  // attribute value; when the crawler has joined disparate blocks of a page
+  // into one long content value (observed firsthand: one `content` value
+  // contained an entire asciidoctor-tabs block's worth of *every* tab's own
+  // paragraph, back to back, newline-joined), searching for that whole
+  // blob can mean searching for text that was never actually contiguous
+  // anywhere on the real page, and can never be found. The pre-windowed
+  // snippet avoids that by construction. Falls back to _highlightResult
+  // only if a snippet genuinely isn't available (e.g. attributesToSnippet
+  // isn't configured for this attribute) -- hierarchy levels are short
+  // heading text to begin with and are never snippeted, so those still
+  // read from _highlightResult directly.
+  //
+  // Split on newlines before taking a line, not the whole snippet/attribute
+  // value -- a snippet window is computed in words, so it can still start
+  // or end mid-line relative to the crawler's own newline joins; keeping
+  // only the specific line(s) that actually contain a <mark> avoids
+  // dragging in a neighboring heading or list item that just happened to
+  // fall inside the window but wasn't itself part of the match.
   function extractHighlightedPhrases (hit) {
     var phrases = []
     var collectMarkedLines = function (highlighted) {
@@ -78,14 +93,19 @@
         if (lineHtml.indexOf('<mark') === -1) return
         var container = document.createElement('div')
         container.innerHTML = lineHtml
-        var phrase = container.textContent.trim()
+        // Algolia marks a snippet edge it truncated mid-attribute with its
+        // own ellipsis ("…" by default) rather than cutting a word in half
+        // -- that's not real page text, so strip it before this becomes a
+        // search phrase.
+        var phrase = container.textContent.replace(/^…\s*/, '').replace(/\s*…$/, '').trim()
         if (phrase) phrases.push(phrase)
       })
     }
     var highlightResult = hit._highlightResult || {}
+    var snippetResult = hit._snippetResult || {}
     if (hit.type === 'content') {
-      collectMarkedLines(highlightResult.content)
-      if (!phrases.length) collectMarkedLines(highlightResult.description)
+      collectMarkedLines(snippetResult.content || highlightResult.content)
+      if (!phrases.length) collectMarkedLines(snippetResult.description || highlightResult.description)
     } else {
       collectMarkedLines(highlightResult.hierarchy && highlightResult.hierarchy[hit.type])
     }
