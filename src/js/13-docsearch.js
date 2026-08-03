@@ -42,28 +42,53 @@
   // the source content, so it's the more reliable thing to search the
   // destination page for (see 14-search-highlight.js).
   //
-  // A whole PHRASE per matched attribute, not the individual <mark>-wrapped
+  // A whole PHRASE per matched *line*, not the individual <mark>-wrapped
   // words within it -- searching for each word independently (mark.js's own
   // default) means a short common word like "tab" matches any occurrence
   // anywhere on the page, including in a completely unrelated, already-visible
   // tab, which both defeats the highlight and can reveal the wrong one.
-  // Requiring the whole phrase as a contiguous run is far more likely to
-  // land only on the actual matched passage.
+  // Requiring a whole line as a contiguous run is far more likely to land
+  // only on the actual matched passage.
+  //
+  // Only from the attribute that's actually *this hit's own match*, mirroring
+  // the same hit.type logic the hit template already uses to decide what's
+  // shown as the match (content, or the specific hierarchy level, falling
+  // back to description only where the template itself would) -- Algolia
+  // still returns a highlightResult for every attribute regardless, often
+  // with some incidental partial credit (e.g. the page's own title) that
+  // isn't why this hit matched at all. Including those short, generic,
+  // *always-present* phrases as fallback search targets is worse than
+  // finding nothing: they're near-guaranteed to match instantly somewhere
+  // irrelevant, and the destination page treats "found a match" as "matched
+  // it," so they'd win by accident over the real (possibly unmatchable)
+  // phrase.
+  //
+  // Split on newlines before taking a line, not the whole attribute value --
+  // the crawler can join disparate blocks of a page into one attribute
+  // value this way (e.g. every asciidoctor-tabs panel's own paragraph,
+  // observed firsthand: one `content` value contained both a Capella
+  // tab's instructions and a Local Server tab's instructions back to back),
+  // and text that was never actually contiguous on the page can never be
+  // found as one phrase.
   function extractHighlightedPhrases (hit) {
     var phrases = []
-    var collect = function (highlighted) {
+    var collectMarkedLines = function (highlighted) {
       if (!highlighted || highlighted.matchLevel === 'none') return
-      var container = document.createElement('div')
-      container.innerHTML = highlighted.value
-      var phrase = container.textContent.trim()
-      if (phrase) phrases.push(phrase)
+      highlighted.value.split('\n').forEach(function (lineHtml) {
+        if (lineHtml.indexOf('<mark') === -1) return
+        var container = document.createElement('div')
+        container.innerHTML = lineHtml
+        var phrase = container.textContent.trim()
+        if (phrase) phrases.push(phrase)
+      })
     }
     var highlightResult = hit._highlightResult || {}
-    collect(highlightResult.content)
-    ;['lvl0', 'lvl1', 'lvl2', 'lvl3', 'lvl4', 'lvl5', 'lvl6'].forEach(function (lvl) {
-      collect(highlightResult.hierarchy && highlightResult.hierarchy[lvl])
-    })
-    collect(highlightResult.description)
+    if (hit.type === 'content') {
+      collectMarkedLines(highlightResult.content)
+      if (!phrases.length) collectMarkedLines(highlightResult.description)
+    } else {
+      collectMarkedLines(highlightResult.hierarchy && highlightResult.hierarchy[hit.type])
+    }
     return phrases
   }
 
