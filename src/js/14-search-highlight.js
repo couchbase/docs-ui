@@ -141,11 +141,19 @@
     // phrase as its own independent match -- exactly what lets a short,
     // common word match somewhere unrelated. acrossElements: true lets a
     // phrase still match if inline markup (a <code> span, emphasis, etc.)
-    // splits it into more than one text node.
+    // splits it into more than one text node. accuracy: 'exactly' (mark.js's
+    // default is 'partially') requires real word boundaries at both ends of
+    // the match -- without it, a short phrase (e.g. a lone "a" ending up as
+    // its own extracted phrase) matches as a bare substring anywhere,
+    // including inside unrelated longer words like "Capella" or "database".
+    // Since every phrase here already came from an actual matched snippet,
+    // not a loose keyword typed by a reader, there's no reason to want
+    // partial-word matches at all.
     new window.Mark(content).mark(phrases, {
       done: afterMark,
       separateWordSearch: false,
       acrossElements: true,
+      accuracy: 'exactly',
     })
   })
 })()
