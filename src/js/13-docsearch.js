@@ -36,6 +36,55 @@
     return cversion && cversion !== 'master' ? title + ' ' + cversion : title
   }
 
+  // The actual matched text (not the raw query) -- Algolia's typo-tolerance
+  // and stemming mean the literal query words don't always appear verbatim
+  // on the page, but a highlighted match, by definition, already exists in
+  // the source content, so it's the more reliable thing to search the
+  // destination page for (see 14-search-highlight.js).
+  //
+  // A whole PHRASE per matched attribute, not the individual <mark>-wrapped
+  // words within it -- searching for each word independently (mark.js's own
+  // default) means a short common word like "tab" matches any occurrence
+  // anywhere on the page, including in a completely unrelated, already-visible
+  // tab, which both defeats the highlight and can reveal the wrong one.
+  // Requiring the whole phrase as a contiguous run is far more likely to
+  // land only on the actual matched passage.
+  function extractHighlightedPhrases (hit) {
+    var phrases = []
+    var collect = function (highlighted) {
+      if (!highlighted || highlighted.matchLevel === 'none') return
+      var container = document.createElement('div')
+      container.innerHTML = highlighted.value
+      var phrase = container.textContent.trim()
+      if (phrase) phrases.push(phrase)
+    }
+    var highlightResult = hit._highlightResult || {}
+    collect(highlightResult.content)
+    ;['lvl0', 'lvl1', 'lvl2', 'lvl3', 'lvl4', 'lvl5', 'lvl6'].forEach(function (lvl) {
+      collect(highlightResult.hierarchy && highlightResult.hierarchy[lvl])
+    })
+    collect(highlightResult.description)
+    return phrases
+  }
+
+  // Appends each matched phrase as its own repeated query param (never the
+  // fragment -- a hit's own #heading-anchor already lives there, and both
+  // need to survive together), so 14-search-highlight.js can find and
+  // reveal them on load, even if they're inside a currently-hidden
+  // asciidoctor-tabs tabpanel. Repeated params (not one joined string) keep
+  // each phrase's own word boundaries intact end to end.
+  function hitHref (hit) {
+    var phrases = extractHighlightedPhrases(hit)
+    if (!phrases.length) return hit.url
+    try {
+      var url = new URL(hit.url)
+      phrases.forEach(function (phrase) { url.searchParams.append('highlight', phrase) })
+      return url.toString()
+    } catch (e) {
+      return hit.url
+    }
+  }
+
   // Algolia returns facet values sorted by hit count, not by version number,
   // so without this a component's versions show in whatever arbitrary order
   // happened to have the most matches for the current query. Non-numeric
@@ -739,7 +788,7 @@
             </div>
 
             <h1 class="hit-name">
-              <a href="${hit.url}">${components.Highlight({ hit: hit, attribute: `hierarchy.${titleLevel}` })}</a>
+              <a href="${hitHref(hit)}">${components.Highlight({ hit: hit, attribute: `hierarchy.${titleLevel}` })}</a>
             </h1>
 
             ${hit.content ? html`
@@ -763,7 +812,7 @@
                     var label = siblingCatalogEntry?.groupByModule
                       ? (siblingCatalogEntry.moduleTitles?.[sibling.module] ?? sibling.module)
                       : productLabel(sibling.component_title, sibling.cversion)
-                    return html`<li><a href="${sibling.url}">${label}</a></li>`
+                    return html`<li><a href="${hitHref(sibling)}">${label}</a></li>`
                   })}
                 </ul>
               </details>
