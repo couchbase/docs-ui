@@ -187,6 +187,50 @@
     return result
   }
 
+  // Which component wins the "main" card when hits for the same page
+  // differ only by component (e.g. a Hello World tutorial mirrored across
+  // every SDK) -- without this, that's decided by whichever SDK Algolia's
+  // relevance ranking happens to favor for the current query's exact
+  // words, so it can shuffle from one search to the next. A small, fixed
+  // preference keeps it consistent instead. Not exhaustive: a component
+  // not listed here just falls through to Algolia's own top-ranked hit for
+  // the group, same as before this existed. The proper long-term fix (a
+  // low-precedence Algolia ranking rule, applied at index time) needs UI +
+  // content-repo + Algolia config changes and a reindex -- deliberately
+  // deferred; this is the lightweight stand-in until/unless that happens.
+  var PREFERRED_SIBLING_COMPONENTS = ['java-sdk']
+
+  // Same idea, one level down: which platform module wins the "main" card
+  // among a single groupByModule component's own per-platform siblings
+  // (currently just Couchbase Lite).
+  var PREFERRED_MODULE_BY_COMPONENT = {
+    'couchbase-lite': 'android',
+  }
+
+  // hits is every candidate for one group (same page, different
+  // component, or -- for a groupByModule component -- same component,
+  // different platform module), in whatever order Algolia originally
+  // ranked them for this query; hits[0] is that top-ranked one, used as
+  // the fallback when nothing here has an opinion.
+  function pickPrimaryHit (hits) {
+    var first = hits[0]
+    var sameComponentVersion = hits.every(function (hit) { return hit.component_version === first.component_version })
+    if (sameComponentVersion) {
+      var componentName = first.component_version && first.component_version.split('@')[0]
+      var preferredModule = componentName && PREFERRED_MODULE_BY_COMPONENT[componentName]
+      var moduleMatch = preferredModule && hits.find(function (hit) { return hit.module === preferredModule })
+      if (moduleMatch) return moduleMatch
+    } else {
+      for (var i = 0; i < PREFERRED_SIBLING_COMPONENTS.length; i++) {
+        var componentMatch = hits.find(function (hit) {
+          return hit.component_version && hit.component_version.split('@')[0] === PREFERRED_SIBLING_COMPONENTS[i]
+        })
+        if (componentMatch) return componentMatch
+      }
+    }
+    return first
+  }
+
   // name -> catalog entry ({name, title, shortName}), so hit
   // grouping/rendering can look up per-component config without walking the
   // nested navGroups tree each time.
@@ -747,12 +791,20 @@
           if (!byComponent.has(dedupeKey)) byComponent.set(dedupeKey, hit)
         })
 
+        // Which hit represents each group is decided up front (see
+        // pickPrimaryHit), not just "whichever Algolia ranked first for
+        // this query" -- items.filter can only keep or drop entries
+        // already in `items`, not substitute a different one in, so this
+        // builds the deduped array by hand instead.
+        var deduped = []
         var seen = new Set()
-        var deduped = items.filter(function (hit) {
-          if (seen.has(hit.__groupKey)) return false
+        items.forEach(function (hit) {
+          if (seen.has(hit.__groupKey)) return
           seen.add(hit.__groupKey)
-          hit.__siblings = Array.from(groups.get(hit.__groupKey).values()).filter(function (sibling) { return sibling !== hit })
-          return true
+          var candidates = Array.from(groups.get(hit.__groupKey).values())
+          var primary = pickPrimaryHit(candidates)
+          primary.__siblings = candidates.filter(function (sibling) { return sibling !== primary })
+          deduped.push(primary)
         })
 
         var hoisted = hoistNearbyRuns(deduped, HOIST_MAX_DISTANCE)
