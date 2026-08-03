@@ -133,27 +133,52 @@
     document.head.appendChild(script)
   }
 
+  // separateWordSearch (mark.js's default) would treat each *word* in a
+  // phrase as its own independent match -- exactly what lets a short,
+  // common word match somewhere unrelated. accuracy: 'exactly' (mark.js's
+  // default is 'partially') requires real word boundaries at both ends of
+  // the match -- without it, a short phrase (e.g. a lone "a" ending up as
+  // its own extracted phrase) matches as a bare substring anywhere,
+  // including inside unrelated longer words like "Capella" or "database".
+  // Since every phrase here already came from an actual matched snippet,
+  // not a loose keyword typed by a reader, there's no reason to want
+  // partial-word matches at all.
+  //
+  // Deliberately NOT acrossElements: true -- it sounds like exactly what's
+  // needed for a phrase split by inline markup (a <code> span, emphasis,
+  // etc.), but confirmed firsthand it does something far more damaging:
+  // once the search scope has more than one sibling container in it (true
+  // of literally any real page, which always has more than one paragraph),
+  // it can fail to find a match *entirely contained within a single
+  // element*, with no cross-element matching involved at all. Losing the
+  // rare split-by-inline-markup case is a much smaller cost than silently
+  // failing to find an otherwise-perfectly-findable phrase on every real
+  // page.
+  function markPhrases (phraseOrPhrases, done) {
+    new window.Mark(content).mark(phraseOrPhrases, {
+      done: done,
+      separateWordSearch: false,
+      accuracy: 'exactly',
+    })
+  }
+
   // site.js (this script's own bundle) loads synchronously at the end of
   // the body with no async/defer, so the DOM is already fully parsed by
   // the time this runs -- no need to wait for DOMContentLoaded.
   loadMarkJs(function () {
-    // separateWordSearch (mark.js's default) would treat each *word* in a
-    // phrase as its own independent match -- exactly what lets a short,
-    // common word match somewhere unrelated. acrossElements: true lets a
-    // phrase still match if inline markup (a <code> span, emphasis, etc.)
-    // splits it into more than one text node. accuracy: 'exactly' (mark.js's
-    // default is 'partially') requires real word boundaries at both ends of
-    // the match -- without it, a short phrase (e.g. a lone "a" ending up as
-    // its own extracted phrase) matches as a bare substring anywhere,
-    // including inside unrelated longer words like "Capella" or "database".
-    // Since every phrase here already came from an actual matched snippet,
-    // not a loose keyword typed by a reader, there's no reason to want
-    // partial-word matches at all.
-    new window.Mark(content).mark(phrases, {
-      done: afterMark,
-      separateWordSearch: false,
-      acrossElements: true,
-      accuracy: 'exactly',
+    // phrases[0] (see 13-docsearch.js) is the longest, most specific
+    // extracted phrase -- try it alone first, since on its own it can't be
+    // out-competed by a shorter, more generic fragment (e.g. a lone "A")
+    // that happens to also have been extracted and also happens to match
+    // in several tabs, which previously could win the "which tab gets
+    // revealed" decision purely by being processed last. Only if the
+    // specific phrase matches nowhere at all (e.g. a text-normalization
+    // mismatch) does this fall back to searching every extracted phrase
+    // together, same as before -- occasionally imprecise, but still finds
+    // *something* rather than nothing.
+    markPhrases(phrases[0], function (totalMarks) {
+      if (totalMarks > 0) return afterMark()
+      markPhrases(phrases, afterMark)
     })
   })
 })()

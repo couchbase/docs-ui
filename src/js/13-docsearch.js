@@ -122,6 +122,15 @@
     } else {
       collectMarkedLines(highlightResult.hierarchy && highlightResult.hierarchy[hit.type])
     }
+    // Longest (most specific) phrase first -- a snippet spanning a
+    // multi-tab block can still surface more than one marked line (see
+    // above), and a short, generic leftover (e.g. a lone "A") is far more
+    // likely to also match somewhere unrelated than a long, specific
+    // sentence is. 14-search-highlight.js tries phrases[0] alone first and
+    // only falls back to the rest if it matches nowhere at all, so this
+    // ordering is what makes that "try the specific one first" strategy
+    // actually pick the right phrase.
+    phrases.sort(function (a, b) { return b.split(/\s+/).length - a.split(/\s+/).length })
     return phrases
   }
 
