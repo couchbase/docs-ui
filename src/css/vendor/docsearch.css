@@ -88,9 +88,14 @@
   /* --pill-color is set inline per row from the catalog's per-category
    * color (grey when the row itself has 0 current hits, even if it's
    * refined) -- replaces the browser default blue tick/mixed-sign fill. */
-  /* accent-color is a standard, well-supported property; this stylelint config's known-properties list just predates it */
+  /* accent-color is a standard, well-supported property; this stylelint config's known-properties list just predates it.
+   * No CSS-level fallback here (JS always sets --pill-color inline, with its own fallback already resolved) -- with
+   * one, postcss-custom-properties (used for an IE11 fallback elsewhere, build.js's `preserve: preview`) treats
+   * --pill-color as statically resolvable via the fallback and strips the var() declaration entirely in the real
+   * (non-preview) build, leaving every checkbox hardcoded to that fallback color. Without a fallback it truly can't
+   * resolve statically and leaves this alone. */
   /* stylelint-disable-next-line property-no-unknown */
-  accent-color: var(--pill-color, #737373);
+  accent-color: var(--pill-color);
 }
 
 /* A component with nothing matching the current search text still gets a
@@ -168,8 +173,9 @@
 
 .facet-group > label input[type="checkbox"] {
   margin: 0;
+  /* no CSS-level fallback -- see the .facet-item checkbox rule above */
   /* stylelint-disable-next-line property-no-unknown */
-  accent-color: var(--pill-color, #737373);
+  accent-color: var(--pill-color);
 }
 
 #component-list .facet-group > ul {

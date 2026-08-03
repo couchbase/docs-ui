@@ -64,6 +64,26 @@ const shortNames = {
   'shared-mobile': 'Mobile',
 }
 
+// Modules that mirror the same content per platform under one component
+// (confirmed against real site nav data -- see docs-search-sketch's original
+// component-catalog.json comment) -- safe to group hits by, unlike e.g.
+// Server or Capella, which reuse generic filenames like index.html across
+// unrelated sections and would wrongly get folded together. Opt-in per
+// component, same reasoning/place as shortNames above: this is
+// display-only grouping logic Antora has no concept of, not something to
+// wait on playbook support for.
+const moduleGrouping = {
+  'couchbase-lite': {
+    swift: 'Swift',
+    objc: 'Objective-C',
+    java: 'Java',
+    csharp: 'C#',
+    c: 'C',
+    android: 'Android',
+    javascript: 'JavaScript',
+  },
+}
+
 module.exports = (
   navGroups,
   {
@@ -76,10 +96,13 @@ module.exports = (
 
   function serializeComponent (name) {
     const title = (components[name] && components[name].title) || name
+    const moduleTitles = moduleGrouping[name]
     return {
       name,
       title,
       shortName: shortNames[name] || title,
+      groupByModule: moduleTitles ? true : undefined,
+      moduleTitles,
     }
   }
 

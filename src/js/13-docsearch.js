@@ -611,15 +611,31 @@
       transformItems: function (items) {
         var groups = new Map()
         items.forEach(function (hit) {
+          var catalogEntry = catalogComponentsByName.get(hit.component_version?.split('@')[0])
           var pathAfterComponentVersion = hit.url_without_anchor.replace(/^https?:\/\/[^/]+\/[^/]+\/[^/]+\//, '')
+          // Confirmed against real site nav data that this is only safe for
+          // components explicitly flagged groupByModule (currently just
+          // Couchbase Lite) -- its modules mirror the same content per
+          // platform, but e.g. Server reuses generic filenames like
+          // index.html across unrelated REST API sections, so folding
+          // module into the comparison universally would wrongly group
+          // those.
+          if (catalogEntry?.groupByModule && hit.module && pathAfterComponentVersion.startsWith(hit.module + '/')) {
+            pathAfterComponentVersion = pathAfterComponentVersion.slice(hit.module.length + 1)
+          }
           hit.__groupKey = (hit.nav_group ?? '') + '::' + pathAfterComponentVersion
           if (!groups.has(hit.__groupKey)) groups.set(hit.__groupKey, new Map())
           var byComponent = groups.get(hit.__groupKey)
           // distinct can already return several anchors from the same
           // component's own page; keep only the top-ranked hit per
           // component so siblings reflect distinct components, not
-          // distinct anchors.
-          if (!byComponent.has(hit.component_version)) byComponent.set(hit.component_version, hit)
+          // distinct anchors. For groupByModule components, several
+          // modules share one component_version, so module has to be part
+          // of that identity too -- otherwise every platform but the
+          // top-ranked one would be silently dropped instead of kept as a
+          // sibling.
+          var dedupeKey = catalogEntry?.groupByModule ? hit.component_version + '::' + hit.module : hit.component_version
+          if (!byComponent.has(dedupeKey)) byComponent.set(dedupeKey, hit)
         })
 
         var seen = new Set()
@@ -738,7 +754,17 @@
               <details class="also-relevant">
                 <summary>Show ${hit.__siblings.length} similar result${hit.__siblings.length === 1 ? '' : 's'}</summary>
                 <ul>
-                  ${hit.__siblings.map((sibling) => html`<li><a href="${sibling.url}">${productLabel(sibling.component_title, sibling.cversion)}</a></li>`)}
+                  ${hit.__siblings.map((sibling) => {
+                    // For a groupByModule component (Couchbase Lite), every
+                    // sibling shares the same component_title/cversion --
+                    // the module is what actually distinguishes them, so
+                    // label by that instead.
+                    var siblingCatalogEntry = catalogComponentsByName.get(sibling.component_version?.split('@')[0])
+                    var label = siblingCatalogEntry?.groupByModule
+                      ? (siblingCatalogEntry.moduleTitles?.[sibling.module] ?? sibling.module)
+                      : productLabel(sibling.component_title, sibling.cversion)
+                    return html`<li><a href="${sibling.url}">${label}</a></li>`
+                  })}
                 </ul>
               </details>
             ` : ''}
