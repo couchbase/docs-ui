@@ -21,11 +21,24 @@
     return el ? el.getAttribute('content') : undefined
   }
 
+  // Once defaultVersionByComponent has loaded (see below), excludes any
+  // component with no entry there at all -- i.e. one with literally zero
+  // records anywhere in the index, not just zero for the current query.
+  // Such a component can never be refined by anything (there's no
+  // component_version value for it to refine by), so it can never register
+  // as isRefined -- leaving it in a group's own component list meant
+  // "select this whole category" could visibly check every real child yet
+  // the group checkbox itself would stay stuck on indeterminate forever,
+  // since "every one of my children is refined" could never become true.
+  // Before that fetch resolves, defaultVersionByComponent is empty for
+  // everything, so this deliberately returns the unfiltered list rather
+  // than wrongly excluding every real component in that brief window.
   function collectComponentNames (node) {
     var names = node.components ? node.components.map(function (c) { return c.name }) : []
     if (node.subGroups) {
       node.subGroups.forEach(function (sub) { names.push.apply(names, collectComponentNames(sub)) })
     }
+    if (defaultVersionsLoaded) names = names.filter(function (name) { return defaultVersionByComponent[name] })
     return names
   }
 
@@ -260,6 +273,7 @@
   // against.
   var defaultVersionByComponent = {}
   var allVersionsByComponent = {}
+  var defaultVersionsLoaded = false
   searchClient.search([{
     indexName: indexName,
     params: { query: '', facets: ['component_version'], hitsPerPage: 0, maxValuesPerFacet: 1000 },
@@ -279,6 +293,7 @@
       defaultVersionByComponent[component] = versionsByComponent[component][0].value
     })
     allVersionsByComponent = versionsByComponent
+    defaultVersionsLoaded = true
   })
 
   var search = instantsearch({
