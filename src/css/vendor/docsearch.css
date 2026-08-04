@@ -309,6 +309,15 @@
   border-radius: 3px;
 }
 
+/* Hints that at least one card under this badge's own run has other
+ * components collapsed into its "Show N similar results" toggle -- kept
+ * visually secondary to the product name itself, since it's a hint to
+ * look closer, not something claiming equal billing with the badge. */
+.hit-product-hint {
+  font-weight: var(--weight-normal);
+  opacity: 0.75;
+}
+
 .ais-Hits-item {
   /* the imported theme sets display:flex here, which we never override --
    * as the sole flex child, .hit (and anything inside it, like the product

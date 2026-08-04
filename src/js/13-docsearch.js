@@ -823,9 +823,20 @@
         // previous card, so one badge reads as a header spanning the run
         // below it.
         var previousComponentVersion = null
+        var runStart = null
         hoisted.forEach(function (hit) {
           hit.__isNewProduct = hit.component_version !== previousComponentVersion
           previousComponentVersion = hit.component_version
+          if (hit.__isNewProduct) runStart = hit
+          // A run's own "Show N similar results" toggle sits under whichever
+          // card actually has the siblings, not necessarily the first one --
+          // easy to miss entirely if the badge above the whole run gives no
+          // hint that expanding any card in it would surface other
+          // components too. Flagging it on the run's own badge-holding hit
+          // means a reader scanning down the page sees it before they'd
+          // otherwise assume a short run of one component is the complete
+          // picture.
+          if (hit.__siblings.length > 0) runStart.__runHasSiblings = true
         })
 
         return hoisted
@@ -897,7 +908,8 @@
           return html`
           <article class="hit">
             ${hit.__isNewProduct ? html`<div class="hit-product" style="--pill-color: ${
-              productColor}">${productLabel(hit.component_title, hit.cversion)}</div>` : ''}
+              productColor}">${productLabel(hit.component_title, hit.cversion)}${
+              hit.__runHasSiblings ? html`<span class="hit-product-hint"> (and others)</span>` : ''}</div>` : ''}
 
             <div class="hit-breadcrumbs">
               ${components.Highlight({ hit: hit, attribute: 'breadcrumbs' })}
