@@ -52,6 +52,43 @@
   min-width: 0;
 }
 
+/* The dedicated search-page layout embeds this same widget inline in the
+ * page body rather than as a header dropdown -- undo the dropdown's
+ * absolute positioning/hidden-until-typed behavior so it renders as a
+ * normal, always-visible block instead. */
+.search-container--page {
+  position: static;
+}
+
+.search-container--page #searchbox .ais-SearchBox-input {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.5rem 2rem 0.5rem 0;
+}
+
+/* No affordance to "close" a dedicated results page back to nothing --
+ * unlike the header dropdown, clearing the box here has nowhere useful to
+ * collapse back to. */
+.search-container--page .ais-SearchBox-reset {
+  display: none;
+}
+
+.search-container--page .search-panel {
+  visibility: visible;
+  position: static;
+  width: auto;
+  max-height: none;
+  overflow-y: visible;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.search-container--page .search-panel__filters {
+  flex: 0 0 220px;
+}
+
 #component-list ul {
   list-style: none;
   margin: 0;

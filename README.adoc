@@ -360,6 +360,10 @@ You can test the search directly from the preview site by setting the following 
 
 You can point to any index that is publicly accessible.
 
+Pressing kbd:[Return] in the search box normally does nothing (search-as-you-type already updates results live).
+If `SEARCH_PAGE_URL` is set to the root-relative URL of a page using the `search-page` layout (see link:preview-src/search.adoc[], rendered full-screen instead of as a header dropdown), pressing kbd:[Return] from *any* search box instead navigates there, carrying over the current query and refinements.
+Leave it unset until that page has a real URL to point to -- Enter remains a no-op until then.
+
 === JIRA Feedback
 
 This UI provides integration with JIRA feedback.

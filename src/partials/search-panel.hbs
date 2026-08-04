@@ -1,4 +1,4 @@
-<div class="search-container" data-app-id="{{env.ALGOLIA_APP_ID}}" data-api-key="{{env.ALGOLIA_API_KEY}}" data-index-name="{{or env.ALGOLIA_IDX_NAME env.ALGOLIA_INDEX_NAME}}">
+<div class="search-container{{#if fullPage}} search-container--page{{/if}}" data-app-id="{{env.ALGOLIA_APP_ID}}" data-api-key="{{env.ALGOLIA_API_KEY}}" data-index-name="{{or env.ALGOLIA_IDX_NAME env.ALGOLIA_INDEX_NAME}}"{{#if env.SEARCH_PAGE_URL}} data-search-page-url="{{{siteRootPath}}}{{{env.SEARCH_PAGE_URL}}}"{{/if}}>
   <div id="searchbox"></div>
   <div class="search-panel">
     <div class="search-panel__filters">

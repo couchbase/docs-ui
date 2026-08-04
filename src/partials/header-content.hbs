@@ -71,7 +71,7 @@
                 </ul>
               </div>
               <div class="primary-action">
-                {{#if env.ALGOLIA_API_KEY}}
+                {{#if (and env.ALGOLIA_API_KEY (ne bodyTemplate "body-search-page"))}}
                 <div class="navbar-item search" id="search">
                   {{> search-panel}}
                 </div>

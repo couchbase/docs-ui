@@ -371,6 +371,14 @@
     // else in the address bar untouched.
     routing: {
       router: instantsearch.routers.history({
+        // Default is a 400ms debounce before a keystroke's state actually
+        // reaches the address bar. The Enter-to-navigate handler below reads
+        // window.location.search at the moment Enter is pressed and relies
+        // on it already reflecting the latest state -- writeDelay: 0 keeps
+        // that gap down to a single tick (still deferred via setTimeout(0)
+        // internally, not truly synchronous) rather than the default's much
+        // longer, easily-losable window.
+        writeDelay: 0,
         parseURL: function (args) {
           var parsed = args.qsModule.parse(args.location.search.slice(1))
           var routeState = {}
@@ -987,7 +995,14 @@
 
   var searchPanel = document.querySelector('.search-panel')
 
+  // The dedicated search-page layout (see src/layouts/search-page.hbs)
+  // embeds this same widget inline, always visible, with nothing "outside"
+  // it to click away to -- the show-on-type/hide-on-clear-or-click-away
+  // behavior below only makes sense for the header's dropdown instance.
+  var isFullPage = container.classList.contains('search-container--page')
+
   search.on('render', function () {
+    if (isFullPage) return
     var query = search.renderState[indexName]?.searchBox?.query
     searchPanel.style.visibility = query ? 'visible' : 'hidden'
   })
@@ -1002,8 +1017,36 @@
   // UI. Running in capture phase evaluates e.target before any of that
   // mutation has a chance to happen.
   document.addEventListener('click', function (e) {
+    if (isFullPage) return
     if (!e.target.closest('.search-container')) clearSearch()
   }, true)
 
   search.start()
+
+  // Pressing Enter submits the searchBox's own <form> -- InstantSearch's
+  // widget already listens for that submit and calls preventDefault (this
+  // is instant-search-as-you-type; a traditional submission has nothing to
+  // do), so today Enter is a silent no-op. Wire it up to instead jump to the
+  // dedicated search-page layout with the current query + refinements,
+  // carried over via the URL routing state that's already kept in sync
+  // (see the `routing` config above) -- i.e. "submit the form" to that page.
+  // searchPageUrl is only present once a real page using that layout has
+  // been deployed and SEARCH_PAGE_URL configured to point at it; until
+  // then this is deliberately a no-op, same as it is today.
+  var searchPageUrl = container.dataset.searchPageUrl
+  var searchForm = container.querySelector('#searchbox form')
+  if (searchPageUrl && searchForm) {
+    searchForm.addEventListener('submit', function (e) {
+      e.preventDefault()
+      var target = new window.URL(searchPageUrl, window.location.href)
+      if (target.pathname === window.location.pathname) return
+      // Deferred one tick so a same-instant keystroke's own debounced
+      // routing write (writeDelay: 0 above, but still a setTimeout(0), not
+      // synchronous) has already landed in window.location.search by the
+      // time it's read here.
+      window.setTimeout(function () {
+        window.location.assign(target.pathname + window.location.search)
+      }, 0)
+    })
+  }
 })()
