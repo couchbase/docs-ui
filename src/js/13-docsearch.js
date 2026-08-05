@@ -1023,6 +1023,14 @@
 
   search.start()
 
+  // On the dedicated search page there's nothing else to do first -- unlike
+  // the header dropdown (where auto-focusing on every page load would be
+  // presumptuous), landing here means search IS the page.
+  if (isFullPage) {
+    var searchInput = container.querySelector('#searchbox input')
+    if (searchInput) searchInput.focus()
+  }
+
   // Pressing Enter submits the searchBox's own <form> -- InstantSearch's
   // widget already listens for that submit and calls preventDefault (this
   // is instant-search-as-you-type; a traditional submission has nothing to

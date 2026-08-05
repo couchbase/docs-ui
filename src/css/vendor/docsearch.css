@@ -14,7 +14,9 @@
   color: var(--color-brand-gray4);
   font-size: 1rem;
   width: 283px;
-  padding: 0.35em 2.25em 0.35em 0.75em;
+  /* Room for both the reset ("x") and submit (magnifying glass) icons on
+   * the right, below, without the two crowding each other. */
+  padding: 0.35em 3.75em 0.35em 0.75em;
 }
 
 @media screen and (max-width: 992px) {
@@ -38,16 +40,28 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 50%;
+  /* top/bottom: 0 + margin: auto centers the button against whatever the
+   * form's own rendered height actually is, rather than a hardcoded 50% +
+   * translate -- robust even if that height changes (e.g. the fullscreen
+   * input's own height/margin, overridden further down) without needing
+   * to re-tune a magic-number offset. */
+  top: 0;
+  bottom: 0;
   right: 0.4em;
-  transform: translateY(-50%);
+  margin: auto 0;
   width: 1.6em;
   height: 1.6em;
 }
 
 .search-container .ais-SearchBox-submitIcon {
-  width: 0.7em;
-  height: 0.7em;
+  width: 0.9em;
+  height: 0.9em;
+}
+
+/* The theme's own default (right: .5rem) sits close enough to the submit
+ * button above to visually crowd it. */
+.search-container .ais-SearchBox-reset {
+  right: 2.3em;
 }
 
 .search-panel {
@@ -79,14 +93,12 @@
   min-width: 0;
 }
 
-/* The dedicated search-page layout embeds this same widget inline in the
- * page body rather than as a header dropdown -- undo the dropdown's
- * absolute positioning/hidden-until-typed behavior so it renders as a
- * normal, always-visible block instead. */
 /* .doc h1.page (doc.css) is display: inline-block, meant to sit beside a
  * following .labels sibling (see body.hbs's .page-heading-title wrapper) --
- * this page's h1 has neither, and the bare inline-block box's line-box
- * visually overlapped the search widget below it as a result. */
+ * this page's h1 (rendered inside search-panel.hbs itself, see fullPage/
+ * pageTitle below, so it's centered along with the rest of the widget) has
+ * neither, and the bare inline-block box's line-box visually overlapped the
+ * search widget below it as a result. */
 .search-page h1.page {
   display: block;
 }
@@ -96,27 +108,36 @@
  * whose height is meant to cancel out via an equal negative margin, so
  * jumping to a heading anchor lands below the fixed header rather than
  * under it. The header's own #searchbox lives outside <main>, so it never
- * matches -- but on this full-page layout #searchbox does, and its own
- * explicit height (below) stops that negative margin from fully collapsing,
- * leaving the spacer's full height in flow and pushing the real search
- * input down far enough to overlap the results panel beneath it. */
+ * matches -- but on this full-page layout #searchbox does, and isn't a
+ * heading anchor that needs it; left in, it pushed the real search input
+ * down far enough to overlap the results panel beneath it. */
 #searchbox::before {
   content: none;
 }
 
+/* The dedicated search-page layout embeds this same widget inline in the
+ * page body rather than as a header dropdown -- undo the dropdown's
+ * absolute positioning/hidden-until-typed behavior so it renders as a
+ * normal, always-visible block instead. */
 .search-container--page {
   position: static;
   max-width: min(1500px, 80%);
   margin: 0 auto;
 }
 
-/* The input's own `margin` (below) pushes its rendered box taller than the
- * theme's default .ais-SearchBox-form height, which would otherwise clip/
- * overlap the results that follow -- give the wrapper enough height to
- * actually contain it. */
 .search-container--page #searchbox {
-  height: 5em;
   margin-bottom: 1rem;
+}
+
+/* The theme's own .ais-SearchBox-form has a fixed height (2.5rem) sized for
+ * its default, smaller input -- too short for this input's own margin
+ * (below), which would otherwise make the form (and #searchbox, sized to
+ * it) clip/overlap the results that follow. Letting it size to its actual
+ * content also means the submit button's top/bottom:0 centering (above)
+ * lands against the input's real box, not the theme's stale, too-short
+ * one. */
+.search-container--page .ais-SearchBox-form {
+  height: auto;
 }
 
 .search-container--page #searchbox .ais-SearchBox-input {
@@ -130,7 +151,12 @@
 }
 
 .search-container--page .ais-SearchBox-submit {
-  right: 1.5em;
+  /* px, not em -- .ais-SearchBox-form's own font-size (.875rem, from the
+   * theme) is unrelated to the input's own (1.5rem, above), so an em value
+   * here doesn't actually track the input's edge the way it looks like it
+   * should. Measured to land ~8-9px inside the input's real right edge,
+   * matching the ~8.5px it already has top and bottom. */
+  right: 33px;
   width: 2.5em;
   height: 2.5em;
   border-radius: 50%;

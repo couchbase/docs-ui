@@ -72,6 +72,12 @@ module.exports =
           for (const component of Object.values(baseUiModel.site.components)) {
             for (const version of component.versions || []) version.asciidoc = asciidoc
           }
+          // Not a real Antora page yet (its eventual URL is set via this same
+          // env var once a real one exists, see search-panel.hbs) -- default
+          // it to this repo's own preview-src/search.adoc for local preview,
+          // so the search-page layout's Enter-to-navigate wiring has
+          // something to actually navigate to out of the box.
+          if (!process.env.SEARCH_PAGE_URL) process.env.SEARCH_PAGE_URL = '/search.html'
           baseUiModel = { ...baseUiModel, env: process.env }
           delete baseUiModel.asciidoc
           return [baseUiModel, layouts]
