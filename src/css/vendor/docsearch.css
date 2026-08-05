@@ -144,7 +144,9 @@
   width: 100%;
   height: 2em;
   margin: 1em;
-  padding: 1em 3em 1em 1em;
+  /* Room for both the reset ("x") and submit (magnifying glass) icons on
+   * the right, below. */
+  padding: 1em 5em 1em 1em;
   font-size: 1.5rem;
   border: solid 2px var(--color-brand-black);
   border-radius: 1em;
@@ -169,11 +171,10 @@
   fill: var(--color-brand-white);
 }
 
-/* No affordance to "close" a dedicated results page back to nothing --
- * unlike the header dropdown, clearing the box here has nowhere useful to
- * collapse back to. */
+/* Clears the query text, same as the header's -- sits to the left of the
+ * bigger submit button here rather than the theme's default inset. */
 .search-container--page .ais-SearchBox-reset {
-  display: none;
+  right: 78px;
 }
 
 .search-container--page .search-panel {
@@ -190,6 +191,17 @@
 
 .search-container--page .search-panel__filters {
   flex: 0 0 220px;
+}
+
+/* Full-width, this reads as a wall of text at any font-size -- an indent
+ * and a capped reading width (blockquote-like) plus a touch more size
+ * (this is a full-text view, unlike the header dropdown's cramped column)
+ * makes each description actually comfortable to read. */
+.search-container--page .hit-snippet {
+  max-width: 42em;
+  padding-left: 1em;
+  border-left: 2px solid #e5e5e5;
+  font-size: 0.95rem;
 }
 
 #component-list ul {
@@ -494,7 +506,13 @@
   opacity: 0.5;
 }
 
-.hit-name {
+/* doc.css's `.doc h1` (a class + type selector) otherwise beats this plain
+ * class selector on the search-page layout, where hits render inside
+ * article.doc -- without the extra specificity here, every result title
+ * renders at doc.css's full page-heading scale (2.5rem, thin weight)
+ * instead of this. The header dropdown never hits this, since it isn't
+ * nested inside .doc at all. */
+.doc .hit-name {
   font-size: 1rem;
   font-weight: var(--weight-semibold);
   line-height: 1.3;

@@ -1047,7 +1047,11 @@
     searchForm.addEventListener('submit', function (e) {
       e.preventDefault()
       var target = new window.URL(searchPageUrl, window.location.href)
-      if (target.pathname === window.location.pathname) return
+      // Reloads even when already on the search page itself, carrying no
+      // new information -- but a submit button that visibly does nothing
+      // reads as broken, and "reload with the current params" is at least
+      // a predictable, honest answer to "what does submit do here".
+      //
       // Deferred one tick so a same-instant keystroke's own debounced
       // routing write (writeDelay: 0 above, but still a setTimeout(0), not
       // synchronous) has already landed in window.location.search by the
