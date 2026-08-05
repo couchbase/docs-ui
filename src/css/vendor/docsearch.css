@@ -9,18 +9,45 @@
 }
 
 #searchbox .ais-SearchBox-input {
-  border: none;
-  border-bottom: 1px solid var(--color-brand-gray5);
+  border: 2px solid var(--color-brand-black);
+  border-radius: 0;
   color: var(--color-brand-gray4);
   font-size: 1rem;
   width: 283px;
-  padding-right: 20px;
+  padding: 0.35em 2.25em 0.35em 0.75em;
 }
 
 @media screen and (max-width: 992px) {
   #searchbox .ais-SearchBox-input {
     width: 100%;
   }
+}
+
+/* InstantSearch always renders its default searchBox markup with a static
+ * magnifying-glass icon prepended via ::before, regardless of whether the
+ * submit button (which the satellite theme hides by default) is shown --
+ * once the submit button is shown below, that's a second, redundant
+ * magnifying glass. One icon, doing double duty as both decoration and the
+ * actual submit control, replaces both. */
+.search-container .ais-SearchBox-form::before {
+  content: none;
+}
+
+.search-container .ais-SearchBox-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 0.4em;
+  transform: translateY(-50%);
+  width: 1.6em;
+  height: 1.6em;
+}
+
+.search-container .ais-SearchBox-submitIcon {
+  width: 0.7em;
+  height: 0.7em;
 }
 
 .search-panel {
@@ -56,14 +83,64 @@
  * page body rather than as a header dropdown -- undo the dropdown's
  * absolute positioning/hidden-until-typed behavior so it renders as a
  * normal, always-visible block instead. */
+/* .doc h1.page (doc.css) is display: inline-block, meant to sit beside a
+ * following .labels sibling (see body.hbs's .page-heading-title wrapper) --
+ * this page's h1 has neither, and the bare inline-block box's line-box
+ * visually overlapped the search widget below it as a result. */
+.search-page h1.page {
+  display: block;
+}
+
+/* main [id]::before (main.css) is a sitewide anchor-scroll-offset spacer:
+ * every element with an id inside <main> gets an invisible pseudo-element
+ * whose height is meant to cancel out via an equal negative margin, so
+ * jumping to a heading anchor lands below the fixed header rather than
+ * under it. The header's own #searchbox lives outside <main>, so it never
+ * matches -- but on this full-page layout #searchbox does, and its own
+ * explicit height (below) stops that negative margin from fully collapsing,
+ * leaving the spacer's full height in flow and pushing the real search
+ * input down far enough to overlap the results panel beneath it. */
+#searchbox::before {
+  content: none;
+}
+
 .search-container--page {
   position: static;
+  max-width: min(1500px, 80%);
+  margin: 0 auto;
+}
+
+/* The input's own `margin` (below) pushes its rendered box taller than the
+ * theme's default .ais-SearchBox-form height, which would otherwise clip/
+ * overlap the results that follow -- give the wrapper enough height to
+ * actually contain it. */
+.search-container--page #searchbox {
+  height: 5em;
+  margin-bottom: 1rem;
 }
 
 .search-container--page #searchbox .ais-SearchBox-input {
   width: 100%;
-  font-size: 1.1rem;
-  padding: 0.5rem 2rem 0.5rem 0;
+  height: 2em;
+  margin: 1em;
+  padding: 1em 3em 1em 1em;
+  font-size: 1.5rem;
+  border: solid 2px var(--color-brand-black);
+  border-radius: 1em;
+}
+
+.search-container--page .ais-SearchBox-submit {
+  right: 1.5em;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 50%;
+  background: var(--color-brand-red);
+}
+
+.search-container--page .ais-SearchBox-submitIcon {
+  width: 1em;
+  height: 1em;
+  fill: var(--color-brand-white);
 }
 
 /* No affordance to "close" a dedicated results page back to nothing --
@@ -229,10 +306,6 @@
   text-decoration-color: var(--color-brand-red);
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
-}
-
-#searchbox {
-  margin-bottom: 1rem;
 }
 
 .current-refinements {
