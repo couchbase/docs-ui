@@ -407,6 +407,17 @@
   text-decoration: underline;
 }
 
+.no-exact-results-notice {
+  background: #fff8e1;
+  border: 1px solid #f0d58c;
+  border-radius: 3px;
+  color: #6b5200;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 .ais-Stats {
   color: #737373;
   font-size: 0.85rem;

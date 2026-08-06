@@ -980,6 +980,10 @@
       // so a couple of relevant sections can still surface without one
       // long page flooding the results.
       distinct: 3,
+      // Exposes hit._rankingInfo.nbTypos, the only way to tell an exact
+      // match from one Algolia's own typo tolerance manufactured -- see the
+      // no-exact-results-notice toggle below.
+      getRankingInfo: true,
     }),
     instantsearch.widgets.pagination({
       container: '#pagination',
@@ -1005,6 +1009,22 @@
     if (isFullPage) return
     var query = search.renderState[indexName]?.searchBox?.query
     searchPanel.style.visibility = query ? 'visible' : 'hidden'
+  })
+
+  // A short, exact-word query (e.g. "CNG") against a facet selection with
+  // no exact hits at all still returns results, care of Algolia's own typo
+  // tolerance -- every one of them a fuzzy/variant-spelling match, not a
+  // real one, and with nothing on screen to say so, that reads as "this
+  // component doesn't mention CNG" rather than "not spelled quite like
+  // that". _rankingInfo.nbTypos (needs configure's getRankingInfo above)
+  // is the only per-hit signal for "did this need a typo to match" --
+  // if every hit currently on screen needed one, none are exact.
+  var noExactResultsNotice = document.querySelector('#no-exact-results-notice')
+  search.on('render', function () {
+    if (!noExactResultsNotice) return
+    var hits = search.helper?.lastResults?.hits ?? []
+    var allTypos = hits.length > 0 && hits.every(function (hit) { return (hit._rankingInfo?.nbTypos ?? 0) > 0 })
+    noExactResultsNotice.hidden = !allTypos
   })
 
   // Capture phase, deliberately -- a bubble-phase listener here would run
