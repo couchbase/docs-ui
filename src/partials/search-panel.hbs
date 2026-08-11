@@ -1,19 +1,17 @@
 <div class="search-container{{#if fullPage}} search-container--page{{/if}}" data-app-id="{{env.ALGOLIA_APP_ID}}" data-api-key="{{env.ALGOLIA_API_KEY}}" data-index-name="{{or env.ALGOLIA_IDX_NAME env.ALGOLIA_INDEX_NAME}}"{{#if env.SEARCH_PAGE_URL}} data-search-page-url="{{{siteRootPath}}}{{{env.SEARCH_PAGE_URL}}}"{{/if}}>
-  {{#if fullPage}}{{#if pageTitle}}<h1 class="page">{{{pageTitle}}}</h1>{{/if}}{{/if}}
   <div id="searchbox"></div>
   <div class="search-panel">
     <div class="search-panel__filters">
+      <button type="button" class="search-panel__filters-toggle" aria-expanded="false" aria-controls="component-list">Filters</button>
       <div id="component-list"></div>
     </div>
-    <div class="search-panel__results">
-      <div id="current-refinements"></div>
-      <div id="no-exact-results-notice" class="no-exact-results-notice" hidden>
-        No exact results for this search.
-        The following are variant spellings that might be useful.
-      </div>
-      <div id="stats"></div>
-      <div id="hits"></div>
-      <div id="pagination"></div>
+    <div id="current-refinements"></div>
+    <div id="no-exact-results-notice" class="no-exact-results-notice" hidden>
+      No exact results for this search.
+      The following are variant spellings that might be useful.
     </div>
+    <div id="stats"></div>
+    <div id="hits"></div>
+    <div id="pagination"></div>
   </div>
 </div>

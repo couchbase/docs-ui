@@ -74,6 +74,11 @@
                 {{#if (and env.ALGOLIA_API_KEY (ne bodyTemplate "body-search-page"))}}
                 <div class="navbar-item search" id="search">
                   {{> search-panel}}
+                  {{#if env.SEARCH_PAGE_URL}}
+                  <a class="search-mobile-cta" href="{{{siteRootPath}}}{{{env.SEARCH_PAGE_URL}}}">
+                    <i class="fas fa-search"></i> Search
+                  </a>
+                  {{/if}}
                 </div>
                 {{/if}}
                 <a class="btn btn-primary btn-grey-reverse" onclick="(window.dataLayer=window.dataLayer||[]).push({'event':'customEvent', 'category':'CTA', 'action':'Button Click',  'label':'Download'});" href="https://www.couchbase.com/downloads">

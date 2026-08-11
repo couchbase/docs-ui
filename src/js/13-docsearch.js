@@ -997,6 +997,21 @@
     input.dispatchEvent(new window.Event('input', { bubbles: true }))
   }
 
+  // Narrow viewports collapse the facet tree under a toggle (see
+  // docsearch.css's .search-panel__filters-toggle media query) -- CSS alone
+  // decides whether the toggle even applies (it's force-expanded and the
+  // button hidden above the breakpoint), this just tracks open/closed state
+  // for whichever mode is currently active. Plain class/aria toggle on
+  // static markup, entirely independent of Algolia's own widgets/renders.
+  var filtersToggle = container.querySelector('.search-panel__filters-toggle')
+  if (filtersToggle) {
+    filtersToggle.addEventListener('click', function () {
+      var isOpen = filtersToggle.getAttribute('aria-expanded') === 'true'
+      filtersToggle.setAttribute('aria-expanded', String(!isOpen))
+      filtersToggle.closest('.search-panel__filters').classList.toggle('is-open', !isOpen)
+    })
+  }
+
   var searchPanel = document.querySelector('.search-panel')
 
   // The dedicated search-page layout (see src/layouts/search-page.hbs)
