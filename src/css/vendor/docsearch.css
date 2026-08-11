@@ -124,6 +124,14 @@
   grid-area: filters;
 }
 
+/* display: contents unwraps this at narrow widths -- current-refinements/
+ * notice/stats/hits/pagination become direct grid items of .search-panel
+ * itself again, individually placed by grid-area (below) exactly as if
+ * this wrapper wasn't there, so the mobile reordering above still works. */
+.search-panel__results {
+  display: contents;
+}
+
 #current-refinements {
   grid-area: refinements;
 }
@@ -150,12 +158,31 @@
 @media (min-width: 768px) {
   .search-panel {
     grid-template-columns: 190px 1fr;
-    grid-template-areas:
-      "filters refinements"
-      "filters notice"
-      "filters stats"
-      "filters hits"
-      "filters pagination";
+    /* Just two items sharing a single row, not filters spanning five rows
+     * of its own -- with filters not spanning, its content (the full
+     * facet tree, easily taller than current-refinements/notice/stats
+     * combined) can no longer force those particular rows to inflate to
+     * make up the difference, which is what was leaving a large gap of
+     * blank space above "N results found" whenever the facet tree was
+     * taller than the rest put together. */
+    grid-template-areas: "filters results";
+    /* Grid's own default (stretch) would otherwise force whichever column
+     * is naturally shorter to stretch and match the taller one -- harmless
+     * in itself, but it's the difference between unused space landing
+     * predictably after that column's own last item versus (pre-fix,
+     * combined with the row-spanning above) inside it, above "N results
+     * found". */
+    align-items: start;
+  }
+
+  /* No longer unwrapped at this width -- a real, independently-sized
+   * column, laid out in its own normal flow rather than the outer grid's
+   * row tracks. */
+  .search-panel__results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    grid-area: results;
   }
 }
 
