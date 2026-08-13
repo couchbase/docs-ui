@@ -122,6 +122,24 @@
     } else {
       collectMarkedLines(highlightResult.hierarchy && highlightResult.hierarchy[hit.type])
     }
+    // A hit can be found purely through an attribute that's never part of
+    // the page's own visible content/hierarchy at all -- the page-keywords-
+    // sourced `keywords` attribute is exactly this: real to Algolia, but
+    // meta-only, so nothing above ever has a mark to find. Falling back to
+    // the literal words the reader typed is a Good Enough guess for that
+    // case: not guaranteed (keywords are curated, not necessarily verbatim
+    // page text), but often, in practice, they turn out to appear as real
+    // body text too, even though that's not what actually mattered for
+    // ranking this particular hit.
+    if (!phrases.length) {
+      var currentQuery = ((search.helper && search.helper.state && search.helper.state.query) || '').trim()
+      if (currentQuery) {
+        phrases.push(currentQuery)
+        currentQuery.split(/\s+/).forEach(function (word) {
+          if (word && word !== currentQuery) phrases.push(word)
+        })
+      }
+    }
     // Longest (most specific) phrase first -- a snippet spanning a
     // multi-tab block can still surface more than one marked line (see
     // above), and a short, generic leftover (e.g. a lone "A") is far more
