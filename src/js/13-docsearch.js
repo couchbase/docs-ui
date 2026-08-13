@@ -125,12 +125,27 @@
     // A hit can be found purely through an attribute that's never part of
     // the page's own visible content/hierarchy at all -- the page-keywords-
     // sourced `keywords` attribute is exactly this: real to Algolia, but
-    // meta-only, so nothing above ever has a mark to find. Falling back to
-    // the literal words the reader typed is a Good Enough guess for that
-    // case: not guaranteed (keywords are curated, not necessarily verbatim
-    // page text), but often, in practice, they turn out to appear as real
-    // body text too, even though that's not what actually mattered for
-    // ranking this particular hit.
+    // meta-only, so nothing above ever has a mark to find. Its own terms are
+    // a better guess than the raw query below: they're curated specifically
+    // for this page, whereas the query is whatever the reader happened to
+    // type. Read from the raw attribute, not _highlightResult.keywords'
+    // marked-up value -- comma-split terms are independent tags, not a
+    // sequence, so there's nothing to gain from parsing out just the one
+    // Algolia happened to mark, and every term is an equally valid guess at
+    // what might appear as real body text.
+    if (!phrases.length && hit._highlightResult && hit._highlightResult.keywords &&
+        hit._highlightResult.keywords.matchLevel !== 'none') {
+      (hit.keywords || '').split(',').forEach(function (term) {
+        term = term.trim()
+        if (term) phrases.push(term)
+      })
+    }
+    // Keywords are curated, not guaranteed to be verbatim page text either
+    // -- if none of them turned out to be (or this hit has no keywords match
+    // at all), falling back to the literal words the reader typed is a Good
+    // Enough last resort: not guaranteed, but often, in practice, they turn
+    // out to appear as real body text too, even though that's not what
+    // actually mattered for ranking this particular hit.
     if (!phrases.length) {
       var currentQuery = ((search.helper && search.helper.state && search.helper.state.query) || '').trim()
       if (currentQuery) {
