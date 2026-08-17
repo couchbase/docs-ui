@@ -386,7 +386,15 @@
     indexName: indexName,
     initialUiState: (function () {
       var state = {}
-      state[indexName] = { refinementList: { component_version: computeDefaultRefinement() } }
+      state[indexName] = {
+        refinementList: {
+          component_version: computeDefaultRefinement(),
+          // Code-example-only content (is_listing: true) stays hidden by
+          // default -- a reader opts in via the "Show code examples?"
+          // checkbox rather than seeing it mixed in from the start.
+          is_listing: ['false'],
+        },
+      }
       return state
     })(),
     searchClient: searchClient,
@@ -673,6 +681,50 @@
 
   var customRefinementList = connectRefinementList(renderRefinementList)
 
+  // "Include code examples" checkbox -- sits right below the current-
+  // refinements pills (its own #code-examples-toggle container, see
+  // search-panel.hbs), not inside the component/version facet tree: it's a
+  // display preference over what counts as a result, not a category to
+  // narrow the catalog by, so it belongs with the other "what's affecting
+  // these results" controls rather than the product/version hierarchy.
+  //
+  // is_listing:false stays refined at all times (see initialUiState above);
+  // this checkbox only ever toggles is_listing:true, so unticking it just
+  // removes that one extra value again rather than resetting anything.
+  var renderCodeExamplesToggle = function (renderOptions) {
+    var items = renderOptions.items
+    var refine = renderOptions.refine
+    var widgetParams = renderOptions.widgetParams
+    var container = document.querySelector(widgetParams.container)
+
+    var trueItem = items.find(function (item) { return item.value === 'true' })
+    // connectRefinementList treats is_listing as a disjunctive facet, so
+    // this count already reflects every OTHER active refinement (query,
+    // component_version, ...) without being narrowed by is_listing's own
+    // current refinement -- exactly "how many additional results ticking
+    // this box would reveal".
+    var additionalCount = trueItem ? trueItem.count : 0
+    var isChecked = Boolean(trueItem && trueItem.isRefined)
+
+    // Hidden when there's nothing extra to reveal, but the underlying
+    // refinement (and thus isChecked next time something's available) is
+    // left untouched -- the reader's choice persists across the box
+    // disappearing and reappearing as the query/filters change.
+    container.hidden = additionalCount === 0
+    container.innerHTML = '' +
+      '<label>' +
+        '<input type="checkbox"' + (isChecked ? ' checked' : '') + '/>' +
+        '<span>Include code examples</span>' +
+        '<span class="toggle-count">(+' + additionalCount + ')</span>' +
+      '</label>'
+
+    container.querySelector('input').addEventListener('change', function () {
+      refine('true')
+    })
+  }
+
+  var customCodeExamplesToggle = connectRefinementList(renderCodeExamplesToggle)
+
   // Collapses the raw list of currently-refined "component@version" values
   // into the fewest pills that still say something true: a whole category
   // selected collapses to one pill for that category and swallows
@@ -783,6 +835,11 @@
     if (clearAllButton) {
       clearAllButton.addEventListener('click', function () {
         search.helper.clearRefinements()
+        // clearRefinements() with no argument wipes every facet, not just
+        // component_version -- without this, is_listing would end up with
+        // no refinement at all (neither ticked nor unticked), rather than
+        // back at its own default (unticked/false-only) state.
+        search.helper.addDisjunctiveFacetRefinement('is_listing', 'false')
         search.helper.search()
       })
     }
@@ -966,7 +1023,7 @@
             </h1>
 
             ${hit.content ? html`
-              <div class="hit-snippet">
+              <div class="hit-snippet${hit.is_listing ? ' hit-snippet--code-example' : ''}">
                 ${components.Snippet({ hit: hit, attribute: 'content' })}
               </div>
             ` : showDescriptionFallback ? html`
@@ -998,6 +1055,16 @@
     }),
     customCurrentRefinements({
       container: '#current-refinements',
+      // buildRefinementPills only knows how to render component_version
+      // values (it splits each refined value on "@" and looks it up in the
+      // catalog) -- without this, the is_listing refinement added below
+      // would flow through as its own bogus "false"/"true" pill here.
+      includedAttributes: ['component_version'],
+    }),
+
+    customCodeExamplesToggle({
+      container: '#code-examples-toggle',
+      attribute: 'is_listing',
     }),
 
     customRefinementList({

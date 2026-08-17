@@ -87,6 +87,7 @@
    * touched a checkbox. */
   grid-template-areas:
     "refinements"
+    "code-examples"
     "notice"
     "stats"
     "filters"
@@ -407,9 +408,12 @@
  * inside the label instead (so each row's own per-category accent-color
  * can drive a normal native checkbox), which never matches that sibling
  * selector, so the checkbox gets hidden with no replacement drawn. Reset
- * back to normal, native rendering within the facet tree specifically. */
+ * back to normal, native rendering within the facet tree specifically --
+ * and in #code-examples-toggle, which nests its own checkbox the same way. */
 #component-list [type="checkbox"]:not(:checked),
-#component-list [type="checkbox"]:checked {
+#component-list [type="checkbox"]:checked,
+#code-examples-toggle [type="checkbox"]:not(:checked),
+#code-examples-toggle [type="checkbox"]:checked {
   position: static;
   left: auto;
 }
@@ -606,6 +610,30 @@
   text-decoration: underline;
 }
 
+/* Muted and a size down from the pills above it -- this is a display
+ * preference (what kind of content counts as a result), not a refinement
+ * pill of its own, and shouldn't compete with those for attention. */
+#code-examples-toggle {
+  grid-area: code-examples;
+  font-size: 0.8rem;
+  color: #737373;
+}
+
+#code-examples-toggle label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+#code-examples-toggle input[type="checkbox"] {
+  margin: 0;
+}
+
+#code-examples-toggle .toggle-count {
+  color: #999;
+}
+
 .no-exact-results-notice {
   background: #fff8e1;
   border: 1px solid #f0d58c;
@@ -742,6 +770,13 @@
   line-height: 1.45;
   color: var(--color-text);
   margin: 0 0 0.4rem;
+}
+
+/* is_listing hits are matches inside a code block rather than prose --
+ * base.css's own code/kbd/pre font, without pre's white-space handling
+ * (the snippet's already a plain single-line excerpt, not a full listing). */
+.hit-snippet--code-example {
+  font-family: 'Source Code Pro', monospace;
 }
 
 .also-relevant {

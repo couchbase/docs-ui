@@ -32,9 +32,9 @@ site:
         displayVersion: '6.0 Beta'
         url: /server/6.0/index.html
       - &latest_server
-        version: '5.5'
+        version: '8.0'
         title: Couchbase Server
-        url: /server/5.5/index.html
+        url: /server/8.0/index.html
         navigation:
         - content: Introduction
       - version: '5.1'
