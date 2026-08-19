@@ -81,12 +81,18 @@
                   {{/if}}
                 </div>
                 {{/if}}
-                <a class="btn btn-primary btn-grey-reverse" onclick="(window.dataLayer=window.dataLayer||[]).push({'event':'customEvent', 'category':'CTA', 'action':'Button Click',  'label':'Download'});" href="https://www.couchbase.com/downloads">
-                  Downloads
+                {{#unless page.attributes.disable-chatbot}}
+                <button type="button" id="ask-ai-button" class="btn btn-ask-ai">
+                  <i class="fas fa-sparkles" aria-hidden="true"></i>
+                  Ask AI
+                </button>
+                {{/unless}}
+                <a class="btn btn-primary btn-grey-reverse header-cta" onclick="(window.dataLayer=window.dataLayer||[]).push({'event':'customEvent', 'category':'CTA', 'action':'Button Click',  'label':'Download'});" href="https://www.couchbase.com/downloads">
+                  <span class="btn-label">Downloads</span>
                   <i class="far fa-arrow-to-bottom fa-fw"></i>
                 </a>
-                <a href="https://cloud.couchbase.com/sign-up" class="btn btn-primary" onclick="(window.dataLayer=window.dataLayer||[]).push({'event':'customEvent', 'category':'CTA', 'action':'Button Click',  'label':'Free Trial'});" >
-                  Try Free
+                <a href="https://cloud.couchbase.com/sign-up" class="btn btn-primary header-cta" onclick="(window.dataLayer=window.dataLayer||[]).push({'event':'customEvent', 'category':'CTA', 'action':'Button Click',  'label':'Free Trial'});" >
+                  <span class="btn-label">Try Free</span>
                   <i class="far fa-cloud fa-fw"></i>
                 </a>
               </div>

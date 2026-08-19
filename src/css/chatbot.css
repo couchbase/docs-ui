@@ -25,6 +25,8 @@
 }
 
 .lex-web-ui-iframe--minimize {
+  /* replaced by the "Ask AI" button in the header; don't show the floating bubble */
+  display: none;
   max-width: 90px !important;
   max-height: 90px !important;
   border-radius: 85px !important;

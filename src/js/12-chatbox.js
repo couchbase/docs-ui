@@ -83,7 +83,7 @@
   }
 
   // load the iframe
-  iframeLoader
+  var chatbotReady = iframeLoader
     .load(chatbotUiconfig)
     .then(function () {
       iframeLoader.api.ping()
@@ -96,4 +96,13 @@
     .catch(function (error) {
       console.error('chatbot UI failed to load', error, iframeOrigin)
     })
+
+  var askAiButton = document.getElementById('ask-ai-button')
+  if (askAiButton) {
+    askAiButton.addEventListener('click', function () {
+      chatbotReady.then(function () {
+        iframeLoader.api.toggleMinimizeUi()
+      })
+    })
+  }
 })()
