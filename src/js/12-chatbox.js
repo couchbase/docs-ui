@@ -27,7 +27,7 @@
       showDialogStateIcon: false,
       backButton: false,
       messageMenu: true,
-      hideButtonMessageBubble: false,
+      hideButtonMessageBubble: true,
       enableLiveChat: false,
     },
     iframe: {
@@ -90,6 +90,10 @@
 
       // perform actions on the parent dependent on the chatbot loading.
       iframeLoader.api.setClientContext(clientContext)
+
+      // always launch expanded -- there's no collapsed size any more, but the
+      // iframe's own internal expand/shrink state defaults to false, so sync it
+      iframeLoader.api.toggleIsUiExpanded()
 
       // document.getElementById('send-intent').setAttribute('disabled', false)
     })
