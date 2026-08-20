@@ -137,19 +137,42 @@
   function sendMessage (text) {
     appendMessage('user', text)
     var botMessageEl = appendMessage('bot', '')
+    var fullText = ''
+    var renderScheduled = false
+    var finished = false
+
+    function renderNow (finalText) {
+      if (window.CouchbaseChatRender) {
+        window.CouchbaseChatRender.renderMessage(botMessageEl, finalText)
+      } else {
+        botMessageEl.textContent = finalText
+      }
+      botMessageEl.scrollIntoView({ block: 'end' })
+    }
+
+    // Re-parsing markdown + re-highlighting on every single WebSocket chunk
+    // is wasteful, so coalesce a burst of chunks into one re-render per
+    // animation frame. An in-progress (unclosed) code fence just renders
+    // as a plain, unhighlighted block until its closing fence streams in --
+    // self-correcting, not broken, same as ChatGPT/Claude's own streaming UIs.
+    function scheduleRender () {
+      if (renderScheduled || finished) return
+      renderScheduled = true
+      requestAnimationFrame(function () {
+        renderScheduled = false
+        if (!finished) renderNow(fullText)
+      })
+    }
 
     client.postText(text, currentClientContext(), function (chunk) {
-      botMessageEl.textContent += chunk
-      botMessageEl.scrollIntoView({ block: 'end' })
+      fullText += chunk
+      scheduleRender()
     }).then(function (result) {
       // result.message is the authoritative final text -- some turns arrive
       // as a single fast REST response with no streamed chunks at all, so
       // this can't just be whatever the onChunk callback accumulated above
-      if (window.CouchbaseChatRender) {
-        window.CouchbaseChatRender.renderMessage(botMessageEl, result.message)
-      } else {
-        botMessageEl.textContent = result.message
-      }
+      finished = true
+      renderNow(result.message)
       saveSession()
     })
   }
