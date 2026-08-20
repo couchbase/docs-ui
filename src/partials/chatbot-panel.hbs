@@ -1,0 +1,28 @@
+{{!-- No Capella (or any other) credentials here -- the backend app holds
+     those server-side; this frontend only ever talks to its own plain
+     REST + wss:// endpoints. --}}
+<div id="chatbot-config" hidden
+  data-api-uri="{{env.CHATBOT_API_BASE_URL}}"
+  data-streaming-ws-endpoint="{{env.CHATBOT_STREAMING_WS_ENDPOINT}}"></div>
+<div id="chatbot-panel" class="chatbot-panel" hidden>
+  <div class="chatbot-panel__header">
+    <img src="{{{uiRootPath}}}/img/couchbase-logo.svg" alt="" class="chatbot-panel__logo">
+    <span class="chatbot-panel__title">Couchbase Ask AI</span>
+    <button type="button" id="chatbot-close-button" class="chatbot-panel__close" aria-label="Close chat">
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="chatbot-panel__notice">
+    This is an experimental tool that uses AI to answer questions about Couchbase.
+    Always consult official Couchbase documentation to verify answers, and do not
+    enter any personal or confidential information.
+  </div>
+  <div id="chatbot-messages" class="chatbot-panel__messages" role="log" aria-live="polite"></div>
+  <form id="chatbot-input-form" class="chatbot-panel__input-row">
+    <textarea id="chatbot-input" class="chatbot-panel__input" rows="1"
+      placeholder="Ask a question about Couchbase..." aria-label="Ask a question"></textarea>
+    <button type="submit" class="chatbot-panel__send" aria-label="Send">
+      <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
+  </form>
+</div>

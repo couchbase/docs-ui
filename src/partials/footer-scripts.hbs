@@ -11,10 +11,6 @@
 {{> terminal}}
 </template>
 
-{{#unless page.attributes.disable-chatbot}}
-<script id="site-script" src="{{{uiRootPath}}}/js/vendor/chatbox-ui.js"></script>
-{{/unless}}
-
 {{#if env.ALGOLIA_API_KEY}}
 {{!-- the real, Antora-driven catalog of navGroups/components/colors that drives the search facet tree --}}
 <script id="search-catalog" type="application/json">
@@ -25,6 +21,11 @@
 {{!-- must load synchronously, before site.js (which contains 13-docsearch.js), so window.algoliasearch/window.instantsearch are set before it runs --}}
 <script src="{{{uiRootPath}}}/js/vendor/algolia.js"></script>
 {{/if}}
+{{#unless page.attributes.disable-chatbot}}
+{{!-- must load synchronously, before site.js (which contains 12-chatbox-render.js),
+     so window.marked/window.DOMPurify are set before it runs --}}
+<script src="{{{uiRootPath}}}/js/vendor/chatbot.js"></script>
+{{/unless}}
 <script id="site-script" src="{{{uiRootPath}}}/js/site.js"></script>
 <script async src="{{{uiRootPath}}}/js/vendor/tabs.js" data-sync-storage-key="preferred-tab"></script>
 {{#with page.attributes.content-scripts}}
