@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = (url) => '/markdown' + url.replace(/\.html$/, '.md')
+module.exports = (url) => url.replace(/\.html$/, '.md')
