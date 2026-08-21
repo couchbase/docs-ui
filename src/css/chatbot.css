@@ -70,7 +70,6 @@
   max-width: 85%;
   padding: 0.6em 0.9em;
   border-radius: 4px;
-  white-space: pre-wrap;
   overflow-wrap: break-word;
 }
 
@@ -78,12 +77,20 @@
   align-self: flex-end;
   background: var(--color-brand-black);
   color: var(--color-brand-white);
+  /* plain typed text (never run through renderMessage) -- preserve the
+     user's own line breaks */
+  white-space: pre-wrap;
 }
 
 .chatbot-message--bot {
   align-self: flex-start;
   background: var(--color-brand-gray7);
   color: var(--color-brand-black);
+  /* always rendered as real HTML by renderMessage -- pre-wrap here would
+     make the literal newlines marked emits between block tags (</p>\n<h2>
+     etc.) count as visible blank lines, on top of each element's own
+     CSS margin, doubling up as large vertical gaps between every block */
+  white-space: normal;
 }
 
 .chatbot-message--bot .markdown-content > *:first-child {
