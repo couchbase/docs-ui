@@ -1,17 +1,6 @@
 ;(function () {
   'use strict'
 
-  // Carried forward from a search hit's link (see 13-docsearch.js) -- each
-  // repeated param is one whole matched phrase, not the raw query, since
-  // Algolia's typo-tolerance and stemming mean the literal query words
-  // don't always appear verbatim on the page. Cleared from the URL below
-  // so a refresh/back-forward doesn't keep re-triggering it.
-  var url = new URL(window.location.href)
-  var phrases = url.searchParams.getAll('highlight')
-  if (!phrases.length) return
-  url.searchParams.delete('highlight')
-  window.history.replaceState(null, '', url.toString())
-
   var content = document.querySelector('.doc') || document.querySelector('main') || document.body
 
   // Mirrors asciidoctor-tabs' own activateTab (dist/js/tabs.js) just closely
@@ -110,16 +99,35 @@
     return Promise.all(pending)
   }
 
-  function afterMark () {
+  // The same phrase can legitimately match more than once on a long page
+  // (a shared phrase repeated across sections, or the exact sentence a
+  // reader selected happening to also appear elsewhere) -- marks[0] (the
+  // first in document order) is often nowhere near where the URL's own
+  // #id fragment says the reader should land. Since that id is already a
+  // reasonable guess at "which part of the page this phrase is about",
+  // prefer the first mark at or after it, over one that's merely first on
+  // the page.
+  function pickTargetMark (marks, preferredId) {
+    var anchor = preferredId && document.getElementById(preferredId)
+    if (!anchor) return marks[0]
+    for (var i = 0; i < marks.length; i++) {
+      if (marks[i] === anchor || (anchor.compareDocumentPosition(marks[i]) & window.Node.DOCUMENT_POSITION_FOLLOWING)) {
+        return marks[i]
+      }
+    }
+    return marks[0]
+  }
+
+  function afterMark (preferredId) {
     var marks = content.querySelectorAll('mark')
     if (!marks.length) return
     Promise.all(Array.from(marks).map(revealAncestorTabsIfNeeded)).then(function () {
       // The browser's one-time native scroll-to-anchor (for the heading
       // fragment already on this URL) may have already run before any tab
       // was revealed, or the heading itself may be nowhere near the actual
-      // match -- re-scroll to the first highlighted match specifically,
-      // now that it's guaranteed visible.
-      marks[0].scrollIntoView({ block: 'center' })
+      // match -- re-scroll to the target match specifically, now that it's
+      // guaranteed visible.
+      pickTargetMark(Array.from(marks), preferredId).scrollIntoView({ block: 'center' })
     })
   }
 
@@ -144,41 +152,113 @@
   // not a loose keyword typed by a reader, there's no reason to want
   // partial-word matches at all.
   //
-  // Deliberately NOT acrossElements: true -- it sounds like exactly what's
+  // The 'exactly' boundary is confirmed firsthand to mean *whitespace*
+  // specifically, not "any non-word character" -- a phrase ending right
+  // before ordinary punctuation (a comma, a period at the end of a
+  // sentence) otherwise silently matches nowhere at all, which is the
+  // common case for a phrase lifted from running prose, not just an edge
+  // case. accuracy.limiters extends what counts as a boundary to include
+  // that punctuation too, without weakening the "real word boundary"
+  // requirement itself -- unlike accuracy: 'complementary' (which sounds
+  // similar but actually EXPANDS a match to its whole surrounding word,
+  // confirmed firsthand to make a lone "a" highlight all of "Capella",
+  // "and", "database", etc. -- exactly the bare-substring problem this is
+  // trying to avoid, just relocated).
+  var LIMITERS = [',', '.', ';', ':', '!', '?', ')', '(', '"', "'"]
+  var ACCURACY = { value: 'exactly', limiters: LIMITERS }
+
+  // Exposed alongside highlightPhrases (see window.CouchbaseSearchHighlight
+  // below) so 15-selection-share.js can grow a selection out to the same
+  // boundary this matching itself requires, rather than maintaining its own,
+  // possibly-drifting idea of where a "word" ends.
+  function isBoundaryChar (ch) {
+    return /\s/.test(ch) || LIMITERS.indexOf(ch) !== -1
+  }
+
+  // Not acrossElements: true by default -- it sounds like exactly what's
   // needed for a phrase split by inline markup (a <code> span, emphasis,
   // etc.), but confirmed firsthand it does something far more damaging:
   // once the search scope has more than one sibling container in it (true
   // of literally any real page, which always has more than one paragraph),
   // it can fail to find a match *entirely contained within a single
   // element*, with no cross-element matching involved at all. Losing the
-  // rare split-by-inline-markup case is a much smaller cost than silently
-  // failing to find an otherwise-perfectly-findable phrase on every real
-  // page.
-  function markPhrases (phraseOrPhrases, done) {
-    new window.Mark(content).mark(phraseOrPhrases, {
+  // rare split-by-inline-markup case by default is a much smaller cost than
+  // silently failing to find an otherwise-perfectly-findable phrase on every
+  // real page. It's only turned on as a last resort below, once both plain
+  // attempts have already come up completely empty -- at that point there's
+  // nothing left for it to break that wasn't already broken.
+  function markPhrases (phraseOrPhrases, opts, done) {
+    new window.Mark(content).mark(phraseOrPhrases, Object.assign({
       done: done,
       separateWordSearch: false,
-      accuracy: 'exactly',
+      accuracy: ACCURACY,
+    }, opts))
+  }
+
+  // Exposed on window.CouchbaseSearchHighlight (see 12-chatbox-*.js for the
+  // same small-namespace convention) so 15-selection-share.js can trigger
+  // this exact matching/tab-reveal behavior in place, instantly, for a
+  // selection made on the CURRENT page -- without round-tripping through a
+  // real navigation just to re-run this same logic from a URL.
+  function highlightPhrases (phrases, preferredId, done) {
+    if (!phrases.length) return done && done(0)
+    loadMarkJs(function () {
+      // Clears any marks left over from a previous in-place call (a real
+      // page load never has any yet, so this is a no-op there) -- unmark()
+      // rather than manually unwrapping, since it's the one guaranteed not
+      // to leave the fragmented, contamination-prone text nodes a manual
+      // unwrap-and-replace was confirmed firsthand to leave behind.
+      new window.Mark(content).unmark({
+        done: function () {
+          // phrases[0] (see 13-docsearch.js) is the longest, most specific
+          // extracted phrase -- try it alone first, since on its own it
+          // can't be out-competed by a shorter, more generic fragment (e.g.
+          // a lone "A") that happens to also have been extracted and also
+          // happens to match in several tabs, which previously could win
+          // the "which tab gets revealed" decision purely by being
+          // processed last. Only if the specific phrase matches nowhere at
+          // all (e.g. a text-normalization mismatch) does this fall back to
+          // searching every extracted phrase together, same as before --
+          // occasionally imprecise, but still finds *something* rather than
+          // nothing.
+          markPhrases(phrases[0], {}, function (totalMarks) {
+            if (totalMarks > 0) { afterMark(preferredId); return done && done(totalMarks) }
+            markPhrases(phrases, {}, function (totalMarks) {
+              if (totalMarks > 0) { afterMark(preferredId); return done && done(totalMarks) }
+              // Last resort: a phrase that crosses an inline element (a
+              // bolded UI term, a code span, a link) inside otherwise plain
+              // body text -- e.g. a reader's own text selection (see
+              // 15-selection-share.js), unlike a curated Algolia snippet
+              // line, has no reason to avoid landing mid-element. Try every
+              // phrase again, together, with acrossElements on -- nothing
+              // here has found anything yet, so there's no existing good
+              // result this could clobber.
+              markPhrases(phrases, { acrossElements: true }, function (totalMarks) {
+                afterMark(preferredId)
+                done && done(totalMarks)
+              })
+            })
+          })
+        },
+      })
     })
   }
+
+  window.CouchbaseSearchHighlight = { highlightPhrases: highlightPhrases, isBoundaryChar: isBoundaryChar }
+
+  // Carried forward from a search hit's link (see 13-docsearch.js) -- each
+  // repeated param is one whole matched phrase, not the raw query, since
+  // Algolia's typo-tolerance and stemming mean the literal query words
+  // don't always appear verbatim on the page. Cleared from the URL below
+  // so a refresh/back-forward doesn't keep re-triggering it.
+  var url = new URL(window.location.href)
+  var phrases = url.searchParams.getAll('highlight')
+  if (!phrases.length) return
+  url.searchParams.delete('highlight')
+  window.history.replaceState(null, '', url.toString())
 
   // site.js (this script's own bundle) loads synchronously at the end of
   // the body with no async/defer, so the DOM is already fully parsed by
   // the time this runs -- no need to wait for DOMContentLoaded.
-  loadMarkJs(function () {
-    // phrases[0] (see 13-docsearch.js) is the longest, most specific
-    // extracted phrase -- try it alone first, since on its own it can't be
-    // out-competed by a shorter, more generic fragment (e.g. a lone "A")
-    // that happens to also have been extracted and also happens to match
-    // in several tabs, which previously could win the "which tab gets
-    // revealed" decision purely by being processed last. Only if the
-    // specific phrase matches nowhere at all (e.g. a text-normalization
-    // mismatch) does this fall back to searching every extracted phrase
-    // together, same as before -- occasionally imprecise, but still finds
-    // *something* rather than nothing.
-    markPhrases(phrases[0], function (totalMarks) {
-      if (totalMarks > 0) return afterMark()
-      markPhrases(phrases, afterMark)
-    })
-  })
+  highlightPhrases(phrases, url.hash ? url.hash.slice(1) : null)
 })()
