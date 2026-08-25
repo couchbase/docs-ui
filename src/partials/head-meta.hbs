@@ -87,6 +87,9 @@
 {{#with (nav-group-for-page (nav-groups))}}
 <meta name="docsearch:nav_group" content="{{#with ./parent}}{{.}} / {{/with}}{{./title}}">
 {{/with}}
+{{#with page.attributes.max-search-level}}
+<meta name="docsearch:max_search_level" content="{{.}}">
+{{/with}}
 
 
 {{#with page.attributes.meta-zd-site-verification}}
