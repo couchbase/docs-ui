@@ -283,4 +283,26 @@
       }
     )
   })
+
+  // Antora's own heading-permalink icon (hover over a heading to reveal it;
+  // the "fas fa-link" glyph itself is appended by 11-page-customize.js) --
+  // up to now, using it has meant clicking through and then manually
+  // copying the resulting URL back out of the address bar. Treating a click
+  // on it as though the reader had selected the whole heading themselves
+  // and clicked Copy link gets it the exact same one-click copy, "Copied ✓"
+  // confirmation, and in-place highlight, for free.
+  doc.addEventListener('click', function (e) {
+    var anchor = e.target.closest('a.anchor')
+    if (!anchor) return
+    var heading = anchor.parentElement
+    if (!heading || !/^H[1-6]$/.test(heading.tagName)) return
+    e.preventDefault()
+    var range = document.createRange()
+    range.selectNodeContents(heading)
+    var selection = window.getSelection()
+    selection.removeAllRanges()
+    selection.addRange(range)
+    positionPopup(selection)
+    copyButton.click()
+  })
 })()
