@@ -134,6 +134,52 @@
     return messageEl
   }
 
+  // Attached only to a finished bot answer (never mid-stream, since
+  // CouchbaseChatRender.renderMessage clears botMessageEl's children on
+  // every call -- these buttons would just get wiped out if added sooner).
+  function feedbackIconHtml (iconName, glyph) {
+    // window.CouchbaseFontAwesome (see src/js/vendor/fontawesome.bundle.js)
+    // renders straight from the icon library rather than needing the <i> in
+    // the DOM before page load, so it works for buttons added long after a
+    // chat response streams in -- unlike a plain <i class="fas ...">, which
+    // this site only ever converts to a real icon once, at page load.
+    if (window.CouchbaseFontAwesome) {
+      var html = window.CouchbaseFontAwesome.iconHtml('fas', iconName)
+      if (html) return html
+    }
+    return glyph
+  }
+
+  function addFeedbackControls (botMessageEl, prompt, response) {
+    var feedbackEl = document.createElement('div')
+    feedbackEl.className = 'chatbot-message__feedback'
+    var buttons = []
+
+    function makeButton (modifier, iconName, glyph, feedbackText) {
+      var button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'chatbot-feedback-button chatbot-feedback-button--' + modifier
+      button.setAttribute('aria-label', feedbackText)
+      button.innerHTML = feedbackIconHtml(iconName, glyph)
+      button.addEventListener('click', function () {
+        // re-clicking the already-selected choice is a no-op; switching
+        // choice, or fixing a fat-fingered click, just re-POSTs -- the
+        // backend overwrites any earlier feedback for this sessionId/
+        // prompt/response rather than piling up duplicates, so there's no
+        // need to disable these buttons once a choice is made
+        if (button.classList.contains('chatbot-feedback-button--selected')) return
+        buttons.forEach(function (b) { b.classList.toggle('chatbot-feedback-button--selected', b === button) })
+        client.postFeedback(prompt, response, feedbackText)
+      })
+      buttons.push(button)
+      return button
+    }
+
+    feedbackEl.appendChild(makeButton('up', 'thumbs-up', '\u{1F44D}', 'Thumbs up'))
+    feedbackEl.appendChild(makeButton('down', 'thumbs-down', '\u{1F44E}', 'Thumbs down'))
+    botMessageEl.appendChild(feedbackEl)
+  }
+
   function sendMessage (text) {
     appendMessage('user', text)
     var botMessageEl = appendMessage('bot', '')
@@ -174,6 +220,9 @@
       finished = true
       renderNow(result.message)
       saveSession()
+      // don't offer feedback on our own error text (status 500) -- there's
+      // nothing useful to rate
+      if (result.status === 200) addFeedbackControls(botMessageEl, text, result.message)
     })
   }
 
@@ -211,8 +260,13 @@
 
   // restore whatever was left from the previous page, if anything
   client.restoreHistory(session.history)
-  ;(session.history || []).forEach(function (message) {
-    appendMessage(message.role === 'user' ? 'user' : 'bot', message.content, true)
+  ;(session.history || []).forEach(function (message, index) {
+    var role = message.role === 'user' ? 'user' : 'bot'
+    var messageEl = appendMessage(role, message.content, true)
+    var previousMessage = (session.history || [])[index - 1]
+    if (role === 'bot' && previousMessage && previousMessage.role === 'user') {
+      addFeedbackControls(messageEl, previousMessage.content, message.content)
+    }
   })
   if (session.isOpen) openPanel()
 })()

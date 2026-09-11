@@ -128,8 +128,30 @@
         })
     }
 
+    // Fire-and-forget: unlike postText this isn't a conversation turn, so
+    // there's no WebSocket wait -- just a plain POST to the same endpoint,
+    // distinguished by "type" so the backend can log it without running the
+    // AI pipeline. TODO: once the backend wires them in, this can also send
+    // optional `tags` (array) and `comment` (free text) fields.
+    function postFeedback (prompt, response, feedbackText) {
+      return fetch(apiUri + '/text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'feedback',
+          sessionId: sessionId,
+          prompt: prompt,
+          response: response,
+          text: feedbackText,
+        }),
+      }).catch(function (error) {
+        console.error('Error sending chat feedback:', error)
+      })
+    }
+
     return {
       postText: postText,
+      postFeedback: postFeedback,
       getSessionId: function () { return sessionId },
       startNewSession: function () {
         conversationHistory = []
