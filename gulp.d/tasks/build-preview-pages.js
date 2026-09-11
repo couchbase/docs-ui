@@ -50,7 +50,6 @@ const ASCIIDOC_ATTRIBUTES = {
   'source-highlighter': 'highlight.js',
   'page-watermark': '2025-01-09 docs-sdk-nodejs add-preview-metadata',
   'page-show-preview-banner': true,
-  'page-chatbot-origin': 'https://d2tkqbbgxczr0v.cloudfront.net',
 }
 
 module.exports =
