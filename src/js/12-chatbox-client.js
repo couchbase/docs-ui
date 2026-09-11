@@ -34,7 +34,7 @@
     var wsClientReady = null
 
     function generateSessionId () {
-      return 'lex-web-ui-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+      return 'docs-chat-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
     }
 
     function connectWebSocket () {
