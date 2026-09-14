@@ -180,14 +180,25 @@
     botMessageEl.appendChild(feedbackEl)
   }
 
+  // Shown in botMessageEl from the moment a request goes out until the
+  // first content (a streamed chunk, or the REST fallback's full result)
+  // actually arrives -- otherwise the bot's message bubble just sits there
+  // empty while the backend is thinking, which reads as broken rather than
+  // "working on it".
+  var TYPING_INDICATOR_HTML = '<span class="chatbot-typing-indicator">' +
+    '<span></span><span></span><span></span></span>'
+
   function sendMessage (text) {
     appendMessage('user', text)
     var botMessageEl = appendMessage('bot', '')
+    botMessageEl.classList.add('chatbot-message--pending')
+    botMessageEl.innerHTML = TYPING_INDICATOR_HTML
     var fullText = ''
     var renderScheduled = false
     var finished = false
 
     function renderNow (finalText) {
+      botMessageEl.classList.remove('chatbot-message--pending')
       if (window.CouchbaseChatRender) {
         window.CouchbaseChatRender.renderMessage(botMessageEl, finalText)
       } else {
