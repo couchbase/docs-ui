@@ -17,7 +17,7 @@
 {{#if (and @root.page.componentVersion.prerelease (not ./prerelease))}}
 <i class="fas fa-file-alt"></i> <p>You are viewing the documentation for a prerelease version.</p>
 {{else}}
-<i class="fas fa-file-alt"></i> <p>A newer version of this documentation is available.</p>
+<i class="fas fa-file-alt"></i> <p>{{or @root.page.attributes.newer-version "A newer version of this documentation is available."}}</p>
 {{/if}}
 <a class="btn" href="{{relativize ./url}}">View Latest</a>
 </div>
