@@ -7,6 +7,8 @@
 <h2>{{#with page.attributes.watermark}}<tt>{{this}}</tt>
 {{else}}Preview{{/with}}</h2>
 <p>You are viewing a preview version of the documentation.</p>
+{{#unless page.attributes.hide-preview-link}}
 <p>Visit the <a href="{{ site.url }}/doctor/tree.html">preview landing page</a> for more details.</p>
+{{/unless}}
 </div>
 {{/if}}
