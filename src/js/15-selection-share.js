@@ -12,7 +12,7 @@
   copyButton.type = 'button'
   copyButton.className = 'selection-share-copy'
   copyButton.setAttribute('aria-label', 'Copy link to selection')
-  copyButton.appendChild(document.createElement('i')).className = 'far fa-clipboard'
+  copyButton.appendChild(document.createElement('i')).className = 'far fa-copy'
   var copyLabel = document.createElement('span')
   copyLabel.className = 'selection-share-copy-label'
   copyLabel.textContent = 'Copy link'
