@@ -553,35 +553,52 @@
         return sum + byComponent[name].reduce(function (s, item) { return s + item.count }, 0)
       }, 0)
 
+      var li = document.createElement('li')
+      li.className = 'facet-group' + (totalCount === 0 ? ' facet-group--empty' : '')
+
+      var label = document.createElement('label')
+      var input = document.createElement('input')
+      input.type = 'checkbox'
+      input.className = 'facet-group-checkbox'
+      input.setAttribute('data-components', allNames.join(','))
+      input.style.setProperty('--pill-color', totalCount === 0 ? FALLBACK_PILL_COLOR : color)
+      if (allRefined) input.checked = true
+      if (!allRefined && anyRefined) input.setAttribute('data-indeterminate', 'true')
+
+      var labelSpan = document.createElement('span')
+      labelSpan.className = 'facet-label'
+      labelSpan.textContent = node.title
+
+      var countSpan = document.createElement('span')
+      countSpan.className = 'facet-count'
+      countSpan.textContent = '(' + totalCount + ')'
+
+      label.appendChild(input)
+      label.appendChild(labelSpan)
+      label.appendChild(countSpan)
+      li.appendChild(label)
+
+      var innerUl = document.createElement('ul')
       // Only a components-holding node gates on its own count -- a
       // subGroups-holding node (e.g. "Develop") always recurses, since the
       // all-or-nothing decision belongs to whichever node directly owns the
       // leaf list, not to its ancestors.
-      var inner = node.components
-        ? (totalCount > 0 ? node.components.map(function (c) {
-          return renderComponentItem(c.name, c.title, color)
-        }).join('') : '')
-        : node.subGroups.map(function (sub) { return renderGroupNode(sub, color) }).join('')
-
-      return '' +
-        '<li class="facet-group' + (totalCount === 0 ? ' facet-group--empty' : '') + '">' +
-          '<label>' +
-            '<input' +
-              ' type="checkbox"' +
-              ' class="facet-group-checkbox"' +
-              ' data-components="' + allNames.join(',') + '"' +
-              ' style="--pill-color: ' + (totalCount === 0 ? FALLBACK_PILL_COLOR : color) + '"' +
-              (allRefined ? ' checked' : '') +
-              (!allRefined && anyRefined ? ' data-indeterminate="true"' : '') +
-            '/>' +
-            '<span class="facet-label">' + node.title + '</span>' +
-            '<span class="facet-count">(' + totalCount + ')</span>' +
-          '</label>' +
-          '<ul>' + inner + '</ul>' +
-        '</li>'
+      if (node.components) {
+        if (totalCount > 0) {
+          node.components.forEach(function (c) {
+            var wrapper = document.createElement('div')
+            wrapper.innerHTML = renderComponentItem(c.name, c.title, color)
+            if (wrapper.firstElementChild) innerUl.appendChild(wrapper.firstElementChild)
+          })
+        }
+      } else {
+        node.subGroups.forEach(function (sub) { innerUl.appendChild(renderGroupNode(sub, color)) })
+      }
+      li.appendChild(innerUl)
+      return li
     }
 
-    var groupsHtml = componentCatalog.navGroups.map(function (node) { return renderGroupNode(node, FALLBACK_PILL_COLOR) }).join('')
+    var groupNodes = componentCatalog.navGroups.map(function (node) { return renderGroupNode(node, FALLBACK_PILL_COLOR) })
 
     // Anything Algolia returns that isn't in the catalog at all (a brand new
     // component not yet added to any nav_groups config) still needs to show
@@ -590,22 +607,39 @@
     var otherCount = leftoverNames.reduce(function (sum, name) {
       return sum + byComponent[name].reduce(function (s, item) { return s + item.count }, 0)
     }, 0)
-    var otherItemsHtml = leftoverNames.map(function (name) {
-      return renderComponentItem(name, name, FALLBACK_PILL_COLOR)
-    }).join('')
-    var otherHtml = leftoverNames.length ? (
-      '<li class="facet-group">' +
-        '<label>' +
-          '<input type="checkbox" class="facet-group-checkbox" data-components="' + leftoverNames.join(',') +
-            '" style="--pill-color: ' + FALLBACK_PILL_COLOR + '" />' +
-          '<span class="facet-label">Other</span>' +
-          '<span class="facet-count">(' + otherCount + ')</span>' +
-        '</label>' +
-        '<ul>' + otherItemsHtml + '</ul>' +
-      '</li>'
-    ) : ''
+    var otherNode = null
+    if (leftoverNames.length) {
+      otherNode = document.createElement('li')
+      otherNode.className = 'facet-group'
+      var otherLabel = document.createElement('label')
+      var otherInput = document.createElement('input')
+      otherInput.type = 'checkbox'
+      otherInput.className = 'facet-group-checkbox'
+      otherInput.setAttribute('data-components', leftoverNames.join(','))
+      otherInput.style.setProperty('--pill-color', FALLBACK_PILL_COLOR)
+      var otherLabelSpan = document.createElement('span')
+      otherLabelSpan.className = 'facet-label'
+      otherLabelSpan.textContent = 'Other'
+      var otherCountSpan = document.createElement('span')
+      otherCountSpan.className = 'facet-count'
+      otherCountSpan.textContent = '(' + otherCount + ')'
+      otherLabel.appendChild(otherInput)
+      otherLabel.appendChild(otherLabelSpan)
+      otherLabel.appendChild(otherCountSpan)
+      otherNode.appendChild(otherLabel)
 
-    listContainer.querySelector('ul').innerHTML = groupsHtml + otherHtml
+      var otherUl = document.createElement('ul')
+      leftoverNames.forEach(function (name) {
+        var wrapper = document.createElement('div')
+        wrapper.innerHTML = renderComponentItem(name, name, FALLBACK_PILL_COLOR)
+        if (wrapper.firstElementChild) otherUl.appendChild(wrapper.firstElementChild)
+      })
+      otherNode.appendChild(otherUl)
+    }
+
+    var targetUl = listContainer.querySelector('ul')
+    var children = otherNode ? groupNodes.concat(otherNode) : groupNodes
+    targetUl.replaceChildren.apply(targetUl, children)
 
     // indeterminate can't be set via an HTML attribute -- apply after insertion
     listContainer.querySelectorAll('.facet-group-checkbox[data-indeterminate]').forEach(function (element) {
