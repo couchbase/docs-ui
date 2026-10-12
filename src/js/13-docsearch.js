@@ -622,8 +622,19 @@
 
     // Anything Algolia returns that isn't in the catalog at all (a brand new
     // component not yet added to any nav_groups config) still needs to show
-    // up somewhere rather than vanish.
-    var leftoverNames = Object.keys(byComponent).filter(function (name) { return !rendered.has(name) })
+    // up somewhere rather than vanish. A site can opt out of showing these
+    // (page-hide-uncategorized-search: true in the playbook) once its
+    // catalog is expected to be complete.
+    var hideUncategorized = metaContent('hide-uncategorized-search') === 'true'
+    var leftoverNames = hideUncategorized ? [] : Object.keys(byComponent).filter(function (name) {
+      return !rendered.has(name)
+    })
+    var otherAllRefined = leftoverNames.length > 0 && leftoverNames.every(function (name) {
+      return byComponent[name].some(function (item) { return item.isRefined })
+    })
+    var otherAnyRefined = leftoverNames.some(function (name) {
+      return byComponent[name].some(function (item) { return item.isRefined })
+    })
     var otherCount = leftoverNames.reduce(function (sum, name) {
       return sum + byComponent[name].reduce(function (s, item) { return s + item.count }, 0)
     }, 0)
@@ -637,6 +648,8 @@
       otherInput.className = 'facet-group-checkbox'
       otherInput.setAttribute('data-components', leftoverNames.join(','))
       otherInput.style.setProperty('--pill-color', FALLBACK_PILL_COLOR)
+      if (otherAllRefined) otherInput.checked = true
+      if (!otherAllRefined && otherAnyRefined) otherInput.setAttribute('data-indeterminate', 'true')
       var otherLabelSpan = document.createElement('span')
       otherLabelSpan.className = 'facet-label'
       otherLabelSpan.textContent = 'Other'
