@@ -384,19 +384,6 @@
 
   var search = instantsearch({
     indexName: indexName,
-    initialUiState: (function () {
-      var state = {}
-      state[indexName] = {
-        refinementList: {
-          component_version: computeDefaultRefinement(),
-          // Code-example-only content (is_listing: true) stays hidden by
-          // default -- a reader opts in via the "Show code examples?"
-          // checkbox rather than seeing it mixed in from the start.
-          is_listing: ['false'],
-        },
-      }
-      return state
-    })(),
     searchClient: searchClient,
     future: { preserveSharedStateOnUnmount: true },
     insights: true,
@@ -429,6 +416,33 @@
           return routeState
         },
       }),
+      // initialUiState can't carry the defaults below: once routing
+      // initializes, the state it reads from the URL replaces
+      // initialUiState outright (on a clean URL that's an empty state), so
+      // the defaults are layered underneath whatever the URL provides here
+      // instead -- URL-provided refinements win, per attribute.
+      stateMapping: {
+        stateToRoute: function (uiState) {
+          var route = {}
+          route[indexName] = uiState[indexName]
+          return route
+        },
+        routeToState: function (routeState) {
+          var fromUrl = (routeState && routeState[indexName]) || {}
+          var refinementList = fromUrl.refinementList || {}
+          var state = {}
+          state[indexName] = Object.assign({}, fromUrl, {
+            refinementList: Object.assign({
+              component_version: computeDefaultRefinement(),
+              // Code-example-only content (is_listing: true) stays hidden by
+              // default -- a reader opts in via the "Show code examples?"
+              // checkbox rather than seeing it mixed in from the start.
+              is_listing: ['false'],
+            }, refinementList),
+          })
+          return state
+        },
+      },
     },
   })
 
@@ -455,6 +469,12 @@
     Object.keys(byComponent).forEach(function (component) {
       byComponent[component].sort(function (a, b) { return compareVersionsDescending(a.version, b.version) })
     })
+
+    var escapeHtml = function (value) {
+      return String(value).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+      })
+    }
 
     // Leaf-level markup: one component's own checkbox + version <select>.
     // The catalog (not just whatever Algolia currently returns) drives which
@@ -494,18 +514,18 @@
           '<label>' +
             '<input' +
               ' type="checkbox"' +
-              ' data-component="' + component + '"' +
+              ' data-component="' + escapeHtml(component) + '"' +
               ' data-value="' +
-                (isVisible ? componentItems[0].value : (fallbackValue ?? '')) + '"' +
-              ' style="--pill-color: ' + color + '"' +
+                escapeHtml(isVisible ? componentItems[0].value : (fallbackValue ?? '')) + '"' +
+              ' style="--pill-color: ' + escapeHtml(color) + '"' +
               (anyRefined ? ' checked' : '') +
               (canRefine ? '' : ' disabled') +
             '/>' +
-            '<span class="facet-label">' + title + '</span>' +
+            '<span class="facet-label">' + escapeHtml(title) + '</span>' +
             '<span class="facet-count">(' + totalCount + ')</span>' +
           '</label>' +
           (showSelect ? (
-            '<select name="' + component + '">' +
+            '<select name="' + escapeHtml(component) + '">' +
               '<button type="button"><selectedcontent></selectedcontent></button>' +
               (componentItems.length > 1 ? (
                 '<option value="ALL" data-value="" ' + (allItems ? 'selected' : '') + '>All versions</option>'
@@ -513,11 +533,11 @@
               itemsWithSelected.map(function (item) {
                 return '' +
                   '<option' +
-                    ' value="' + item.value + '"' +
-                    ' data-component="' + component + '"' +
-                    ' data-value="' + item.value + '"' +
+                    ' value="' + escapeHtml(item.value) + '"' +
+                    ' data-component="' + escapeHtml(component) + '"' +
+                    ' data-value="' + escapeHtml(item.value) + '"' +
                     (item.isSelected ? ' selected' : '') +
-                  '><span class="option-version">' + item.version + '</span> ' +
+                  '><span class="option-version">' + escapeHtml(item.version) + '</span> ' +
                   '<span class="option-count">(' + item.count + ')</span></option>'
               }).join('') +
             '</select>'
@@ -722,7 +742,7 @@
   // narrow the catalog by, so it belongs with the other "what's affecting
   // these results" controls rather than the product/version hierarchy.
   //
-  // is_listing:false stays refined at all times (see initialUiState above);
+  // is_listing:false stays refined at all times (see stateMapping.routeToState above);
   // this checkbox only ever toggles is_listing:true, so unticking it just
   // removes that one extra value again rather than resetting anything.
   var renderCodeExamplesToggle = function (renderOptions) {
