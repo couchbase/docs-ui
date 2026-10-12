@@ -34,7 +34,12 @@
     var wsClientReady = null
 
     function generateSessionId () {
-      return 'docs-chat-' + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+      var randomBytes = new Uint8Array(16)
+      window.crypto.getRandomValues(randomBytes)
+      var hex = Array.prototype.map.call(randomBytes, function (b) {
+        return b.toString(16).padStart(2, '0')
+      }).join('')
+      return 'docs-chat-' + hex
     }
 
     function connectWebSocket () {
