@@ -71,8 +71,8 @@
 <meta name="dcterms.subject" content="{{page.component.name}}">
 <meta name="dcterms.identifier" content="{{page.version}}">
 <meta name="page-url" content="{{page.url}}">
-<meta name="page-chatbot-origin" content="{{page.attributes.chatbot-origin}}">
-
+{{! set `page-hide-uncategorized-search: true` in the playbook to hide search's uncategorized (General/Other) facet groups }}
+<meta name="hide-uncategorized-search" content="{{page.attributes.hide-uncategorized-search}}">
 {{! meta tags starting docsearch: are automatically extracted by Algolia }}
 {{! docsearch:version has special handling so we use `cversion` }}
 <meta name="docsearch:component" content="{{page.component.name}}">
@@ -88,6 +88,9 @@
 <meta name="docsearch:page_rank" content="{{page.attributes.rank}}">
 {{#with (nav-group-for-page (nav-groups))}}
 <meta name="docsearch:nav_group" content="{{#with ./parent}}{{.}} / {{/with}}{{./title}}">
+{{/with}}
+{{#with page.attributes.max-search-level}}
+<meta name="docsearch:max_search_level" content="{{.}}">
 {{/with}}
 
 

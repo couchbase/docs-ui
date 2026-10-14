@@ -1,111 +1,269 @@
-.lex-web-ui-iframe {
+.chatbot-panel {
   bottom: 1.5rem;
-  display: none; /* hidden by default changed once iframe is loaded */
-  margin-bottom: 0;
-  margin-left: 2px;
+  display: flex;
+  flex-direction: column;
   margin-right: 3vw;
-  margin-top: 2px;
-  max-width: 27vw;
-  height: 80vh; /* dynamically changed on iframe maximize/minimize */
-  min-width: calc(30vw - 3vw); /* half viewport width minus margin right */
+  max-width: 55vw;
+  height: 90vh;
+  min-width: calc(55vw - 3vw);
   position: fixed;
   right: 0;
   z-index: 2147483637; /* max z-index (2147483647) - 10 */
+  background: var(--color-brand-white);
+  border-radius: 4px;
+  border: 1px solid var(--color-brand-gray5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
-.lex-web-ui-iframe iframe {
-  border-radius: 8px 8px 10px 10px;
-  /* overflow: hidden; */
-  width: 100%;
-  height: 100%;
+.chatbot-panel[hidden] {
+  display: none;
 }
 
-.lex-web-ui-iframe--show {
+.chatbot-panel__header {
   display: flex;
+  align-items: center;
+  gap: 0.6em;
+  flex: none;
+  padding: 0.6em 1em;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
 }
 
-.lex-web-ui-iframe--minimize {
-  max-width: 90px !important;
-  max-height: 90px !important;
-  border-radius: 85px !important;
-  min-width: 90px !important;
+.chatbot-panel__logo {
+  height: 1.5em;
 }
 
-.lex-web-ui-iframe--minimize:hover {
-  max-width: 200px !important;
+.chatbot-panel__title {
+  font-weight: 600;
+  flex: 1;
 }
 
-.lex-web-ui-iframe--minimize.add-space-for-bubble {
-  max-width: 250px !important;
-  max-height: 150px !important;
-  border-radius: 85px !important;
-  min-width: 250px !important;
+.chatbot-panel__close {
+  background: none;
+  border: 0;
+  color: var(--color-brand-white);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.25em;
 }
 
-.lex-web-ui-iframe--maximize {
-  max-width: 55vw !important;
-  height: 90vh; /* dynamically changed on iframe maximize/minimize */
-  min-width: calc(55vw - 3vw) !important;
+.chatbot-panel__notice {
+  flex: none;
+  padding: 0.75em 1em;
+  background: var(--color-brand-gray7);
+  color: var(--color-brand-gray3);
+  font-size: 0.85rem;
 }
 
-/* disable box shadow when minimized */
-.lex-web-ui-iframe.lex-web-ui-iframe--minimize iframe {
-  box-shadow: none;
-  border-radius: none;
+.chatbot-panel__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+
+.chatbot-message {
+  max-width: 85%;
+  padding: 0.6em 0.9em;
+  border-radius: 4px;
+  overflow-wrap: break-word;
+}
+
+.chatbot-message--user {
+  align-self: flex-end;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  /* plain typed text (never run through renderMessage) -- preserve the
+     user's own line breaks */
+  white-space: pre-wrap;
+}
+
+.chatbot-message--bot {
+  align-self: flex-start;
+  background: var(--color-brand-gray7);
+  color: var(--color-brand-black);
+  /* always rendered as real HTML by renderMessage -- pre-wrap here would
+     make the literal newlines marked emits between block tags (</p>\n<h2>
+     etc.) count as visible blank lines, on top of each element's own
+     CSS margin, doubling up as large vertical gaps between every block */
+  white-space: normal;
+}
+
+.chatbot-message--pending {
+  padding-block: 0.85em;
+}
+
+.chatbot-typing-indicator {
+  display: inline-flex;
+  gap: 0.3em;
+}
+
+.chatbot-typing-indicator span {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--color-brand-gray3);
+  animation: chatbot-typing-bounce 1.2s infinite ease-in-out both;
+}
+
+.chatbot-typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.chatbot-typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chatbot-typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes chatbot-typing-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.chatbot-message--bot .markdown-content > *:first-child {
+  margin-top: 0;
+}
+
+.chatbot-message--bot .markdown-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.chatbot-message__feedback {
+  display: flex;
+  gap: 0.4em;
+  margin-top: 0.5em;
+}
+
+.chatbot-feedback-button {
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  color: var(--color-brand-gray3);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.2em 0.4em;
+  /* `color` only affects the Font Awesome SVG icon (its paths fill with
+     currentColor) -- the plain-emoji fallback ignores it, so selection is
+     also shown via background + scale, which works either way */
+}
+
+.chatbot-feedback-button:hover {
+  background: var(--color-brand-gray6);
+  color: var(--color-brand-black);
+}
+
+.chatbot-feedback-button--selected {
+  background: var(--color-brand-gray6);
+  color: var(--color-brand-black);
+  transform: scale(1.15);
+}
+
+.chatbot-code-block {
+  margin: 0.75em 0;
+  border: 1px solid var(--color-brand-gray5);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chatbot-code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4em 0.75em;
+  background: var(--color-brand-gray6);
+  font-size: 0.8rem;
+}
+
+.chatbot-code-block__lang {
+  color: var(--color-brand-gray3);
+  text-transform: uppercase;
+  font-weight: var(--weight-medium);
+}
+
+.chatbot-code-block__copy {
+  background: none;
+  border: 0;
+  color: var(--color-brand-gray3);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.chatbot-code-block code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.75em;
+  font-family: "Source Code Pro", monospace;
+}
+
+.chatbot-panel__input-row {
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5em;
+  padding: 0.75em 1em;
+  border-top: 1px solid var(--color-brand-gray6);
+}
+
+.chatbot-panel__input {
+  flex: 1;
+  resize: none;
+  border: 1px solid var(--color-brand-gray5);
+  border-radius: 4px;
+  padding: 0.5em 0.75em;
+  font: inherit;
+  max-height: 8em;
+}
+
+.chatbot-panel__send {
+  flex: none;
+  background: var(--color-brand-black);
+  color: var(--color-brand-white);
+  border: 0;
+  border-radius: 4px;
+  width: 2.2em;
+  height: 2.2em;
+  cursor: pointer;
 }
 
 /* hide on very small resolutions */
 @media only screen and (max-width: 240px), only screen and (max-height: 256px) {
-  .lex-web-ui-iframe {
+  .chatbot-panel {
     display: none !important;
-  }
-
-  .lex-web-ui-iframe--minimize {
-    max-width: 300px !important;
-    max-height: 185px !important;
   }
 }
 
 /* take most space on small resolutions (smart phones) */
 @media only screen and (min-width: 241px) and (max-width: 480px) {
-  .lex-web-ui-iframe {
-    min-width: 85vw !important;
-    height: 84vh;
+  .chatbot-panel {
+    max-width: 96vw;
+    min-width: 96vw;
+    height: 90vh;
     margin-right: 2vw;
-    align-self: center;
-  }
-
-  .lex-web-ui-iframe--maximize {
-    max-width: 96vw !important;
-    height: 90vh; /* dynamically changed on iframe maximize/minimize */
-    min-width: 96vw !important;
   }
 }
 
 /* adjust down on medium resolutions */
 @media only screen and (min-width: 481px) and (max-width: 960px) {
-  .lex-web-ui-iframe {
-    max-width: 55vw;
-    height: 80vh; /* dynamically changed on iframe maximize/minimize */
-    min-width: calc(55vw - 3vw); /* half viewport width minus margin right */
-  }
-
-  .lex-web-ui-iframe--maximize {
-    max-width: 90vw !important;
-    height: 90vh; /* dynamically changed on iframe maximize/minimize */
-    min-width: 90vw !important;
-  }
-
-  /* .lex-web-ui-iframe.lex-web-ui-iframe--show.lex-web-ui-iframe--minimize {
-      max-width: 245px !important;
-      max-height: 145px !important;
-      border-radius: 85px !important;
-      min-width: 245px !important;
-    } */
-  .lex-web-ui-iframe.lex-web-ui-iframe--show.lex-web-ui-iframe--minimize--bubble {
-    max-width: 245px !important;
-    max-height: 145px !important;
-    border-radius: 85px !important;
-    min-width: 245px !important;
+  .chatbot-panel {
+    max-width: 90vw;
+    min-width: 90vw;
+    height: 90vh;
   }
 }

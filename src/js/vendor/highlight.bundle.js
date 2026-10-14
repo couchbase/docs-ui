@@ -32,4 +32,9 @@
   hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'))
   hljs.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'))
   hljs.initHighlighting()
+
+  // exposed so 12-chatbox-render.js can highlight code blocks that arrive
+  // after this initial DOM pass (streamed chat responses), reusing the same
+  // registered languages rather than re-vendoring highlight.js
+  window.hljs = hljs
 })()

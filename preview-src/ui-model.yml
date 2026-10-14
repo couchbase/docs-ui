@@ -7,9 +7,9 @@ site:
   keys:
     navGroups: |
       [
-        { "title": "Server", "startPage": "home::server.adoc", "components": ["server", "*-connector"], "url": "/index.html" },
+        { "title": "Server", "startPage": "home::server.adoc", "components": ["server", "*-connector"], "url": "/index.html", "color": "#c41016" },
         { "title": "Develop",
-          "subPages": [
+          "subGroups": [
             {
               "title": "Mobile",
               "startPage": "home::mobile.adoc",
@@ -19,8 +19,8 @@ site:
             {
               "title": "Cloud",
               "startPage": "home::cloud.adoc",
-              "components": ["operator"],
-              "url": "#"
+              "components": ["cloud"],
+              "url": "/cloud/index.html"
             }
           ]
         }
@@ -32,9 +32,9 @@ site:
         displayVersion: '6.0 Beta'
         url: /server/6.0/index.html
       - &latest_server
-        version: '5.5'
+        version: '8.0'
         title: Couchbase Server
-        url: /server/5.5/index.html
+        url: /server/8.0/index.html
         navigation:
         - content: Introduction
       - version: '5.1'
@@ -167,6 +167,15 @@ site:
       url: /couchbase-lite/2.1/index.html
     sync-gateway:
       url: /sync-gateway/2.1/index.html
+    cloud:
+      # continuously-deployed/unversioned component -- exercises the search
+      # catalog's handling of a genuine empty-string version (e.g. Capella)
+      versions:
+      - &latest_cloud
+        version: ''
+        title: Capella
+        url: /cloud/index.html
+      latest: *latest_cloud
     home:
       latest: &home_latest
         version: ''

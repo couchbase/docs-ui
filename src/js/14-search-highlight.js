@@ -1,0 +1,264 @@
+;(function () {
+  'use strict'
+
+  var content = document.querySelector('.doc') || document.querySelector('main') || document.body
+
+  // Mirrors asciidoctor-tabs' own activateTab (dist/js/tabs.js) just closely
+  // enough to reveal one tab -- deliberately NOT calling tab.click() and
+  // relying on that library's own listener: tabs.js loads via a separate
+  // async script tag, so there's no guarantee it has run (and attached its
+  // click listeners) by the time this does. A click with no listener
+  // attached yet is silently a no-op. This also intentionally skips that
+  // library's sync-storage write -- revealing a tab to show *this* search
+  // result shouldn't overwrite the reader's actual site-wide tab
+  // preference (e.g. "always show me Java"). Only called once
+  // whenTabsReady below has confirmed tabs.js has already run, so the
+  // aria-controls attribute it sets on each tab is guaranteed present here.
+  function revealTab (tab) {
+    var tabs = tab.closest('.tabs')
+    if (!tabs) return
+    var panel = document.getElementById(tab.getAttribute('aria-controls'))
+    if (!panel) return
+    tabs.querySelectorAll('.tablist .tab').forEach(function (t) {
+      var selected = t === tab
+      t.setAttribute('aria-selected', String(selected))
+      t.classList.toggle('is-selected', selected)
+      t.tabIndex = selected ? 0 : -1
+    })
+    tabs.querySelectorAll(':scope > .content > .tabpanel, :scope > .tabpanel').forEach(function (p) {
+      var hide = p !== panel
+      p.hidden = hide
+      p.classList.toggle('is-hidden', hide)
+    })
+  }
+
+  // Before tabs.js's own init() has run for a given .tabs block, NONE of
+  // its tabpanels carry is-hidden/is-selected yet -- that state is only
+  // ever applied by init() itself (defaulting to the first tab, or
+  // whichever one sync storage prefers), at some point after this script
+  // runs, since tabs.js loads via its own async script tag with no
+  // ordering guarantee relative to this one. So checking "is this panel
+  // currently hidden" here is meaningless -- it can easily still be
+  // showing the pre-init unstyled default, about to be hidden moments
+  // later. Each .tabs block carries an is-loading class (set at build
+  // time) until init() finishes and removes it synchronously, so this
+  // waits for that before ever asking whether a reveal is needed at all.
+  function whenTabsReady (tabsEl) {
+    return new Promise(function (resolve) {
+      if (!tabsEl.classList.contains('is-loading')) return resolve()
+      var finished = false
+      var finish = function () {
+        if (finished) return
+        finished = true
+        observer.disconnect()
+        resolve()
+      }
+      var observer = new window.MutationObserver(function () {
+        if (!tabsEl.classList.contains('is-loading')) finish()
+      })
+      observer.observe(tabsEl, { attributes: true, attributeFilter: ['class'] })
+      // Safety net: proceed anyway if is-loading is somehow never cleared
+      // (e.g. tabs.js failed to load), rather than waiting forever.
+      window.setTimeout(finish, 3000)
+    })
+  }
+
+  // A search hit can land inside an asciidoctor-tabs tabpanel that ends up
+  // hidden (e.g. a ".NET"-specific code example on a page whose matched
+  // heading sits above the tabset and is shared by every tab) -- the
+  // library's own hash-based tab activation can't help here, since the
+  // anchor it lands on isn't a tab itself. For every tabpanel ancestor
+  // (walking outward, in case of nested tab sets), wait for that tab
+  // block's own initial state to actually be settled, then reveal it only
+  // if it isn't already the selected one. Returns a promise so callers can
+  // wait for reveals that had to queue behind that.
+  //
+  // Finds the tab via the panel's own aria-labelledby, not the tab's
+  // aria-controls -- aria-controls is only added by tabs.js's init() (see
+  // above), so it may not exist yet at the point this runs; aria-labelledby
+  // is baked into the page at build time and always there.
+  function revealAncestorTabsIfNeeded (el) {
+    var pending = []
+    var node = el
+    while (node) {
+      if (node.classList && node.classList.contains('tabpanel')) {
+        // const, not var: with more than one ancestor tabpanel (nested tab
+        // sets), var here would let a later iteration overwrite the value
+        // a still-pending .then() below captures, revealing the wrong tab.
+        const tabId = (node.getAttribute('aria-labelledby') || '').split(/\s+/)[0]
+        const tab = tabId && document.getElementById(tabId)
+        const tabsEl = tab && tab.closest('.tabs')
+        if (tab && tabsEl) {
+          pending.push(whenTabsReady(tabsEl).then(function () {
+            if (!tab.classList.contains('is-selected')) revealTab(tab)
+          }))
+        }
+      }
+      node = node.parentElement
+    }
+    return Promise.all(pending)
+  }
+
+  // The same phrase can legitimately match more than once on a long page
+  // (a shared phrase repeated across sections, or the exact sentence a
+  // reader selected happening to also appear elsewhere) -- marks[0] (the
+  // first in document order) is often nowhere near where the URL's own
+  // #id fragment says the reader should land. Since that id is already a
+  // reasonable guess at "which part of the page this phrase is about",
+  // prefer the first mark at or after it, over one that's merely first on
+  // the page.
+  function pickTargetMark (marks, preferredId) {
+    var anchor = preferredId && document.getElementById(preferredId)
+    if (!anchor) return marks[0]
+    for (var i = 0; i < marks.length; i++) {
+      if (marks[i] === anchor || (anchor.compareDocumentPosition(marks[i]) & window.Node.DOCUMENT_POSITION_FOLLOWING)) {
+        return marks[i]
+      }
+    }
+    return marks[0]
+  }
+
+  function afterMark (preferredId) {
+    var marks = content.querySelectorAll('mark')
+    if (!marks.length) return
+    Promise.all(Array.from(marks).map(revealAncestorTabsIfNeeded)).then(function () {
+      // The browser's one-time native scroll-to-anchor (for the heading
+      // fragment already on this URL) may have already run before any tab
+      // was revealed, or the heading itself may be nowhere near the actual
+      // match -- re-scroll to the target match specifically, now that it's
+      // guaranteed visible.
+      pickTargetMark(Array.from(marks), preferredId).scrollIntoView({ block: 'center' })
+    })
+  }
+
+  function loadMarkJs (callback) {
+    if (window.Mark) return callback()
+    var siteCssLink = document.querySelector('link[href$="/css/site.css"]')
+    if (!siteCssLink) return
+    var script = document.createElement('script')
+    script.src = siteCssLink.href.replace(/\/css\/site\.css.*$/, '') + '/js/vendor/mark.js'
+    script.onload = callback
+    document.head.appendChild(script)
+  }
+
+  // separateWordSearch (mark.js's default) would treat each *word* in a
+  // phrase as its own independent match -- exactly what lets a short,
+  // common word match somewhere unrelated. accuracy: 'exactly' (mark.js's
+  // default is 'partially') requires real word boundaries at both ends of
+  // the match -- without it, a short phrase (e.g. a lone "a" ending up as
+  // its own extracted phrase) matches as a bare substring anywhere,
+  // including inside unrelated longer words like "Capella" or "database".
+  // Since every phrase here already came from an actual matched snippet,
+  // not a loose keyword typed by a reader, there's no reason to want
+  // partial-word matches at all.
+  //
+  // The 'exactly' boundary is confirmed firsthand to mean *whitespace*
+  // specifically, not "any non-word character" -- a phrase ending right
+  // before ordinary punctuation (a comma, a period at the end of a
+  // sentence) otherwise silently matches nowhere at all, which is the
+  // common case for a phrase lifted from running prose, not just an edge
+  // case. accuracy.limiters extends what counts as a boundary to include
+  // that punctuation too, without weakening the "real word boundary"
+  // requirement itself -- unlike accuracy: 'complementary' (which sounds
+  // similar but actually EXPANDS a match to its whole surrounding word,
+  // confirmed firsthand to make a lone "a" highlight all of "Capella",
+  // "and", "database", etc. -- exactly the bare-substring problem this is
+  // trying to avoid, just relocated).
+  var LIMITERS = [',', '.', ';', ':', '!', '?', ')', '(', '"', "'"]
+  var ACCURACY = { value: 'exactly', limiters: LIMITERS }
+
+  // Exposed alongside highlightPhrases (see window.CouchbaseSearchHighlight
+  // below) so 15-selection-share.js can grow a selection out to the same
+  // boundary this matching itself requires, rather than maintaining its own,
+  // possibly-drifting idea of where a "word" ends.
+  function isBoundaryChar (ch) {
+    return /\s/.test(ch) || LIMITERS.indexOf(ch) !== -1
+  }
+
+  // Not acrossElements: true by default -- it sounds like exactly what's
+  // needed for a phrase split by inline markup (a <code> span, emphasis,
+  // etc.), but confirmed firsthand it does something far more damaging:
+  // once the search scope has more than one sibling container in it (true
+  // of literally any real page, which always has more than one paragraph),
+  // it can fail to find a match *entirely contained within a single
+  // element*, with no cross-element matching involved at all. Losing the
+  // rare split-by-inline-markup case by default is a much smaller cost than
+  // silently failing to find an otherwise-perfectly-findable phrase on every
+  // real page. It's only turned on as a last resort below, once both plain
+  // attempts have already come up completely empty -- at that point there's
+  // nothing left for it to break that wasn't already broken.
+  function markPhrases (phraseOrPhrases, opts, done) {
+    new window.Mark(content).mark(phraseOrPhrases, Object.assign({
+      done: done,
+      separateWordSearch: false,
+      accuracy: ACCURACY,
+    }, opts))
+  }
+
+  // Exposed on window.CouchbaseSearchHighlight (see 12-chatbox-*.js for the
+  // same small-namespace convention) so 15-selection-share.js can trigger
+  // this exact matching/tab-reveal behavior in place, instantly, for a
+  // selection made on the CURRENT page -- without round-tripping through a
+  // real navigation just to re-run this same logic from a URL.
+  function highlightPhrases (phrases, preferredId, done) {
+    if (!phrases.length) return done && done(0)
+    loadMarkJs(function () {
+      // Clears any marks left over from a previous in-place call (a real
+      // page load never has any yet, so this is a no-op there) -- unmark()
+      // rather than manually unwrapping, since it's the one guaranteed not
+      // to leave the fragmented, contamination-prone text nodes a manual
+      // unwrap-and-replace was confirmed firsthand to leave behind.
+      new window.Mark(content).unmark({
+        done: function () {
+          // phrases[0] (see 13-docsearch.js) is the longest, most specific
+          // extracted phrase -- try it alone first, since on its own it
+          // can't be out-competed by a shorter, more generic fragment (e.g.
+          // a lone "A") that happens to also have been extracted and also
+          // happens to match in several tabs, which previously could win
+          // the "which tab gets revealed" decision purely by being
+          // processed last. Only if the specific phrase matches nowhere at
+          // all (e.g. a text-normalization mismatch) does this fall back to
+          // searching every extracted phrase together, same as before --
+          // occasionally imprecise, but still finds *something* rather than
+          // nothing.
+          markPhrases(phrases[0], {}, function (totalMarks) {
+            if (totalMarks > 0) { afterMark(preferredId); return done && done(totalMarks) }
+            markPhrases(phrases, {}, function (totalMarks) {
+              if (totalMarks > 0) { afterMark(preferredId); return done && done(totalMarks) }
+              // Last resort: a phrase that crosses an inline element (a
+              // bolded UI term, a code span, a link) inside otherwise plain
+              // body text -- e.g. a reader's own text selection (see
+              // 15-selection-share.js), unlike a curated Algolia snippet
+              // line, has no reason to avoid landing mid-element. Try every
+              // phrase again, together, with acrossElements on -- nothing
+              // here has found anything yet, so there's no existing good
+              // result this could clobber.
+              markPhrases(phrases, { acrossElements: true }, function (totalMarks) {
+                afterMark(preferredId)
+                done && done(totalMarks)
+              })
+            })
+          })
+        },
+      })
+    })
+  }
+
+  window.CouchbaseSearchHighlight = { highlightPhrases: highlightPhrases, isBoundaryChar: isBoundaryChar }
+
+  // Carried forward from a search hit's link (see 13-docsearch.js) -- each
+  // repeated param is one whole matched phrase, not the raw query, since
+  // Algolia's typo-tolerance and stemming mean the literal query words
+  // don't always appear verbatim on the page. Cleared from the URL below
+  // so a refresh/back-forward doesn't keep re-triggering it.
+  var url = new URL(window.location.href)
+  var phrases = url.searchParams.getAll('highlight')
+  if (!phrases.length) return
+  url.searchParams.delete('highlight')
+  window.history.replaceState(null, '', url.toString())
+
+  // site.js (this script's own bundle) loads synchronously at the end of
+  // the body with no async/defer, so the DOM is already fully parsed by
+  // the time this runs -- no need to wait for DOMContentLoaded.
+  highlightPhrases(phrases, url.hash ? url.hash.slice(1) : null)
+})()

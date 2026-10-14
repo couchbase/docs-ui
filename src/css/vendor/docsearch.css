@@ -1,246 +1,843 @@
-@import "docsearch.js/dist/cdn/docsearch.css";
+@import "instantsearch.css/themes/satellite-min.css";
 
-.algolia-autocomplete-results {
-  position: absolute;
-  top: 100%;
-  width: 100%;
+/* The search input/results live inside the header's ".search" navbar item
+ * (position: relative, see header.css), so the whole panel can float below
+ * it as a dropdown -- same positioning approach the old widget used for its
+ * ".algolia-autocomplete-results" dropdown. */
+.search-container {
+  position: relative;
 }
 
-.algolia-autocomplete {
-  left: auto !important;
-  width: inherit;
-}
-
-.algolia-autocomplete .ds-dropdown-menu {
-  background: var(--color-brand-white);
-  border: 1px solid #e1e1e1;
+#searchbox .ais-SearchBox-input {
+  border: 2px solid var(--color-brand-black);
   border-radius: 0;
-  box-shadow: none;
-  display: grid !important;
-  grid-template-columns: 5fr 2fr;
-  grid-auto-rows: 1fr auto;
-  /*
-  max-height: calc(var(--viewport-height) - var(--navbar-height) - 4rem);
-  */
-  max-height: calc(100vh - var(--height-navbar) + 1.5rem);
-  max-width: none;
-  min-width: auto;
-  position: absolute;
-  top: 6px;
-  width: inherit;
+  color: var(--color-brand-gray4);
+  font-size: 1rem;
+  width: 283px;
+  /* Room for both the reset ("x") and submit (magnifying glass) icons on
+   * the right, below, without the two crowding each other. */
+  padding: 0.35em 3.75em 0.35em 0.75em;
 }
 
-.algolia-autocomplete .ds-dropdown-menu::before {
-  border-color: #e1e1e1;
-  border-radius: 0;
+@media screen and (max-width: 992px) {
+  #searchbox .ais-SearchBox-input {
+    width: 100%;
+  }
 }
 
-.algolia-autocomplete .ds-dropdown-menu .ds-dataset-1 {
-  background: none;
-  border: 0;
-  border-radius: 0;
-  overscroll-behavior: none;
-  padding: 0 8px;
-  line-height: 1.2;
+/* InstantSearch always renders its default searchBox markup with a static
+ * magnifying-glass icon prepended via ::before, regardless of whether the
+ * submit button (which the satellite theme hides by default) is shown --
+ * once the submit button is shown below, that's a second, redundant
+ * magnifying glass. One icon, doing double duty as both decoration and the
+ * actual submit control, replaces both. */
+.search-container .ais-SearchBox-form::before {
+  content: none;
 }
 
-.algolia-autocomplete .ds-dropdown-menu .ds-suggestions {
-  margin: 4px 0 8px;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion {
-  background: none;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion--title {
-  font-weight: var(--weight-semibold);
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion:hover .algolia-docsearch-suggestion--title,
-.algolia-autocomplete .ds-suggestion.ds-cursor .algolia-docsearch-suggestion--title {
-  text-decoration: underline;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion .algolia-docsearch-suggestion--subcategory-column {
-  font-weight: normal;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column::after {
-  display: none;
-}
-
-.algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column-text::after {
-  content: "|";
-  padding: 0 0.5em;
-}
-
-.algolia-autocomplete .ds-filter {
-  padding: 8px 6px 8px 10px;
-  font-size: 0.9em;
-  box-shadow: 5px 0 5px -5px inset #ddd;
-  line-height: 1;
-  overflow: auto;
-}
-
-.algolia-autocomplete .ds-filter::before {
-  content: "Filter Results";
-  display: block;
-  font-weight: var(--weight-semibold);
-  border-bottom: 1px solid #eee;
-  padding-bottom: 4px;
-}
-
-.algolia-autocomplete .ds-filter > div {
-  display: grid;
-  align-items: flex-start;
-  grid-template-columns: auto;
-  margin: 8px 0;
-}
-
-.algolia-autocomplete .ds-filter input[type=checkbox],
-.algolia-autocomplete .ds-filter label {
-  cursor: pointer;
-}
-
-.algolia-autocomplete .ds-filter input[type=checkbox] {
-  transform: scale(0.9);
-  margin: 0 4px 0 0;
-}
-
-.algolia-autocomplete .ds-filter input[type=checkbox] + label {
-  padding-left: 1.5rem;
-}
-
-.algolia-autocomplete .ds-filter input[type=checkbox] + label::before,
-.algolia-autocomplete .ds-filter input[type=checkbox] + label::after {
-  width: 1rem;
-  height: 1rem;
-  top: 0.1em;
-}
-
-.algolia-autocomplete .ds-filter label {
-  line-height: 1.2;
-}
-
-.algolia-autocomplete .ds-filter select {
-  margin-left: 1.5rem;
-  max-width: min-content;
-  margin-top: 4px;
-  display: none;
-  appearance: none;
-  font-size: 0.9em;
-  line-height: 2;
-  padding: 0 1.5em 0 0.5em;
-  border: 1px solid #e5e5e5;
-  border-radius: 0.25em;
-  box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.05);
-  background: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20448%20512%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M207.029%20381.476L12.686%20187.132c-9.373-9.373-9.373-24.569%200-33.941l22.667-22.667c9.357-9.357%2024.522-9.375%2033.901-.04L224%20284.505l154.745-154.021c9.379-9.335%2024.544-9.317%2033.901.04l22.667%2022.667c9.373%209.373%209.373%2024.569%200%2033.941L240.971%20381.476c-9.373%209.372-24.569%209.372-33.942%200z%22%2F%3E%3C%2Fsvg%3E) no-repeat right 0.5em top 55% / 0.75em auto, #fff repeat;
-  background-color: #fff;
-}
-
-.algolia-autocomplete .ds-filter input[type=checkbox]:checked ~ select {
-  display: initial;
-}
-
-.algolia-autocomplete .ds-dropdown-menu.ds-without-1 .ds-dataset-1 {
-  grid-column: 1 / -1;
-}
-
-.algolia-autocomplete .ds-dropdown-menu.ds-without-1 .ds-filter {
-  display: none;
-}
-
-.algolia-autocomplete .ds-footer {
-  display: flex;
-  justify-content: space-between;
-  background-color: rgba(164, 167, 174, 0.1);
-  border-top: 1px solid rgba(225, 225, 225, 0.5);
-  grid-column: 1 / -1;
-  padding: 8px;
-}
-
-.algolia-autocomplete .ds-pagination {
+.search-container .ais-SearchBox-submit {
   display: flex;
   align-items: center;
-  font-size: 0.8em;
-  line-height: 1;
+  justify-content: center;
+  position: absolute;
+  /* top/bottom: 0 + margin: auto centers the button against whatever the
+   * form's own rendered height actually is, rather than a hardcoded 50% +
+   * translate -- robust even if that height changes (e.g. the fullscreen
+   * input's own height/margin, overridden further down) without needing
+   * to re-tune a magic-number offset. */
+  top: 0;
+  bottom: 0;
+  right: 0.4em;
+  margin: auto 0;
+  width: 1.6em;
+  height: 1.6em;
 }
 
-.algolia-autocomplete .ds-pagination > :not(:first-child) {
-  margin-left: 0.5em;
+.search-container .ais-SearchBox-submitIcon {
+  width: 0.9em;
+  height: 0.9em;
 }
 
-.algolia-autocomplete .ds-pagination a {
-  color: #174d8c;
+/* The theme's own default (right: .5rem) sits close enough to the submit
+ * button above to visually crowd it. */
+.search-container .ais-SearchBox-reset {
+  right: 2.3em;
 }
 
-.algolia-autocomplete .ds-pagination a.inactive {
-  color: currentColor;
-  pointer-events: none;
-  opacity: 0.2;
+/* position: fixed + left/right: 0 + an explicit width narrower than the
+ * viewport + margin: auto is the classic over-constrained-box centering
+ * trick -- it keeps the panel centered in the viewport (rather than
+ * anchored to the search box's own, much narrower, right edge) at every
+ * width, and since the width is capped at 90vw, there's always at least
+ * 5vw of margin on each side: it can never overflow either edge, unlike
+ * the old right: 0 anchor, which had no such guarantee as the viewport
+ * narrowed. */
+.search-panel {
+  visibility: hidden;
+  position: fixed;
+  top: var(--height-navbar);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: var(--z-index-navbar-dropdown);
+  display: grid;
+  grid-template-columns: 1fr;
+  /* filters comes after stats -- opening it, on a narrow screen, otherwise
+   * immediately pushes the result count below the fold before you've even
+   * touched a checkbox. */
+  grid-template-areas:
+    "refinements"
+    "code-examples"
+    "notice"
+    "stats"
+    "filters"
+    "hits"
+    "pagination";
+  gap: 0.6rem 1.25rem;
+  width: min(760px, 90vw);
+  max-height: calc(100vh - var(--height-navbar) + 1.5rem);
+  overflow-y: auto;
+  background: var(--color-brand-white);
+  color: var(--color-text);
+  border: 1px solid #e1e1e1;
+  border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.25rem;
+  font-size: var(--font-small);
 }
 
-.algolia-autocomplete .ds-pagination--prev::before,
-.algolia-autocomplete .ds-pagination--next::after {
-  display: inline-block;
-  width: 0.5em;
-  font-size: 1.2em;
-  line-height: 0;
-}
-
-.algolia-autocomplete .ds-pagination--prev::before {
-  content: "\2039";
-}
-
-.algolia-autocomplete .ds-pagination--next::after {
-  content: "\203a";
-  text-align: right;
-}
-
-.algolia-autocomplete .algolia-docsearch-footer {
-  margin-top: 0;
-  width: 112px;
-  height: 16px;
-}
-
-@media screen and (min-width: 769px) {
-  .algolia-autocomplete-results {
+/* Past this width, centering in the viewport (above) starts to visually
+ * detach the panel from the search box that owns it -- its own right edge
+ * drifts left of the search box's right edge. Reinstating the old right: 0
+ * anchor here is safe again: this is comfortably past the narrower range
+ * (~1168-1300px) where that anchor used to overflow the left edge instead. */
+@media (min-width: 1575px) {
+  .search-container:not(.search-container--page) .search-panel {
+    position: absolute;
+    top: 100%;
+    left: auto;
     right: 0;
-    min-width: 50vw;
+    margin: 0;
+  }
+}
+
+.search-panel__filters {
+  grid-area: filters;
+}
+
+/* display: contents unwraps this at narrow widths -- current-refinements/
+ * notice/stats/hits/pagination become direct grid items of .search-panel
+ * itself again, individually placed by grid-area (below) exactly as if
+ * this wrapper wasn't there, so the mobile reordering above still works. */
+.search-panel__results {
+  display: contents;
+}
+
+#current-refinements {
+  grid-area: refinements;
+}
+
+#no-exact-results-notice {
+  grid-area: notice;
+}
+
+#stats {
+  grid-area: stats;
+}
+
+#hits {
+  grid-area: hits;
+}
+
+/* Below this, the facet tree collapses under a toggle instead (see
+ * .search-panel__filters-toggle) -- two real columns need more room than a
+ * narrow phone viewport (or the header dropdown's own, narrower-still,
+ * 90vw-capped width) has to give both a fair shake. Matches the site nav's
+ * own mobile/desktop breakpoint (see header.css's .navbar-burger) rather
+ * than a value of its own, so the two switch together instead of leaving a
+ * gap where the nav has already gone mobile but this hasn't. */
+@media (min-width: 768px) {
+  .search-panel {
+    grid-template-columns: 190px 1fr;
+    /* Just two items sharing a single row, not filters spanning five rows
+     * of its own -- with filters not spanning, its content (the full
+     * facet tree, easily taller than current-refinements/notice/stats
+     * combined) can no longer force those particular rows to inflate to
+     * make up the difference, which is what was leaving a large gap of
+     * blank space above "N results found" whenever the facet tree was
+     * taller than the rest put together. */
+    grid-template-areas: "filters results";
+    /* Grid's own default (stretch) would otherwise force whichever column
+     * is naturally shorter to stretch and match the taller one -- harmless
+     * in itself, but it's the difference between unused space landing
+     * predictably after that column's own last item versus (pre-fix,
+     * combined with the row-spanning above) inside it, above "N results
+     * found". */
+    align-items: start;
   }
 
-  .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column-text::after {
+  /* No longer unwrapped at this width -- a real, independently-sized
+   * column, laid out in its own normal flow rather than the outer grid's
+   * row tracks. */
+  .search-panel__results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    grid-area: results;
+  }
+}
+
+.search-panel__filters-toggle {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .search-panel__filters-toggle {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.35rem 0;
+    margin-bottom: 0.35rem;
+    background: none;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+  }
+
+  /* Right when closed (there's more, expand this way), rotating to point
+   * down (now showing what's below) rather than swapping characters -- so
+   * it reads as one arrow turning, not two different symbols. */
+  .search-panel__filters-toggle::after {
+    content: " \25B6";
+    display: inline-block;
+    font-size: 0.7em;
+    transition: transform 0.15s ease;
+  }
+
+  .search-panel__filters.is-open .search-panel__filters-toggle::after {
+    transform: rotate(90deg);
+  }
+
+  .search-panel__filters:not(.is-open) #component-list {
     display: none;
   }
 }
 
-@media screen and (min-width: 1024px) {
-  .algolia-autocomplete .ds-dropdown-menu.ds-with-1 {
-    width: 40rem;
-    /*
-    width: 34rem;
-    */
-  }
-
-  /*
-  .algolia-autocomplete .ds-dropdown-menu {
-    max-height: calc(var(--viewport-height) - var(--navbar-height));
-  }
-  */
+/* .doc h1.page (doc.css) is display: inline-block, meant to sit beside a
+ * following .labels sibling (see body.hbs's .page-heading-title wrapper) --
+ * this page's h1 (rendered inside search-panel.hbs itself, see fullPage/
+ * pageTitle below, so it's centered along with the rest of the widget) has
+ * neither, and the bare inline-block box's line-box visually overlapped the
+ * search widget below it as a result. */
+.search-page h1.page {
+  display: block;
 }
 
-@supports (scrollbar-width: thin) {
-  .algolia-autocomplete * {
-    scrollbar-width: thin;
-    scrollbar-color: #c1c1c1 transparent;
+/* main [id]::before (main.css) is a sitewide anchor-scroll-offset spacer:
+ * every element with an id inside <main> gets an invisible pseudo-element
+ * whose height is meant to cancel out via an equal negative margin, so
+ * jumping to a heading anchor lands below the fixed header rather than
+ * under it. The header's own #searchbox lives outside <main>, so it never
+ * matches -- but on this full-page layout #searchbox does, and isn't a
+ * heading anchor that needs it; left in, it pushed the real search input
+ * down far enough to overlap the results panel beneath it. */
+#searchbox::before {
+  content: none;
+}
+
+/* The dedicated search-page layout embeds this same widget inline in the
+ * page body rather than as a header dropdown -- undo the dropdown's
+ * absolute positioning/hidden-until-typed behavior so it renders as a
+ * normal, always-visible block instead. */
+.search-container--page {
+  position: static;
+  max-width: min(1500px, 80%);
+  margin: 0 auto;
+}
+
+/* 80% leaves a big chunk of an already-small screen unused. This sits
+ * inside article.doc, which is already inset from the viewport by the
+ * site's own .container gutter (same ancestor the preview/watermark
+ * banner above it uses) -- max-width: 100% just matches that banner's
+ * width exactly, rather than adding a second inset on top of it. */
+@media (max-width: 767px) {
+  .search-container--page {
+    max-width: 100%;
   }
 }
 
-.algolia-autocomplete ::-webkit-scrollbar {
-  height: 0.25rem;
-  width: 0.25rem;
+.search-container--page #searchbox {
+  margin-bottom: 0.5rem;
 }
 
-.algolia-autocomplete ::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
+/* The theme's own .ais-SearchBox-form has a fixed height (2.5rem) sized for
+ * its default, smaller input -- too short for this input's own margin
+ * (below), which would otherwise make the form (and #searchbox, sized to
+ * it) clip/overlap the results that follow. Letting it size to its actual
+ * content also means the submit button's top/bottom:0 centering (above)
+ * lands against the input's real box, not the theme's stale, too-short
+ * one. */
+.search-container--page .ais-SearchBox-form {
+  height: auto;
+}
+
+.search-container--page #searchbox .ais-SearchBox-input {
+  width: 100%;
+  height: 2em;
+  margin: 1em;
+  /* Room for both the reset ("x") and submit (magnifying glass) icons on
+   * the right, below. */
+  padding: 1em 5em 1em 1em;
+  font-size: 1.5rem;
+  border: solid 2px var(--color-brand-black);
+  border-radius: 1em;
+}
+
+.search-container--page .ais-SearchBox-submit {
+  /* px, not em -- .ais-SearchBox-form's own font-size (.875rem, from the
+   * theme) is unrelated to the input's own (1.5rem, above), so an em value
+   * here doesn't actually track the input's edge the way it looks like it
+   * should. Measured to land ~8-9px inside the input's real right edge,
+   * matching the ~8.5px it already has top and bottom. */
+  right: 33px;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 50%;
+  background: var(--color-brand-red);
+}
+
+.search-container--page .ais-SearchBox-submitIcon {
+  width: 1em;
+  height: 1em;
+  fill: var(--color-brand-white);
+}
+
+/* Clears the query text, same as the header's -- sits to the left of the
+ * bigger submit button here rather than the theme's default inset. */
+.search-container--page .ais-SearchBox-reset {
+  right: 78px;
+}
+
+.search-container--page .search-panel {
+  visibility: visible;
+  position: static;
+  width: auto;
+  max-height: none;
+  overflow-y: visible;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+/* Wider than the header dropdown's own filters column (190px) -- there's
+ * more room to give it here, and the full-page layout's own facet/version
+ * labels run a little longer without the dropdown's tighter font-size. */
+@media (min-width: 768px) {
+  .search-container--page .search-panel {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+/* Tighter still on a phone screen: the input's own margin (below) and the
+ * panel/searchbox spacing above both read as excessive once you're
+ * scrolling to find results rather than admiring whitespace. */
+@media (max-width: 767px) {
+  .search-container--page #searchbox {
+    margin-bottom: 0.15rem;
+  }
+
+  .search-container--page .search-panel {
+    margin-top: 0.15rem;
+    gap: 0.2rem 1.25rem;
+  }
+
+  /* The desktop input's own horizontal margin (1em) both wastes width that
+   * the container fix above just clawed back, and -- since the pills/
+   * filters below have no such margin of their own -- left the input's
+   * pill misaligned with everything under it. Zero horizontal margin
+   * lines its edges up with them and hands the freed width back to the
+   * (now much tighter) padding-right, so the placeholder/typed text
+   * doesn't get clipped. */
+  .search-container--page #searchbox .ais-SearchBox-input {
+    margin: 0.4em 0;
+    padding: 0.6em 3.75em 0.6em 0.75em;
+    font-size: 1.15rem;
+  }
+
+  /* Repositioned in px, not em, to track the input's now-zero horizontal
+   * margin directly -- see the ais-SearchBox-submit comment elsewhere on
+   * why em here doesn't track the input's own edge anyway. Also sized down
+   * from the base rule's 2.5em (35px): that was tall enough, against this
+   * font-size's shorter input, to squeeze its own top/bottom margin to
+   * under 1px even with top/bottom: 0 centering -- 21px leaves roughly the
+   * same ~8px clearance vertically as right: 8px does horizontally. */
+  .search-container--page .ais-SearchBox-submit {
+    right: 8px;
+    width: 21px;
+    height: 21px;
+  }
+
+  .search-container--page .ais-SearchBox-reset {
+    right: 46px;
+  }
+}
+
+/* Full-width, this reads as a wall of text at any font-size -- an indent
+ * and a capped reading width (blockquote-like) plus a touch more size
+ * (this is a full-text view, unlike the header dropdown's cramped column)
+ * makes each description actually comfortable to read. */
+.search-container--page .hit-snippet {
+  max-width: 42em;
+  padding-left: 1em;
+  border-left: 2px solid #e5e5e5;
+  font-size: 0.95rem;
+}
+
+#component-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* base.css has a site-wide custom-checkbox pattern that unconditionally
+ * moves every [type="checkbox"] off-screen and expects a sibling
+ * `+ label::before/::after` to paint a replacement -- built for markup
+ * where the checkbox and label are siblings. Ours nests the checkbox
+ * inside the label instead (so each row's own per-category accent-color
+ * can drive a normal native checkbox), which never matches that sibling
+ * selector, so the checkbox gets hidden with no replacement drawn. Reset
+ * back to normal, native rendering within the facet tree specifically --
+ * and in #code-examples-toggle, which nests its own checkbox the same way. */
+#component-list [type="checkbox"]:not(:checked),
+#component-list [type="checkbox"]:checked,
+#code-examples-toggle [type="checkbox"]:not(:checked),
+#code-examples-toggle [type="checkbox"]:checked {
+  position: static;
+  left: auto;
+}
+
+.facet-item {
+  margin-bottom: 0.5rem;
+}
+
+.facet-item label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.facet-item input[type="checkbox"] {
+  margin: 0;
+  /* --pill-color is set inline per row from the catalog's per-category
+   * color (grey when the row itself has 0 current hits, even if it's
+   * refined) -- replaces the browser default blue tick/mixed-sign fill. */
+  /* accent-color is a standard, well-supported property; this stylelint config's known-properties list just predates it.
+   * No CSS-level fallback here (JS always sets --pill-color inline, with its own fallback already resolved) -- with
+   * one, postcss-custom-properties (used for an IE11 fallback elsewhere, build.js's `preserve: preview`) treats
+   * --pill-color as statically resolvable via the fallback and strips the var() declaration entirely in the real
+   * (non-preview) build, leaving every checkbox hardcoded to that fallback color. Without a fallback it truly can't
+   * resolve statically and leaves this alone. */
+  /* stylelint-disable-next-line property-no-unknown */
+  accent-color: var(--pill-color);
+}
+
+/* A component with nothing matching the current search text still gets a
+ * row (from the catalog, not from Algolia's facet response) -- greyed
+ * rather than removed, so the tree doesn't reflow as the query changes. */
+.facet-item--empty {
+  opacity: 0.45;
+}
+
+.facet-item label:has(input:disabled),
+.facet-item input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+
+.facet-label {
+  flex: 1;
+}
+
+.facet-count {
+  color: #999;
+  font-size: 0.8em;
+}
+
+.facet-item select {
+  margin: 0.25rem 0 0 1.4rem;
+  max-width: calc(100% - 1.4rem);
+  font-size: 0.8rem;
+}
+
+@supports (appearance: base-select) {
+  .facet-item select {
+    appearance: base-select;
+  }
+
+  /* ::picker() is part of the new customizable-select spec, too new for this stylelint config to know about */
+  /* stylelint-disable-next-line selector-pseudo-element-no-unknown */
+  .facet-item select::picker(select) {
+    appearance: base-select;
+  }
+
+  .facet-item select button {
+    padding: 0.1rem 0.3rem;
+    border: 1px solid #ddd;
+  }
+
+  .facet-item option {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .option-count {
+    color: #999;
+    font-size: 0.85em;
+  }
+}
+
+.facet-group {
+  margin-bottom: 0.6rem;
+}
+
+.facet-group--empty > label {
+  opacity: 0.45;
+}
+
+.facet-group > label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}
+
+.facet-group > label input[type="checkbox"] {
+  margin: 0;
+  /* no CSS-level fallback -- see the .facet-item checkbox rule above */
+  /* stylelint-disable-next-line property-no-unknown */
+  accent-color: var(--pill-color);
+}
+
+#component-list .facet-group > ul {
+  margin-top: 0.4rem;
+  margin-left: 1em;
+}
+
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted {
+  background: none;
+  color: inherit;
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-color: var(--color-brand-red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.current-refinements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* doc.css's `.doc ul` (class + type, see the .doc .hit-name fix elsewhere
+ * for the same pattern) otherwise beats the plain class selector above on
+ * the search-page layout, reintroducing a 1rem left indent this list
+ * doesn't want -- the header dropdown never hits this since it isn't
+ * nested inside .doc. */
+.doc .current-refinements {
+  padding: 0;
+}
+
+.refinement-pill {
+  /* --pill-color is set inline per pill from the catalog's per-category
+   * color; this default only applies to the "Clear all" pill, which sets
+   * no color of its own. */
+
+  --pill-color: #737373;
+
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: color-mix(in sRGB, var(--pill-color) 16%, white);
+  color: color-mix(in sRGB, var(--pill-color) 75%, black);
+  border-radius: 999px;
+  padding: 0.25rem 0.4rem 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: var(--weight-semibold);
+}
+
+.refinement-pill-remove {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.65;
+  padding: 0.15rem 0.35rem;
+}
+
+.refinement-pill-remove:hover {
+  opacity: 1;
+}
+
+.refinement-pill--clear-all {
+  background: none;
+  padding: 0.25rem 0;
+}
+
+.refinement-pill--clear-all button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: var(--weight-normal);
+  color: var(--color-brand-red);
+  padding: 0;
+}
+
+.refinement-pill--clear-all button:hover {
+  text-decoration: underline;
+}
+
+/* Muted and a size down from the pills above it -- this is a display
+ * preference (what kind of content counts as a result), not a refinement
+ * pill of its own, and shouldn't compete with those for attention. */
+#code-examples-toggle {
+  grid-area: code-examples;
+  font-size: 0.8rem;
+  color: #737373;
+}
+
+#code-examples-toggle label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+#code-examples-toggle input[type="checkbox"] {
+  margin: 0;
+}
+
+#code-examples-toggle .toggle-count {
+  color: #999;
+}
+
+.no-exact-results-notice {
+  background: #fff8e1;
+  border: 1px solid #f0d58c;
+  border-radius: 3px;
+  color: #6b5200;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ais-Stats {
+  color: #737373;
+  font-size: 0.85rem;
+}
+
+#pagination {
+  grid-area: pagination;
+  margin: 0.5rem auto 0;
+  text-align: center;
+}
+
+/* The theme's own rules for this reach it through combined selectors like
+ * ".ais-Pagination-item--selected .ais-Pagination-link" -- all more
+ * specific than a plain class, so a same-specificity override here only
+ * ever wins for the resting state. !important flattens every state at
+ * once, scoped narrowly to the handful of properties giving it its
+ * 3D look. */
+.ais-Pagination-link {
+  background-image: none !important;
+  background-color: #fff;
+  box-shadow: none !important;
+  border: 1px solid #e0e0e0;
+}
+
+.ais-Pagination-item--selected .ais-Pagination-link {
+  background-color: var(--color-brand-red-tint);
+  border-color: var(--color-brand-red);
+  color: var(--color-brand-red);
+}
+
+.ais-Hits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hit-product {
+  /* Same catalog-driven per-category color as .refinement-pill above. */
+
+  --pill-color: #737373;
+
+  font-size: 0.85rem;
+  font-weight: var(--weight-bold);
+  color: color-mix(in sRGB, var(--pill-color) 75%, black);
+  background: color-mix(in sRGB, var(--pill-color) 12%, white);
+  padding: 0.35rem 0.75rem;
+  margin: 0.5rem 0 0.75rem -1rem;
+  border-radius: 3px;
+}
+
+/* Hints that at least one card under this badge's own run has other
+ * components collapsed into its "Show N similar results" toggle -- kept
+ * visually secondary to the product name itself, since it's a hint to
+ * look closer, not something claiming equal billing with the badge. */
+.hit-product-hint {
+  font-weight: var(--weight-normal);
+  opacity: 0.75;
+}
+
+.ais-Hits-item {
+  /* the imported theme sets display:flex here, which we never override --
+   * as the sole flex child, .hit (and anything inside it, like the product
+   * pill) was sizing to its own content instead of stretching to the
+   * column's full width. It also puts a box-shadow "border" on every item
+   * by default, which would otherwise survive even when border-bottom is
+   * removed below. */
+  display: block;
+  box-shadow: none;
+  padding: 0.9rem 0 0.9rem 1rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.ais-Hits-item:has(+ .ais-Hits-item .hit-product) {
+  border-bottom: none;
+}
+
+.ais-Hits-item:first-child .hit-product {
+  margin-top: 0;
+}
+
+.ais-Hits-item:first-child {
+  padding-top: 0;
+}
+
+.ais-Hits-item:last-child {
+  border-bottom: none;
+}
+
+.hit-breadcrumbs {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #737373;
+  margin-bottom: 0.3rem;
+}
+
+.breadcrumb-sep {
+  opacity: 0.5;
+}
+
+/* doc.css's `.doc h1` (a class + type selector) otherwise beats this plain
+ * class selector on the search-page layout, where hits render inside
+ * article.doc -- without the extra specificity here, every result title
+ * renders at doc.css's full page-heading scale (2.5rem, thin weight)
+ * instead of this. The header dropdown never hits this, since it isn't
+ * nested inside .doc at all. */
+.doc .hit-name {
+  font-size: 1rem;
+  font-weight: var(--weight-semibold);
+  line-height: 1.3;
+  margin: 0 0 0.4rem;
+}
+
+.hit-name a {
+  color: var(--color-brand-red);
+  text-decoration: none;
+}
+
+.hit-name a:hover {
+  text-decoration: underline;
+}
+
+.hit-snippet {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--color-text);
+  margin: 0 0 0.4rem;
+}
+
+/* is_listing hits are matches inside a code block rather than prose --
+ * base.css's own code/kbd/pre font, without pre's white-space handling
+ * (the snippet's already a plain single-line excerpt, not a full listing). */
+.hit-snippet--code-example {
+  font-family: 'Source Code Pro', monospace;
+}
+
+.also-relevant {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.also-relevant summary {
+  cursor: pointer;
+  color: #737373;
+}
+
+.also-relevant ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--color-text);
+}
+
+.also-relevant ul a {
+  color: var(--color-brand-red);
+  text-decoration: none;
+}
+
+.also-relevant ul a:hover {
+  text-decoration: underline;
+}
+
+/* On a narrow screen, cramming the whole instant-search dropdown into the
+ * mobile nav's own menu is the "main problem" the responsive facets/
+ * centering work above ran into -- rather than chase that further, send
+ * mobile readers to the roomier dedicated search page instead. A plain
+ * link, not a widget: nothing here talks to Algolia at all. */
+.search-mobile-cta {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-item.search .search-container {
+    display: none;
+  }
+
+  .search-mobile-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.6rem;
+    border: 1px solid var(--color-brand-white);
+    border-radius: 3px;
+    color: var(--color-brand-white);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+  }
+
+  /* header.css's .search .fa-search (leftover from the old widget's own
+   * icon positioning) applies to any fa-search icon inside .search,
+   * including this one -- its -1em margin was pulling "Search" left into
+   * the icon. */
+  .search-mobile-cta .fa-search {
+    margin-right: 0;
+  }
 }
