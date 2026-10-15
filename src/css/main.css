@@ -66,6 +66,7 @@ main #watermark {
   margin: 1.25rem 0 0;
   /* margin: calc(-1 * var(--height-spacer)) calc(-1 * var(--width-container-gutter)) var(--height-spacer); */
   padding: var(--base-space);
+  column-gap: 1rem;
   border-radius: 3px;
   font-family: "Open Sans", sans-serif;
   font-weight: var(--weight-normal);
