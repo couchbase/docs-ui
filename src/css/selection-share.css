@@ -19,7 +19,7 @@
   border: none;
   background: none;
   color: var(--color-brand-white);
-  font-family: var(--font-body);
+  font-family: "Source Sans Pro", sans-serif;
   font-size: var(--font-small);
   line-height: 1;
   white-space: nowrap;

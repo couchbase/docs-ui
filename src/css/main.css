@@ -67,7 +67,7 @@ main #watermark {
   /* margin: calc(-1 * var(--height-spacer)) calc(-1 * var(--width-container-gutter)) var(--height-spacer); */
   padding: var(--base-space);
   border-radius: 3px;
-  font-family: var(--font-body);
+  font-family: "Open Sans", sans-serif;
   font-weight: var(--weight-normal);
   flex-wrap: wrap;
 }
@@ -103,7 +103,7 @@ main #watermark {
   white-space: nowrap;
   border: 1px solid #1174e0;
   font-size: var(--font-base);
-  font-family: var(--font-body);
+  font-family: "Open Sans", sans-serif;
 }
 
 .article-banner a.btn:focus,

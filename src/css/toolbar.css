@@ -28,7 +28,7 @@
   padding-left: 25px;
   padding-top: 0;
   padding-bottom: 0;
-  font-family: var(--font-body);
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .sidebar-box .tools {

@@ -23,7 +23,7 @@
   font-size: var(--labels-font-size);
   font-weight: var(--weight-bold);
   line-height: var(--labels-line-height);
-  font-family: var(--font-body);
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .doc .labels li:first-child::before {
@@ -55,7 +55,7 @@
   padding: 6px;
   text-transform: uppercase;
   margin-right: var(--base-small-space);
-  font-family: var(--font-body);
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .doc .labels li a,
@@ -64,7 +64,7 @@
 .doc .deprecated,
 .doc .edition.page-edition a {
   text-decoration: none;
-  font-family: var(--font-body);
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .doc .edition *,

@@ -1,14 +1,20 @@
 # 0001: Apply Couchbase Brand Guidelines 2026
 
-- **Status:** Phase A done (commit f74049b). Phase B blocked on the evolved wordmark SVGs and Centra No. 2 web font files from the brand team.
+- **Status:** Palette tokens and new logos applied. Font change (Inter/Centra) deliberately deferred; see Update below. Rest of Phase B waits on Centra No. 2 web font files from the brand team.
 - **Date:** 2026-10-15
 - **Source:** Couchbase Brand Guide 2026 (last updated August 2026). The PDF (52 MB) is deliberately not committed; get it from the brand team.
 
 
+## Update 2026-10-15
+- **Logos applied** (from the brand team's Logo pack): `couchbase-logo.svg` = FullLogo Red/Black (header on white, footer on light grey); new `couchbase-logo-white.svg` = FullLogo Red/White (chatbot panel header on black); `favicon.svg`/`.ico` = Token Red. The new wordmark is wider (5.3:1 vs 4.4:1), so the header logo (fixed 32px height) is ~20% wider than before.
+- **Fonts reverted to Open Sans / Source Sans Pro** (and the Inter/Centra tokens removed) because the team will have more capacity for cross-context visual QE of a sitewide font change post GA. A quick check looked fine, so this is a low-risk follow-up once there is appetite. Gotham was never referenced by any CSS, so its files stay removed.
+- Palette additions and `--radius-*` tokens stay (they are additive and unused until adopted).
+- Still unchanged: "Documentation" lockup (`cb-documentation.svg`), link colour, grey scale, radii.
+
 ## Context
 Brand Guide (updated Aug 2026) replaces the 2023 system: new "evolved" wordmark, Centra No. 2 (display) + Inter (body/UI) instead of Open Sans/Source Sans, a palette built on Red/Gold + Cream/Mid Cream/Sand + a 3-step neutral gray scale, red inline links (gold on black), 3 colourways (Dark / Light 1 cream / Light 2 white), and a rounded-corner scale (0,5,10,15,20,30,60,90,120px).
 
-## Already done (Phase A, commit f74049b)
+## Phase A as originally done (commit f74049b; font parts since reverted, see Update)
 - `src/css/vars.css`: gold -> #FC9D0C, cream -> #FFF0DA (were off by one); added tokens for Dark/Darkest/Invalid Red, Mid Cream, Sand, Light/Medium/Dark Gray, Highlight/Faded Green, Dark Teal; `--color-text`/warning/orange-tint now alias brand tokens; added `--font-body`, `--font-display`, `--radius-sm/md/lg`.
 - 31 `font-family` declarations swapped to `var(--font-body)` (Inter); Google Fonts import now Inter only; `.doc h1-h6` use `--font-display` (falls back to Inter until Centra is available).
 - Removed unused Gotham CSS + 4 woff files.

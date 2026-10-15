@@ -128,11 +128,6 @@
 
   /* New  design font style */
 
-  /* Brand Guidelines 2026: Centra No. 2 (display) + Inter (body/UI).
-     Centra No. 2 is licensed and not yet bundled; headings fall back to Inter until the font files are added. */
-  --font-display: "Centra No. 2", "Inter", sans-serif;
-  --font-body: "Inter", sans-serif;
-
   /* Brand Guidelines 2026 corner-radius scale (px): 0, 5, 10, 15, 20, 30, 60, 90, 120 */
   --radius-sm: 5px;
   --radius-md: 10px;
