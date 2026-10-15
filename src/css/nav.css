@@ -34,7 +34,7 @@
   padding: 9px 20px 9px 50px;
   text-transform: uppercase;
   font-weight: 600;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
   font-size: 1.5rem;
   line-height: 2.188rem;
   background: #eef2f7 url(../img/server-icon.png) no-repeat 17px center /25px;
@@ -127,7 +127,7 @@
   color: #292b36;
   display: inline-block;
   word-break: break-word;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: var(--font-body);
   text-decoration: none;
   /* padding: 0.25rem 0; */
 }

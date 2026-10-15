@@ -1,12 +1,26 @@
 :root {
   /* NOTE tint colors are 15% transparent */
   /* primary */
-  --color-brand-black: #000; /* Beta Black 2023 */
-  --color-brand-red: #ec1218; /* Couchbase Red 2023 */
-  --color-brand-orange: #fc9c0c; /* System Orange 2023 */
-  --color-brand-peach: #fff0db; /* Schematic Peach 2023 */
+  --color-brand-black: #000; /* Black */
+  --color-brand-red: #ec1218; /* Couchbase Red (primary) */
+  --color-brand-orange: #fc9d0c; /* Gold (secondary) */
+  --color-brand-peach: #fff0da; /* Cream */
   --color-brand-red-tint: var(--color-brand-peach);
-  --color-brand-white: #fff; /* Display White 2023 */
+  --color-brand-white: #fff; /* White */
+
+  /* Brand Guidelines 2026 additions (see "Color" section of the guide) */
+  --color-brand-red-dark: #7c0206; /* Dark Red */
+  --color-brand-red-darkest: #560003; /* Darkest Red */
+  --color-brand-red-invalid: #ffd5d6; /* Invalid Red: form error states only */
+  --color-brand-cream: var(--color-brand-peach);
+  --color-brand-cream-mid: #ead8be; /* Mid Cream */
+  --color-brand-sand: #9b9382; /* Sand */
+  --color-brand-gray-light: #d2d5d9; /* Light Gray */
+  --color-brand-gray-medium: #858585; /* Medium Gray */
+  --color-brand-gray-dark: #333; /* Dark Gray */
+  --color-brand-green-highlight: #21ea2a; /* Highlight Green: confirmations/highlights only */
+  --color-brand-green-faded: #d6ffd7; /* Faded Green: accent only */
+  --color-brand-teal-dark: #175257; /* Dark Teal: illustration only */
   --color-brand-primary: var(--color-brand-black);
   --color-brand-couchbase: var(--color-brand-red);
   --color-brand-accent: var(--color-brand-orange);
@@ -34,7 +48,7 @@
   --color-brand-tip: #2ca01c;
   --color-brand-note: #0074e0;
   --color-brand-important: #b36cdb;
-  --color-brand-warning: #ea2328;
+  --color-brand-warning: var(--color-brand-red);
   --color-brand-caution: #ff8f00;
   /* tertiary */
   --color-gray-rgb: 115, 118, 138;
@@ -51,9 +65,9 @@
   --color-brand-silver: #c1c1c1;
   --color-brand-blue-tint: #d9eafb;
   --color-brand-grey: #666;
-  --color-brand-orange-tint: #fff0da;
+  --color-brand-orange-tint: var(--color-brand-peach);
   --color-muted: var(--color-brand-gray);
-  --color-text: #333;
+  --color-text: var(--color-brand-gray-dark);
   --color-code: var(--color-brand-pink);
   --color-border: var(--color-brand-silver);
   --checkbox-border-color: var(--color-brand-gray9);
@@ -114,6 +128,15 @@
 
   /* New  design font style */
 
+  /* Brand Guidelines 2026: Centra No. 2 (display) + Inter (body/UI).
+     Centra No. 2 is licensed and not yet bundled; headings fall back to Inter until the font files are added. */
+  --font-display: "Centra No. 2", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Brand Guidelines 2026 corner-radius scale (px): 0, 5, 10, 15, 20, 30, 60, 90, 120 */
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
   --font-base: 1rem; /* ~16px */
   --font-medium: 1.25rem; /* ~20px */
   --font-small: 0.875rem; /* ~14px */
