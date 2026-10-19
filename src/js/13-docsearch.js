@@ -624,7 +624,9 @@
             if (wrapper.firstElementChild) innerUl.appendChild(wrapper.firstElementChild)
           })
         }
-      } else {
+      } else if (node.subGroups) {
+        // (a group with neither, e.g. a startPage-only "Start Here" entry,
+        // just renders its header)
         node.subGroups.forEach(function (sub) { innerUl.appendChild(renderGroupNode(sub, color)) })
       }
       li.appendChild(innerUl)
