@@ -18,8 +18,11 @@ module.exports = (
 
   const navGroupsAndSubgroups = [...navGroups, ...subGroups]
 
+  // a parent group without components (e.g. Server) shares its startPage with
+  // a subgroup (e.g. Self-Managed Server) that does have them; prefer the latter
+  const groupsByUrl = navGroupsAndSubgroups.filter(({ url }) => url === pageUrl)
   const navGroupByUrl =
-    navGroupsAndSubgroups.find(({ url }) => url === pageUrl)
+    groupsByUrl.find(({ components }) => components && components.length) || groupsByUrl[0]
 
   if (navGroupByUrl) {
     return navGroupByUrl
