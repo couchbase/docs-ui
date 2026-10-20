@@ -133,19 +133,19 @@
   display: contents;
 }
 
-#current-refinements {
+.search-panel #current-refinements {
   grid-area: refinements;
 }
 
-#no-exact-results-notice {
+.search-panel #no-exact-results-notice {
   grid-area: notice;
 }
 
-#stats {
+.search-panel #stats {
   grid-area: stats;
 }
 
-#hits {
+.search-panel #hits {
   grid-area: hits;
 }
 
@@ -649,7 +649,7 @@
   font-size: 0.85rem;
 }
 
-#pagination {
+.search-panel #pagination {
   grid-area: pagination;
   margin: 0.5rem auto 0;
   text-align: center;
