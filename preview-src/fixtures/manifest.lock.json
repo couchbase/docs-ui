@@ -1,0 +1,142 @@
+{
+  "home-index": {
+    "source": "docs-site@master",
+    "commit": "4776c38a6858a4760ef4607774a7930cda2a5fbf",
+    "path": "home/modules/ROOT/pages/index.adoc",
+    "dest": "landing/home-index.adoc",
+    "sha256": "fe3fb9f6e144aff7"
+  },
+  "home-server": {
+    "source": "docs-site@master",
+    "commit": "4776c38a6858a4760ef4607774a7930cda2a5fbf",
+    "path": "home/modules/ROOT/pages/server.adoc",
+    "dest": "landing/home-server.adoc",
+    "sha256": "4ab4d9ca36e6f81d"
+  },
+  "home-mobile": {
+    "source": "docs-site@master",
+    "commit": "4776c38a6858a4760ef4607774a7930cda2a5fbf",
+    "path": "home/modules/ROOT/pages/mobile.adoc",
+    "dest": "landing/home-mobile.adoc",
+    "sha256": "56e9c3c10fce52ba"
+  },
+  "home-cloud": {
+    "source": "docs-site@master",
+    "commit": "4776c38a6858a4760ef4607774a7930cda2a5fbf",
+    "path": "home/modules/ROOT/pages/cloud.adoc",
+    "dest": "landing/home-cloud.adoc",
+    "sha256": "d612a6479a834b46"
+  },
+  "home-start-here": {
+    "source": "docs-site@master",
+    "commit": "4776c38a6858a4760ef4607774a7930cda2a5fbf",
+    "path": "home/modules/ROOT/pages/start-here.adoc",
+    "dest": "landing/home-start-here.adoc",
+    "sha256": "a26329f92bc0777d"
+  },
+  "sg-admonitions": {
+    "source": "docs-style-guide@main",
+    "commit": "60af94afab9cba1e56d5ba18b849df360cf61f9c",
+    "path": "styleguide/modules/ROOT/pages/admonitions.adoc",
+    "dest": "components/sg-admonitions.adoc",
+    "sha256": "4546c23bcc622e90"
+  },
+  "sg-tabs": {
+    "source": "docs-style-guide@main",
+    "commit": "60af94afab9cba1e56d5ba18b849df360cf61f9c",
+    "path": "styleguide/modules/ROOT/pages/tabbed-content.adoc",
+    "dest": "components/sg-tabs.adoc",
+    "sha256": "f92744683a8e1636"
+  },
+  "sg-examples": {
+    "source": "docs-style-guide@main",
+    "commit": "60af94afab9cba1e56d5ba18b849df360cf61f9c",
+    "path": "styleguide/modules/ROOT/pages/examples.adoc",
+    "dest": "components/sg-examples.adoc",
+    "sha256": "24091f5e4739cc0c"
+  },
+  "server-concept-deep-toc": {
+    "source": "docs-server@release/8.0",
+    "commit": "bd86dd398b647e6047649986852a5842075adaeb",
+    "path": "modules/manage/pages/manage-security/manage-users-and-roles.adoc",
+    "dest": "pages/server-concept-deep-toc.adoc",
+    "sha256": "c77f07857562a8e6"
+  },
+  "server-deprecated": {
+    "source": "docs-server@release/8.0",
+    "commit": "bd86dd398b647e6047649986852a5842075adaeb",
+    "path": "modules/rest-api/pages/deprecated-security-apis/upload-retrieve-root-cert.adoc",
+    "dest": "pages/server-deprecated.adoc",
+    "sha256": "4bd146081fc955fb"
+  },
+  "sdk-howto": {
+    "source": "docs-sdk-java@release/3.13",
+    "commit": "18f3b0b23d28569e7376f495f2830683cd56cb63",
+    "path": "modules/howtos/pages/kv-operations.adoc",
+    "dest": "pages/sdk-howto.adoc",
+    "sha256": "86bf24d3a403f5e8"
+  },
+  "cbl-callouts": {
+    "source": "docs-couchbase-lite@release/4.1",
+    "commit": "7b72a31cb7b933b34a40940104166c30d92c399d",
+    "path": "modules/csharp/pages/replication.adoc",
+    "dest": "pages/cbl-callouts.adoc",
+    "sha256": "32f843522b2cf441"
+  },
+  "analytics-tables": {
+    "source": "docs-enterprise-analytics@release/3.0",
+    "commit": "d34ece0eac8829cb5055a375b4a5902dfdffc5c4",
+    "path": "modules/sqlpp/pages/8_builtin.adoc",
+    "dest": "pages/analytics-tables.adoc",
+    "sha256": "2b620036791339c0"
+  },
+  "devex-long-output": {
+    "source": "docs-devex@release/8.0",
+    "commit": "c3bb1549af4887019b9983e371d9e8b4f569052c",
+    "path": "modules/indexes/pages/groupby-aggregate-performance.adoc",
+    "dest": "pages/devex-long-output.adoc",
+    "sha256": "5db9eada4f2e9529"
+  },
+  "capella-tutorial": {
+    "source": "docs-capella@main",
+    "commit": "4a71146a403ea1d4d8f6977ba71581a4b35ce55c",
+    "path": "modules/get-started/pages/create-account.adoc",
+    "dest": "capella/capella-tutorial.adoc",
+    "sha256": "027b652aaec32218"
+  },
+  "capella-ui-macros": {
+    "source": "docs-capella@main",
+    "commit": "4a71146a403ea1d4d8f6977ba71581a4b35ce55c",
+    "path": "modules/organizations/pages/manage-organization-users.adoc",
+    "dest": "capella/capella-ui-macros.adoc",
+    "sha256": "c1be9c4921e17e85"
+  },
+  "capella-release-notes": {
+    "source": "docs-capella@main",
+    "commit": "4a71146a403ea1d4d8f6977ba71581a4b35ce55c",
+    "path": "modules/release-notes/pages/release-notes.adoc",
+    "dest": "capella/capella-release-notes.adoc",
+    "sha256": "f86bebea2b7dd670"
+  },
+  "app-services-tutorial": {
+    "source": "docs-capella-app-services@main",
+    "commit": "d8bb5759712650bd6db00373a4d9504a2def4e87",
+    "path": "modules/ROOT/pages/get-started/configuring-app-services.adoc",
+    "dest": "capella/app-services-tutorial.adoc",
+    "sha256": "902b2cc7f38e1525"
+  },
+  "ai-guide": {
+    "source": "docs-ai@main",
+    "commit": "400d2ef9148fda57a1dc7130faf0980edb65059d",
+    "path": "modules/build/pages/ai-functions.adoc",
+    "dest": "capella/ai-guide.adoc",
+    "sha256": "c387566638f32677"
+  },
+  "redocly-metric": {
+    "source": "docs-capella-app-services@main",
+    "commit": "d8bb5759712650bd6db00373a4d9504a2def4e87",
+    "path": "modules/ROOT/pages/references/rest_api_metric.adoc",
+    "dest": "rest-api/redocly-metric.adoc",
+    "sha256": "151260901027c6cb"
+  }
+}

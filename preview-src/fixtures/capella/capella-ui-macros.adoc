@@ -1,0 +1,203 @@
+// FIXTURE capella-ui-macros: docs-capella@main (4a71146a) modules/organizations/pages/manage-organization-users.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Manage Organization Users
+:page-component-name: cloud
+:page-capella-type: Operational
+:page-aliases: invpc:invpc-manage-database-users.adoc
+
+
+[abstract]
+Invite users to an organization and manage their roles within the organization.
+
+== Prerequisites
+
+You must have the xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owner] role to:
+
+* Add users to your organization.
+
+* Change a user's organization role.
+
+* Remove someone other than yourself from an organization.
+
+* Remove 1 or more SSO users from an organization through the <<remove-user-sso,realm in the Capella UI>> or through your identity provider.
+
+IMPORTANT: An organization must have at least 1 user with the xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owner] role at all times.
+If you're the only xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owner] user, you cannot edit your own role until you grant the xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owner] role to at least 1 other user.
+
+== View Organization Users in the Capella UI
+
+To view your organization's users:
+
+. In the navigation breadcrumbs in the Capella UI, click your organization's name.
+
+. Go to menu:People[].
++
+Capella shows a <<user-summary,summary>> of all users who are part of the organization.
+
+. To find a specific user, do 1 of the following:
+
+* Use the search bar to find the user by *Name* or *Email*.
+
+* Use the default filters to narrow the list of users by:
+
+** Email Status (Verified or Pending)
+
+** MFA Status (Enabled or Disabled)
+
+** xref:organizations:organization-user-roles.adoc[Roles]
+
+** xref:organizations:ui-auth/manage-role-mapping.adoc#access-teams[Teams]
+
+[#user-summary]
+=== Users Summary
+
+The *People* tab shows a summary of all users that are part of the organization.
+This includes the following information about each user:
+
+[#organization-users-summary,cols="1,3",options="header"]
+|===
+
+| Field
+| Description
+
+| *Name*
+| The name and email address of the user.
+Data in this column is in ascending alphabetical order by default.
+Click the header to change this to descending alphabetical order.
+
+| *Email Status*
+a| The invitation status of the user.
+
+* *Verified*: The invitee has accepted the invitation.
+* *Pending*: The invitee has not yet accepted the invitation.
+
+| *Roles*
+a| The organization roles assigned to the account:
+
+* xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owner]
+* xref:organizations:organization-user-roles.adoc#organization-role-project-creator[Project Creator]
+* xref:organizations:organization-user-roles.adoc#organization-role-member[Organization Member]
+
+|===
+
+[#invite-organization-users]
+== Add/Invite Users to an Organization
+
+.Social Sign In and Single Sign-On (SSO)
+[IMPORTANT]
+====
+People you invite to an organization can sign in using third-party accounts such as Google or GitHub if they're associated with the same email address used for Capella.
+
+When using SSO with your organization, make sure only authorized SSO users can access your organization by only inviting Organization Owners.
+Configure all other users using your SSO provider.
+
+Users with SSO do not need an invitation and can sign in using the organization's realm name.
+
+For more information, see xref:organizations:ui-auth/sign-in-with-sso.adoc[].
+====
+
+To add users to an organization:
+
+. In the navigation breadcrumbs in the Capella UI, click your organization name. 
+
+. Go to menu:People[]. 
+
+. Click btn:[Invite People].
+
+. Enter the user's email address, where they will receive an invitation to log into Capella.
+
+. Select 1 or more xref:organizations:organization-user-roles.adoc[organization roles] for the user.
+
+. Click btn:[Invite].
+
+After you add a user, Capella sends an email to invite them to join the organization.
+An invited user is shown in the *People* tab with a status of *Pending* until they accept their invitation.
+Once they accept the invitation, their status shows *Verified*.
+
+A pending user cannot access anything in the organization until they accept the invitation and configure their account.
+
+CAUTION: Invitations expire after 24 hours.
+
+[#resend-invite]
+== Resend or Cancel a User's Invitation
+
+If a user did not receive their invitation before it expired, you have the option to resend the invitation.
+
+To resend or cancel a user's invitation:
+
+. In the navigation breadcrumbs in the Capella UI, click your organization name. 
+
+. Go to menu:People[]. 
+
+. Click the name of the user you want to re-invite or cancel their invitation, and do 1 of the following:
+
+** To resend the invite, click btn:[Resend Invite].
+
+** To cancel the invite, click btn:[Remove User].
+... Confirm that you want to remove the user and click btn:[Remove].
+
+[#change-user]
+== Change a User's Organization Role
+
+WARNING: If you remove the Organization Owner role from a user, they also lose the xref:projects:project-roles.adoc#project-owner-role[Project Owner] role for all projects in their organization.
+They keep their other project roles.
+
+To change a user's organization role:
+
+. In the navigation breadcrumbs in the Capella UI, click your organization name. 
+
+. Go to menu:People[].
+
+. Click the name of the user whose role you want to change.
+
+. Under *Organizational Roles*, click btn:[Edit Organizational Roles].
+
+. From the list of xref:organizations:organization-user-roles.adoc[organization roles], select the roles that you want to add to the current user.
+Deselect the roles you want to remove.
+
+. Click btn:[Save].
+
+[#remove-user]
+== Remove a User (or Yourself) from an Organization
+
+To remove SSO users, see <<remove-user-sso>>.
+
+WARNING: Removing a user from an organization removes all organization roles assigned to this user and removes their access to all projects contained in that organization.
+
+To remove yourself or another non-SSO user from an organization:
+
+. In the navigation breadcrumbs in the Capella UI, click your organization name. 
+
+. Go to menu:People[]. 
+. Click the name of the user you want to remove from the organization.
++
+This can be yourself if you're removing yourself from the organization.
+
+. Under *Remove User*, click btn:[Remove User].
+
+. Confirm you want to remove this user and click btn:[Remove].
+
+[#remove-user-sso]
+=== Remove SSO Users
+
+As well as removing SSO users from Capella using your identity provider, xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owners] can also remove them using the Capella UI.
+To remove SSO users from Capella using the Capella UI:
+
+. In the navigation breadcrumbs in the Capella UI, click your organization name. 
+
+. Go to menu:Settings[SSO].
+
+. In the listing for your realm, click menu:More Options (&vellip;)[Manage SSO Users].
+
+. Select 1 or more users to remove.
+
+. Click btn:[Delete].
+
+. Confirm your user selection for removal and click btn:[Delete User(s)].
+
+== See Also
+
+* xref:organizations:manage-organizations.adoc[Manage Organizations]
+* xref:organizations:organization-user-roles.adoc[Organization Roles]
+* xref:projects:manage-project-users.adoc[Manage Project Users]
+* xref:projects:project-roles.adoc[Project Roles]
