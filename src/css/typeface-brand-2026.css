@@ -1,4 +1,4 @@
-/* Brand Guidelines 2026 fonts (ADR 0002). Declared but not referenced by any rule yet, so browsers never fetch them.
+/* Brand Guidelines 2026 fonts (ADR 0002). Used via --font-body / --font-display in vars.css.
    NOTE: Centra No. 2 web licence assumed to cover docs.couchbase.com; to be double-checked. */
 
 @font-face {
@@ -36,7 +36,7 @@
 @font-face {
   font-family: "Centra No. 2";
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400 700;
   font-display: swap;
   src: url(../font/centra-no2-500.woff2) format("woff2");
 }

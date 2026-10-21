@@ -227,6 +227,7 @@ Baselines are not committed (they are about 50 MB) and are specific to the OS th
  $ npm run test:visual:update           # record baselines from your working tree (a known-good state)
  $ npm run test:visual                  # rebuild and compare; failures list the pages
 
+The suite also fails any page that scrolls horizontally at the three widths (`tests/visual/layout.spec.js`; pages that already overflowed are listed there as expected failures).
 Each failing page gets `-expected.png`, `-actual.png` and `-diff.png` under `test-results/`; `npx playwright show-report` opens an HTML report with side-by-side and slider views.
 Accept intended changes with `npm run test:visual:update`.
 

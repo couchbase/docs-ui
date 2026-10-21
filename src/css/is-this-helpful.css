@@ -1,6 +1,6 @@
 
 .is-this-helpful-box * {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
 }
 
 .is-this-helpful-box {
@@ -9,7 +9,7 @@
   margin-bottom: 25px;
   /* border-top: 1px solid #ccc; */
   padding-top: 25px;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
 }
 
 .is-this-helpful-box .btn-row {
@@ -44,7 +44,7 @@
   resize: vertical;
   font-size: 0.875rem;
   color: var(--color-brand-gray4);
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
 }
 
 .dialog-box {

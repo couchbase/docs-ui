@@ -113,7 +113,7 @@
   opacity: 1;
   font-size: 1.125rem;
   line-height: 24px;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
 }
 
 .navbar-nav .nav-link .arrow {
@@ -167,7 +167,7 @@
 /* .parent-site a {
   color: var(--color-brand-gray4);
   font-size: 1rem;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
 } */
 
 .search {
@@ -195,6 +195,7 @@
   margin-left: var(--column-space);
   padding: 5px 15px;
   font: inherit;
+  font-family: var(--font-display);
   font-weight: 600;
   border: 2px solid var(--color-brand-orange);
   border-radius: 0;

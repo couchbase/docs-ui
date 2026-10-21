@@ -143,6 +143,10 @@
   --radius-sm: 5px;
   --radius-md: 10px;
   --radius-lg: 20px;
+  /* Brand Guidelines 2026: Inter for body and UI, Centra No. 2 for headlines and calls to action. Centra is only
+     supplied in Medium, so headings use weight 500 (its face covers every weight, so it is never faux-bolded). */
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
+  --font-display: "Centra No. 2", "Inter", system-ui, -apple-system, "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif;
   --font-base: 1rem; /* ~16px */
   --font-medium: 1.25rem; /* ~20px */
   --font-small: 0.875rem; /* ~14px */

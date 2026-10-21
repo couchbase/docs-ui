@@ -13,6 +13,7 @@
 .home h1,
 .home h2,
 .home h3 {
+  font-family: var(--font-display);
   font-weight: var(--weight-bold);
   line-height: 1.2;
   margin: 0;
