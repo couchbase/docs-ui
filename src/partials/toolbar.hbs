@@ -1,5 +1,5 @@
 {{#with (or (and (not env.CI) page.fileUri) (and (not page.origin.private) page.editUrl))}}
-<div class="tools" role="navigation">
+<div class="tools" role="navigation" aria-label="Page tools">
 <ul>
 <li class="tool edit"><a href="{{this}}" title="Edit Page" target="_blank" rel="noopener" class="remove-ext-icon">Edit on GitHub</a></li>
 </ul>

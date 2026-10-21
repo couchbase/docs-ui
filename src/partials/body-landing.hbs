@@ -8,16 +8,16 @@
 {{#if (eq (nav-mode) 'client')}}
 {{#with (nav-group-for-page (nav-groups))}}
 {{#if ./components.length}}
-<aside class="nav left-sidebar">
+<nav class="nav left-sidebar" aria-label="Documentation">
   <div class="nav-container">
-    <a href="#" class="menu-expand-toggle"><span>Navigation</span><i class="fas fa-times-circle"></i><i class="fas fa-chevron-circle-left"></i></a>
+    <a href="#" class="menu-expand-toggle" role="button" aria-label="Toggle navigation" aria-expanded="true"><span>Navigation</span><i class="fas fa-times-circle"></i><i class="fas fa-chevron-circle-left"></i></a>
   </div>
-</aside>
+</nav>
 {{/if}}
 {{/with}}
 {{/if}}
 {{/if}}
-<main class="{{or mainClass 'article'}}" data-ceiling="topbar">
+<main class="{{or mainClass 'article'}}" id="main-content" tabindex="-1" data-ceiling="topbar">
 {{> llms-guidance}}
 {{> watermark}}
 <article class="doc landing-page-doc{{#if articleClass}} {{articleClass}}{{/if}}">

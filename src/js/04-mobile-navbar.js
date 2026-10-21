@@ -7,9 +7,9 @@
     navbarToggle.addEventListener('click', function (e) {
       e.stopPropagation()
       navbarToggle.classList.toggle('is-active')
+      navbarToggle.setAttribute('aria-expanded', String(navbarToggle.classList.contains('is-active')))
       document.getElementById(navbarToggle.dataset.target).classList.toggle('is-active')
       document.documentElement.classList.toggle('is-clipped--navbar')
-      document.querySelector('nav.collapse-menu').classList.remove('collapse-menu')
     })
   })
 })()

@@ -11,7 +11,7 @@
         <span class="component_list_title">{{{./title}}}</span>
         {{#with (or (and (eq @root.page.component.name componentName) @root.page.version) (lookup ../../latestVersions componentName)) as |activeVersion|}}
         {{#if (and activeVersion (ne activeVersion 'master'))}}
-        <select class="version_list" data-component="{{{componentName}}}">
+        <select class="version_list" data-component="{{{componentName}}}" aria-label="Version">
           {{#each ../versions}}
           <option value="{{./version}}" data-url="{{{relativize ./url}}}"{{#if (eq ./version activeVersion)}} selected{{/if}}>{{or ./displayVersion ./version}}</option>
           {{/each}}

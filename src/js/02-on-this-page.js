@@ -73,6 +73,7 @@
   if (startOfContent) {
     var embeddedToc = document.createElement('aside')
     embeddedToc.className = 'toc embedded'
+    embeddedToc.setAttribute('aria-label', 'On this page')
     embeddedToc.appendChild(menu.cloneNode(true))
     startOfContent.parentNode.insertBefore(embeddedToc, startOfContent)
   }
