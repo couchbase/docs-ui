@@ -1,48 +1,50 @@
 {
   "404.html": {
     "landmark-unique": 1,
+    "link-in-text-block": 1,
     "link-name": 1
   },
   "fixtures/capella/ai-guide.html": {
     "color-contrast": 11,
     "landmark-unique": 2,
-    "link-in-text-block": 13,
+    "link-in-text-block": 16,
     "link-name": 2
   },
   "fixtures/capella/app-services-tutorial.html": {
     "color-contrast": 25,
     "landmark-unique": 2,
-    "link-in-text-block": 2,
+    "link-in-text-block": 8,
     "link-name": 2
   },
   "fixtures/capella/capella-release-notes.html": {
     "color-contrast": 17,
     "landmark-unique": 2,
-    "link-in-text-block": 17,
+    "link-in-text-block": 30,
     "link-name": 2
   },
   "fixtures/capella/capella-tutorial.html": {
     "color-contrast": 15,
     "landmark-unique": 2,
-    "link-in-text-block": 16,
+    "link-in-text-block": 27,
     "link-name": 2
   },
   "fixtures/capella/capella-ui-macros.html": {
     "color-contrast": 13,
     "landmark-unique": 2,
-    "link-in-text-block": 5,
+    "link-in-text-block": 6,
     "link-name": 2
   },
   "fixtures/components/sg-admonitions.html": {
     "color-contrast": 10,
     "landmark-unique": 2,
+    "link-in-text-block": 3,
     "link-name": 2,
     "select-name": 2
   },
   "fixtures/components/sg-examples.html": {
     "color-contrast": 18,
     "landmark-unique": 2,
-    "link-in-text-block": 2,
+    "link-in-text-block": 3,
     "link-name": 2,
     "scrollable-region-focusable": 1,
     "select-name": 2
@@ -101,7 +103,7 @@
   "fixtures/pages/cbl-callouts.html": {
     "color-contrast": 44,
     "landmark-unique": 2,
-    "link-in-text-block": 17,
+    "link-in-text-block": 25,
     "link-name": 2,
     "select-name": 2
   },
@@ -125,14 +127,14 @@
   "fixtures/pages/server-concept-deep-toc.html": {
     "color-contrast": 17,
     "landmark-unique": 2,
-    "link-in-text-block": 18,
+    "link-in-text-block": 26,
     "link-name": 2,
     "select-name": 2
   },
   "fixtures/pages/server-deprecated.html": {
     "color-contrast": 12,
     "landmark-unique": 2,
-    "link-in-text-block": 5,
+    "link-in-text-block": 7,
     "link-name": 2,
     "scrollable-region-focusable": 1,
     "select-name": 2

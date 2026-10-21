@@ -19,11 +19,23 @@ body {
   font-family: var(--font-body);
   line-height: var(--line-height-body);
   margin: 0;
-  scroll-behavior: smooth;
 }
 
-body.rest-api {
-  scroll-behavior: initial;
+/* Anchor targets stop below the fixed header; the TOC scroll-spy reads this same value. */
+:root {
+  scroll-padding-top: var(--h2-heading-top-space);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Redoc positions its own anchors (see scrollYOffset in the generated theme) */
+:root:has(body.rest-api) {
+  scroll-padding-top: 0;
+  scroll-behavior: auto;
 }
 
 a {

@@ -65,7 +65,6 @@
   if (sidebar) {
     window.addEventListener('load', function () {
       onScroll()
-      // hashScroll()
       window.addEventListener('scroll', onScroll)
     })
   }
@@ -79,10 +78,8 @@
   }
 
   function onScroll () {
-    // NOTE doc.parentNode.offsetTop ~= doc.parentNode.getBoundingClientRect().top + window.pageYOffset
-    //var targetPosition = doc.parentNode.offsetTop
-    // NOTE no need to compensate wheen using spacer above [id] elements
-    var targetPosition = 0
+    // a heading is current once it has reached the line below the fixed header that anchor jumps scroll it to
+    var targetPosition = (parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0) + 1
     var activeFragment
     headings.some(function (heading) {
       if (Math.floor(heading.getBoundingClientRect().top) <= targetPosition) {
@@ -116,12 +113,4 @@
   function toArray (collection) {
     return [].slice.call(collection)
   }
-
-  // function hashScroll () {
-  //   // element which needs to be scrolled to
-  //   var hasValue = window.location.hash
-  //   var elementTillScroll = document.querySelector(hasValue)
-  //   // scroll to element
-  //   elementTillScroll.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  // }
 })()

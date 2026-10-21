@@ -54,34 +54,41 @@ function expectBelowHeader ({ top, headerBottom, atEnd }, label) {
   if (!atEnd) expect(top, `${label}: heading text at ${top}px is not near the top of the page`).toBeLessThanOrEqual(headerBottom + 160)
 }
 
-for (const rel of PAGES) {
-  test(`following a #fragment on load lands below the header: ${rel}`, async ({ page }) => {
-    await page.goto('/' + rel, { waitUntil: 'load' })
-    const ids = await page.$$eval('main h2[id], main h3[id], main h4[id]', (hs) => hs.map((h) => h.id))
-    expect(ids.length).toBeGreaterThan(3)
-    const picks = [ids[1], ids[Math.floor(ids.length / 2)], ids[ids.length - 2]]
-    for (const id of picks) {
-      await page.goto(`/${rel}#${id}`, { waitUntil: 'load' })
-      await settled(page)
-      expectBelowHeader(await page.evaluate(measure, id), `#${id}`)
-    }
-  })
+// instant jumps (reduced motion) and smooth scrolling must both finish in the right place
+for (const motion of ['reduce', 'no-preference']) {
+  test.describe(`prefers-reduced-motion: ${motion}`, () => {
+    test.use({ reducedMotion: motion })
 
-  test(`TOC links land below the header and the matching entry is highlighted: ${rel}`, async ({ page }, testInfo) => {
-    test.skip(testInfo.project.name === 'behaviour-mobile', 'the On this page TOC is not shown on small screens')
-    await page.goto('/' + rel, { waitUntil: 'load' })
-    await page.waitForTimeout(500)
-    const hrefs = await page.$$eval('aside.toc a[href^="#"]', (as) =>
-      as.map((a) => a.getAttribute('href')).filter((h) => h.length > 1)
-    )
-    expect(hrefs.length).toBeGreaterThan(3)
-    for (const href of [hrefs[1], hrefs[Math.floor(hrefs.length / 2)]]) {
-      await page.click(`aside.toc a[href="${href}"]`)
-      await settled(page)
-      const id = href.slice(1)
-      expectBelowHeader(await page.evaluate(measure, id), href)
-      const active = await page.$$eval('aside.toc a.is-active', (as) => as.map((a) => a.getAttribute('href')))
-      expect(active, `TOC highlight after following ${href}`).toEqual([href])
+    for (const rel of PAGES) {
+      test(`following a #fragment on load lands below the header: ${rel}`, async ({ page }) => {
+        await page.goto('/' + rel, { waitUntil: 'load' })
+        const ids = await page.$$eval('main h2[id], main h3[id], main h4[id]', (hs) => hs.map((h) => h.id))
+        expect(ids.length).toBeGreaterThan(3)
+        const picks = [ids[1], ids[Math.floor(ids.length / 2)], ids[ids.length - 2]]
+        for (const id of picks) {
+          await page.goto(`/${rel}#${id}`, { waitUntil: 'load' })
+          await settled(page)
+          expectBelowHeader(await page.evaluate(measure, id), `#${id}`)
+        }
+      })
+
+      test(`TOC links land below the header and the matching entry is highlighted: ${rel}`, async ({ page }, testInfo) => {
+        test.skip(testInfo.project.name === 'behaviour-mobile', 'the On this page TOC is not shown on small screens')
+        await page.goto('/' + rel, { waitUntil: 'load' })
+        await page.waitForTimeout(500)
+        const hrefs = await page.$$eval('aside.toc a[href^="#"]', (as) =>
+          as.map((a) => a.getAttribute('href')).filter((h) => h.length > 1)
+        )
+        expect(hrefs.length).toBeGreaterThan(3)
+        for (const href of [hrefs[1], hrefs[Math.floor(hrefs.length / 2)]]) {
+          await page.click(`aside.toc a[href="${href}"]`)
+          await settled(page)
+          const id = href.slice(1)
+          expectBelowHeader(await page.evaluate(measure, id), href)
+          const active = await page.$$eval('aside.toc a.is-active', (as) => as.map((a) => a.getAttribute('href')))
+          expect(active, `TOC highlight after following ${href}`).toEqual([href])
+        }
+      })
     }
   })
 }
