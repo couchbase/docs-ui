@@ -219,15 +219,19 @@ Sources, branches and trims are listed in [.path]_preview-src/fixtures/manifest.
 ==== Visual regression tests
 
 Playwright screenshots every preview page at desktop, tablet and mobile widths, with third-party requests blocked so runs are deterministic.
-Baselines are not committed (they are about 50 MB).
-Generate them from a base ref, then compare your branch against them:
+`npm run test:visual` builds the preview and runs the tests in a scrubbed environment with fixed dummy search settings (`scripts/visual-test.js`), because variables such as `ALGOLIA_*`, `OPTANON_*`, `CHATBOT_*` and `CI` otherwise change the rendered pages (e.g. whether a search bar appears) and baselines would differ between shells.
+It warns if the FontAwesome Pro packages are not installed, since icons would then be missing (see the `.npmrc` token above).
+Baselines are not committed (they are about 50 MB) and are specific to the OS they were generated on.
 
  $ npx playwright install chromium      # first time only
- $ npm run test:visual:baseline         # builds origin/master in a temporary worktree and records screenshots
- $ npm run test:visual                  # builds your working tree and compares
+ $ npm run test:visual:update           # record baselines from your working tree (a known-good state)
+ $ npm run test:visual                  # rebuild and compare; failures list the pages
 
-Pass another ref to the baseline script, e.g. `sh scripts/visual-baseline.sh my-branch`.
-Use `npm run test:visual:update` to accept your changes as the new baselines, and open `playwright-report/index.html` to see diffs.
+Each failing page gets `-expected.png`, `-actual.png` and `-diff.png` under `test-results/`; `npx playwright show-report` opens an HTML report with side-by-side and slider views.
+Accept intended changes with `npm run test:visual:update`.
+
+To compare against another ref instead, `npm run test:visual:baseline [ref]` (default `origin/master`) builds that ref's `src/` in a temporary worktree, using the current build tooling, and records its screenshots.
+Note that the tests block Google Fonts, so a ref that still loads them (before fonts were self-hosted) renders in fallback fonts and will differ on every page.
 
 ==== Real Antora build
 

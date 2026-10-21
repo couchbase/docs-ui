@@ -10,8 +10,8 @@
   "scripts": {
     "import:fixtures": "node scripts/import-fixtures.js",
     "preview:build": "gulp preview:build",
-    "test:visual": "gulp preview:build && playwright test",
-    "test:visual:update": "gulp preview:build && playwright test --update-snapshots",
+    "test:visual": "node scripts/visual-test.js",
+    "test:visual:update": "node scripts/visual-test.js --update-snapshots",
     "test:visual:baseline": "sh scripts/visual-baseline.sh"
   },
   "engines": {
