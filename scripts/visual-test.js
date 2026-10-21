@@ -27,7 +27,8 @@ const env = {
   ALGOLIA_INDEX_NAME: 'visual_test',
   ALGOLIA_IDX_NAME: 'visual_test',
 }
-if (process.env.VISUAL_PORT) env.VISUAL_PORT = process.env.VISUAL_PORT
+// test controls (not rendering inputs) that may be passed through
+for (const name of ['VISUAL_PORT', 'A11Y_UPDATE']) if (process.env[name]) env[name] = process.env[name]
 Object.keys(env).forEach((k) => env[k] === undefined && delete env[k])
 
 // Icons: the preview renders real icons only if the FontAwesome Pro packages are installed (see README).

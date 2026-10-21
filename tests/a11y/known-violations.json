@@ -1,0 +1,232 @@
+{
+  "404.html": {
+    "landmark-unique": 1,
+    "link-name": 1
+  },
+  "fixtures/capella/ai-guide.html": {
+    "color-contrast": 11,
+    "landmark-unique": 2,
+    "link-in-text-block": 13,
+    "link-name": 2
+  },
+  "fixtures/capella/app-services-tutorial.html": {
+    "color-contrast": 25,
+    "landmark-unique": 2,
+    "link-in-text-block": 2,
+    "link-name": 2
+  },
+  "fixtures/capella/capella-release-notes.html": {
+    "color-contrast": 17,
+    "landmark-unique": 2,
+    "link-in-text-block": 17,
+    "link-name": 2
+  },
+  "fixtures/capella/capella-tutorial.html": {
+    "color-contrast": 15,
+    "landmark-unique": 2,
+    "link-in-text-block": 16,
+    "link-name": 2
+  },
+  "fixtures/capella/capella-ui-macros.html": {
+    "color-contrast": 13,
+    "landmark-unique": 2,
+    "link-in-text-block": 5,
+    "link-name": 2
+  },
+  "fixtures/components/sg-admonitions.html": {
+    "color-contrast": 10,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "fixtures/components/sg-examples.html": {
+    "color-contrast": 18,
+    "landmark-unique": 2,
+    "link-in-text-block": 2,
+    "link-name": 2,
+    "scrollable-region-focusable": 1,
+    "select-name": 2
+  },
+  "fixtures/components/sg-tabs.html": {
+    "color-contrast": 5,
+    "landmark-unique": 2,
+    "link-in-text-block": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "fixtures/index.html": {
+    "color-contrast": 6,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "fixtures/landing/home-cloud.html": {
+    "color-contrast": 22,
+    "landmark-unique": 1,
+    "link-name": 1
+  },
+  "fixtures/landing/home-index.html": {
+    "empty-heading": 19,
+    "heading-order": 6,
+    "landmark-unique": 1,
+    "link-name": 1
+  },
+  "fixtures/landing/home-mobile.html": {
+    "empty-heading": 3,
+    "heading-order": 2,
+    "landmark-unique": 1,
+    "link-name": 1,
+    "page-has-heading-one": 1
+  },
+  "fixtures/landing/home-server.html": {
+    "color-contrast": 71,
+    "empty-heading": 11,
+    "heading-order": 4,
+    "landmark-unique": 1,
+    "link-name": 1,
+    "scrollable-region-focusable": 1
+  },
+  "fixtures/landing/home-start-here.html": {
+    "color-contrast": 12,
+    "landmark-unique": 1,
+    "link-name": 1
+  },
+  "fixtures/pages/analytics-tables.html": {
+    "color-contrast": 13,
+    "empty-table-header": 30,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "fixtures/pages/cbl-callouts.html": {
+    "color-contrast": 44,
+    "landmark-unique": 2,
+    "link-in-text-block": 17,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "fixtures/pages/devex-long-output.html": {
+    "color-contrast": 158,
+    "definition-list": 2,
+    "landmark-unique": 2,
+    "link-in-text-block": 1,
+    "link-name": 2,
+    "scrollable-region-focusable": 1,
+    "select-name": 2
+  },
+  "fixtures/pages/sdk-howto.html": {
+    "color-contrast": 62,
+    "landmark-unique": 2,
+    "link-in-text-block": 6,
+    "link-name": 2,
+    "scrollable-region-focusable": 14,
+    "select-name": 2
+  },
+  "fixtures/pages/server-concept-deep-toc.html": {
+    "color-contrast": 17,
+    "landmark-unique": 2,
+    "link-in-text-block": 18,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "fixtures/pages/server-deprecated.html": {
+    "color-contrast": 12,
+    "landmark-unique": 2,
+    "link-in-text-block": 5,
+    "link-name": 2,
+    "scrollable-region-focusable": 1,
+    "select-name": 2
+  },
+  "fixtures/rest-api/redocly-metric.html": {
+    "landmark-one-main": 1,
+    "landmark-unique": 2,
+    "link-name": 1,
+    "nested-interactive": 1,
+    "region": 8,
+    "scrollable-region-focusable": 1,
+    "select-name": 1
+  },
+  "home.html": {
+    "color-contrast": 18,
+    "heading-order": 1,
+    "landmark-unique": 1,
+    "link-name": 1
+  },
+  "index.html": {
+    "color-contrast": 106,
+    "landmark-unique": 2,
+    "link-in-text-block": 4,
+    "link-name": 2,
+    "scrollable-region-focusable": 1,
+    "select-name": 2
+  },
+  "landing-page-core-concept.html": {
+    "color-contrast": 11,
+    "empty-heading": 6,
+    "frame-title": 1,
+    "heading-order": 2,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "landing-page-sdk.html": {
+    "color-contrast": 6,
+    "empty-heading": 10,
+    "heading-order": 2,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "landing-page-top-level-sdk.html": {
+    "color-contrast": 1,
+    "empty-heading": 10,
+    "heading-order": 2,
+    "landmark-unique": 1,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "landing-page-tutorials.html": {
+    "color-contrast": 17,
+    "empty-heading": 8,
+    "heading-order": 8,
+    "landmark-unique": 1,
+    "link-name": 2
+  },
+  "landing-page.html": {
+    "landmark-unique": 1,
+    "link-name": 1,
+    "page-has-heading-one": 1
+  },
+  "noindex.html": {
+    "color-contrast": 4,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "rest-api.html": {
+    "landmark-one-main": 1,
+    "landmark-unique": 1,
+    "link-name": 1,
+    "page-has-heading-one": 1
+  },
+  "search.html": {
+    "color-contrast": 10,
+    "landmark-unique": 1,
+    "link-name": 1,
+    "page-has-heading-one": 1
+  },
+  "tiles.html": {
+    "color-contrast": 8,
+    "landmark-unique": 2,
+    "link-name": 2,
+    "select-name": 2
+  },
+  "tutorials.html": {
+    "color-contrast": 7,
+    "empty-heading": 14,
+    "landmark-one-main": 1,
+    "landmark-unique": 1,
+    "link-name": 1,
+    "region": 6
+  }
+}

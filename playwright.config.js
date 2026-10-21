@@ -9,8 +9,9 @@ const { defineConfig } = require('@playwright/test')
 const PORT = Number(process.env.VISUAL_PORT || 5254)
 
 module.exports = defineConfig({
-  testDir: 'tests/visual',
-  snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{arg}{ext}',
+  testDir: 'tests',
+  snapshotDir: 'tests/visual/__screenshots__',
+  snapshotPathTemplate: '{snapshotDir}/{projectName}/{arg}{ext}',
   outputDir: 'test-results',
   fullyParallel: true,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
@@ -24,9 +25,21 @@ module.exports = defineConfig({
     deviceScaleFactor: 1,
   },
   projects: [
-    { name: 'desktop', use: { viewport: { width: 1440, height: 900 } } },
-    { name: 'tablet', use: { viewport: { width: 820, height: 1100 } } },
-    { name: 'mobile', use: { viewport: { width: 390, height: 844 }, hasTouch: true } },
+    // screenshots and the horizontal-overflow guard, at three widths
+    { name: 'desktop', testMatch: /visual\/.*\.spec\.js/, use: { viewport: { width: 1440, height: 900 } } },
+    { name: 'tablet', testMatch: /visual\/.*\.spec\.js/, use: { viewport: { width: 820, height: 1100 } } },
+    {
+      name: 'mobile',
+      testMatch: /visual\/.*\.spec\.js/,
+      use: { viewport: { width: 390, height: 844 }, hasTouch: true },
+    },
+    // behaviour (anchor scrolling, keyboard) and accessibility (axe) checks
+    { name: 'behaviour', testMatch: /(behaviour|a11y)\/.*\.spec\.js/, use: { viewport: { width: 1440, height: 900 } } },
+    {
+      name: 'behaviour-mobile',
+      testMatch: /behaviour\/.*\.spec\.js/,
+      use: { viewport: { width: 390, height: 844 }, hasTouch: true },
+    },
   ],
   webServer: {
     command: `node scripts/serve-public.js public ${PORT}`,
