@@ -220,7 +220,68 @@ function loadSampleUiModel (src) {
         },
       })
     })
+    addPreviewNavGroups(uiModel, src)
     return uiModel
+  })
+}
+
+// Makes the fixture pages and the other sample pages reachable from the nav of the preview's components, so
+// nothing has to be found by typing its URL. Built from the files, so it cannot drift from them.
+function addPreviewNavGroups (uiModel, previewSrc) {
+  const titleOf = (file, fallback) => {
+    try {
+      const doc = Asciidoctor.load(fs.readFileSync(file, 'utf8'), { safe: 'safe', parse_header_only: true })
+      return doc.getDocumentTitle() || fallback
+    } catch (e) {
+      return fallback
+    }
+  }
+  const item = (file, content) => ({
+    content,
+    url: '/' + ospath.relative(previewSrc, file).split(ospath.sep).join('/').replace(/\.adoc$/, '.html'),
+    urlType: 'internal',
+  })
+  const walk = (dir) =>
+    fs.pathExistsSync(dir)
+      ? fs.readdirSync(dir, { withFileTypes: true }).reduce((acc, ent) => {
+        const full = ospath.join(dir, ent.name)
+        return ent.isDirectory() ? acc.concat(walk(full)) : full.endsWith('.adoc') ? acc.concat(full) : acc
+      }, [])
+      : []
+  const fixturesDir = ospath.join(previewSrc, 'fixtures')
+  const labels = {
+    landing: 'Landing pages',
+    components: 'Style guide components',
+    pages: 'Page types',
+    capella: 'Capella, App Services and AI',
+    'rest-api': 'REST API (Redocly)',
+  }
+  const groups = {}
+  walk(fixturesDir)
+    .sort()
+    .forEach((file) => {
+      const folder = ospath.relative(fixturesDir, ospath.dirname(file))
+      if (!folder) return // fixtures/index.adoc is linked separately
+      ;(groups[folder] = groups[folder] || []).push(item(file, titleOf(file, ospath.basename(file, '.adoc'))))
+    })
+  const samples = fs
+    .readdirSync(previewSrc)
+    .filter((name) => name.endsWith('.adoc'))
+    .sort()
+    .map((name) => item(ospath.join(previewSrc, name), titleOf(ospath.join(previewSrc, name), ospath.basename(name, '.adoc')) + ` (${name})`))
+  const navGroups = [
+    {
+      content: 'UI fixtures (real pages)',
+      url: '/fixtures/index.html',
+      urlType: 'internal',
+      items: Object.keys(groups).map((folder) => ({ content: labels[folder] || folder, items: groups[folder] })),
+    },
+    { content: 'Other sample pages', items: samples },
+  ]
+  const targets = [['server', '5.1'], ['cloud', ''], ['home', ''], ['server', '8.0']]
+  targets.forEach(([name, version]) => {
+    const target = ((uiModel.site.components[name] || {}).versions || []).find((v) => v.version === version)
+    if (target) target.navigation = (target.navigation || []).concat(JSON.parse(JSON.stringify(navGroups)))
   })
 }
 

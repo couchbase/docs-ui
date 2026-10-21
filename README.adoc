@@ -208,7 +208,8 @@ They were added as the foundation for the 2026 rebrand (see [.path]_design-decis
 ==== Fixture pages
 
 [.path]_preview-src/fixtures/_ holds about twenty real pages (landing pages, the style guide's component showcase, each page type, Capella/App Services/AI labels, release notes and a small Redocly API reference) imported from the content repos.
-They appear in `gulp preview` like any other preview page.
+They appear in `gulp preview` like any other preview page: open [.path]_/fixtures/index.html_ (a generated table of pages and their sources), or use the "UI fixtures (real pages)" and "Other sample pages" groups that the preview adds to the left nav (landing pages use a layout without a left nav, so reach them from the index).
+Most of the original sample nav entries are placeholder `#` links and a few point at pages that were never built; those are not fixtures.
 To refresh them from your local clones of the content repos (read via `git show origin/<branch>:<path>`, so nothing is checked out):
 
  $ npm run import:fixtures
