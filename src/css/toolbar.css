@@ -24,7 +24,7 @@
   background: url(../img/edit.svg) no-repeat center left;
   background-size: 15px;
   vertical-align: top;
-  color: #999;
+  color: var(--text-subtle);
   padding-left: 25px;
   padding-top: 0;
   padding-bottom: 0;

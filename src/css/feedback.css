@@ -4,7 +4,7 @@
   border: 0;
   border-radius: 3px 3px 0 0;
   box-shadow: -2px -4px 30px rgba(0, 0, 0, 0.25);
-  color: #fff !important;
+  color: var(--text-inverse) !important;
   font-family: inherit;
   font-size: 1rem;
   line-height: 1;

@@ -1,5 +1,5 @@
 .crumbs {
-  color: var(--color-muted);
+  color: inherit; /* was var(--color-muted), which was never defined */
   font-weight: var(--weight-light);
   /* effectively a single-line height of 1.5 */
   line-height: 1.35;
@@ -17,7 +17,7 @@
 .crumbs li::after {
   content: "/";
   padding: 0 0.25rem;
-  color: var(--color-muted);
+  color: inherit; /* was var(--color-muted), which was never defined */
 }
 
 .crumbs li:last-of-type::after {

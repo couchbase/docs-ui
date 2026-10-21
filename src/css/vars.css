@@ -66,7 +66,6 @@
   --color-brand-blue-tint: #d9eafb;
   --color-brand-grey: #666;
   --color-brand-orange-tint: var(--color-brand-peach);
-  --color-muted: var(--color-brand-gray);
   --color-text: var(--color-brand-gray-dark);
   --color-code: var(--color-brand-pink);
   --color-border: var(--color-brand-silver);
@@ -76,6 +75,18 @@
   /* --color-border-table: #666; */
   --color-border-table: #dadada;
   --color-shade: #f3f3f3;
+  /* Semantic layer (ADR 0002): components should use these rather than brand colours directly,
+     so a theme (dark mode, area accents) only has to redefine this block. Values mirror what the
+     site rendered before they were introduced, so adopting them is visually neutral. */
+  --surface-page: var(--color-brand-white);
+  --surface-nav: var(--color-brand-gray7);
+  --surface-sunken: var(--color-brand-gray6);
+  --surface-code: #f1f7fe;
+  --text-strong: var(--color-brand-gray1);
+  --text-muted: var(--color-brand-gray4);
+  --text-subtle: #999; /* NOTE fails WCAG AA on white (2.85:1): revisit in the colour phase */
+  --text-inverse: var(--color-brand-white);
+  --border-subtle: var(--color-brand-gray8);
   --color-navbar-bg: var(--color-brand-black);
   --color-navbar-text: var(--color-brand-white);
   --color-footer-bg: var(--color-shade);

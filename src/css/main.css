@@ -109,7 +109,7 @@ main #watermark {
 
 .article-banner a.btn:focus,
 .article-banner a.btn:hover {
-  background-color: #fff;
+  background-color: var(--surface-page);
   color: var(--color-link-active);
 }
 
@@ -198,7 +198,7 @@ main #watermark {
   }
 
   a {
-    color: #000;
+    color: var(--color-brand-black);
     text-decoration: underline;
   }
 
