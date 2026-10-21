@@ -8,7 +8,7 @@ table.tableblock tbody,
 table.tableblock tfoot,
 table.tableblock td,
 table.tableblock th {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-body);
 }
 
 table.tableblock {

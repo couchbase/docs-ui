@@ -7,7 +7,7 @@
 }
 
 .btn {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.125rem;
 }
 

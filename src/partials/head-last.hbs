@@ -1,6 +1,9 @@
 {{#with page.canonicalUrl}}
 <link rel="canonical" href="{{this}}">
 {{/with}}
+<link rel="preload" href="{{{uiRootPath}}}/font/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{{uiRootPath}}}/font/inter-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{{uiRootPath}}}/font/centra-no2-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{{uiRootPath}}}/css/site.css">
 {{#if env.ALGOLIA_API_KEY}}
 <link rel="stylesheet" href="{{{uiRootPath}}}/css/vendor/docsearch.css">

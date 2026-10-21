@@ -1,0 +1,27 @@
+# Recommended Redocly theme for the Brand Guidelines 2026 fonts (ADR 0002).
+#
+# Copy over `redocly/theme.yaml` (and each module's own `theme.yaml`) in the content repos (docs-capella,
+# docs-capella-app-services, docs-capella-copy, docs-sync-gateway, docs-enterprise-analytics, ...), then re-run each
+# module's generate-docs.sh and commit the regenerated HTML partial. The generated pages inherit nothing from this
+# repo at build time: the font names are baked into the partial, and resolve at view time because the docs-ui CSS
+# loads Inter and Centra No. 2 on every page. Until a module is regenerated its API reference keeps using Open Sans,
+# which docs-ui still declares (and only downloads when used) for that reason.
+#
+# scrollYOffset must equal the fixed header's height (src/css/vars.css: --height-to-body, currently 7.1rem = ~114px);
+# if the header height changes, change it here and regenerate.
+openapi:
+  scrollYOffset: 114 # after header.header - we can't use the element because it's composed in by Antora later
+  theme:
+    sidebar:
+      width: 400px
+    typography:
+      fontFamily: "Inter, sans-serif"
+      fontSize: 1em
+      heading1:
+        fontSize: 2.25em
+        lineHeight: 50px
+        fontFamily: "Centra No. 2, Inter, sans-serif"
+      headings:
+        fontWeight: "500"
+        fontFamily: "Centra No. 2, Inter, sans-serif"
+        lineHeight: 1.5em

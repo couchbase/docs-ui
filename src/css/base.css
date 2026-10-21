@@ -16,7 +16,7 @@ body {
 
 body {
   color: var(--color-text);
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-body);
   line-height: var(--line-height-body);
   margin: 0;
   scroll-behavior: smooth;
@@ -30,7 +30,7 @@ a {
   color: var(--color-link);
   outline: none;
   text-decoration: none;
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-body);
 }
 
 a:focus,
@@ -101,7 +101,7 @@ small {
 em,
 i {
   font-style: italic;
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
 }
 

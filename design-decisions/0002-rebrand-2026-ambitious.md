@@ -137,3 +137,12 @@ Alternatives that capture most of the benefit:
 3. Monorepo with workspaces (`ui/`, `site/` with playbooks and extensions, `home/` extracted); decide after the fixtures build has shown how much the integration actually hurts.
 
 Suggested order: extract `home/`; write down the contract between extensions and UI (data the UI expects: `navGroups`, site-navigation data, `page-*` attributes, icon defs, llms hooks); then revisit the merge with the visibility/licence answer in hand.
+
+### Phase 2a: typography (2026-10-21, branch `rebrand-fonts`, stacked on `rebrand-phase0`)
+Prioritised after Phase 0 because the Inter and Centra files were only declared there, so nothing used them.
+- **Inter** is now the body/UI font (`--font-body`), replacing all 31 Open Sans / Source Sans Pro declarations. **Centra No. 2** (`--font-display`) is used for `.doc` headings, `.btn` and the Ask AI button, component-title and landing card titles, home headings. Chromium confirms Centra on h1/h2/buttons and Inter on body text and links.
+- **Weights:** Inter ships only 400, 600, 700 and a 400 italic, so the 13 uses of weight 300 render at 400 and 500 renders at 400; no bold-italic exists (synthesised). Centra ships only Medium, so its `@font-face` declares `font-weight: 400 700` (every request uses the one file, never faux-bolded) and headings are set to 500. `h1` moved from light to medium; heading tracking from -0.025rem to 0 per the guide.
+- **Preloads** for inter-400, inter-600 and centra-no2-500 in `head-last.hbs`; verified 200s and no preload warnings.
+- **Observed effects:** headings are heavier than the old light/semibold Open Sans; nav and TOC items wrap more because Inter is wider than Source Sans Pro (the left nav and TOC used it); `h1` wraps to 3 lines on a 390px viewport where it used to take 2. No new horizontal overflow (checked against Phase 0). Accepted for now; sizes and nav width are design-direction questions for Phase 2 proper.
+- **Kept on purpose:** Open Sans and Source Sans Pro stay declared (downloaded only if used) because the generated Redocly HTML names Open Sans in its baked-in theme. `redocly-theme.recommended.yaml` is the replacement to roll out per content repo (regenerate and commit each partial).
+- **Tests:** `tests/visual/layout.spec.js` fails any page that scrolls horizontally. Four pages already did before this work (narrow widths: `server-concept-deep-toc` at tablet and mobile, `cbl-callouts` and `tiles` at mobile) and are marked expected failures.
