@@ -170,7 +170,7 @@ i {
   width: 25px;
   height: 25px;
   border: 1px solid var(--checkbox-border-color);
-  background: #f9f9f9;
+  background: var(--surface-nav);
   border-radius: 3px;
   display: inline-block;
 }
@@ -213,7 +213,7 @@ i {
 }
 
 [type="checkbox"]:disabled:checked + label::after {
-  color: #999;
+  color: var(--text-subtle);
 }
 
 [type="checkbox"]:disabled + label {

@@ -62,7 +62,7 @@ This section offers a basic tutorial to learn how to set up the UI project, prev
 To preview and bundle the UI, you need the following software on your computer:
 
 * {url-git}[git] (command: `git`)
-* {url-node}[Node 10] (command: `node`)
+* {url-node}[Node 24 (Active LTS) or later] (command: `node`)
 * {url-gulp}[Gulp CLI] (command: `gulp`)
 
 ==== git
@@ -73,31 +73,31 @@ First, make sure you have git installed.
 
 If not, {url-git-dl}[download and install] the git package for your system.
 
-==== Node 10
+==== Node 24
 
-Next, make sure that you have Node 10 installed.
+Next, make sure that you have Node 24 (the current Active LTS) or later installed.
 
  $ node -v
 
 If this command fails with an error, you don't have Node installed.
-If the command doesn't report a Node 10 version (e.g., v10.15.3), then you don't have a suitable version of Node installed.
+If the command doesn't report a Node 24 or later version (e.g., v24.11.0), then you don't have a suitable version of Node installed.
 
 While you can install Node from the official packages, we strongly recommend that you use {url-nvm}[nvm] (Node Version Manager) to install and manage Node.
 Follow the {url-nvm-install}[nvm installation instructions] to set up nvm on your machine.
 
-Once you've installed nvm, open a new terminal and install Node 10 using the following command:
+Once you've installed nvm, open a new terminal and install Node 24 using the following command:
 
- $ nvm install 10
+ $ nvm install 24
 
 You can switch to this version of Node at any time using the following command:
 
- $ nvm use 10
+ $ nvm use 24
 
-To make Node 10 the default in new terminals, type:
+To make Node 24 the default in new terminals, type:
 
- $ nvm alias default 10
+ $ nvm alias default 24
 
-Now that you have Node 10 installed, you can proceed with installing the Gulp CLI.
+Now that you have a suitable version of Node installed, you can proceed with installing the Gulp CLI.
 
 ==== Gulp CLI
 
@@ -198,6 +198,51 @@ Here's how that process works:
 
 The deploy preview works because there is a webhook on the repository that pings \https://api.netlify.com/hooks/github for the following events: push, pull_request, delete_branch.
 Netlify then runs the command specified in netlify.toml, deploys the site, and allocates a temporary URL for it.
+
+=== Test the UI Against Real Content
+
+The sample pages in [.path]_preview-src/_ are synthetic.
+Three further tools let you check changes against real pages without a full docs build.
+They were added as the foundation for the 2026 rebrand (see [.path]_design-decisions/0002-rebrand-2026-ambitious.md_).
+
+==== Fixture pages
+
+[.path]_preview-src/fixtures/_ holds about twenty real pages (landing pages, the style guide's component showcase, each page type, Capella/App Services/AI labels, release notes and a small Redocly API reference) imported from the content repos.
+They appear in `gulp preview` like any other preview page: open [.path]_/fixtures/index.html_ (a generated table of pages and their sources), or use the "UI fixtures (real pages)" and "Other sample pages" groups that the preview adds to the left nav (landing pages use a layout without a left nav, so reach them from the index).
+Most of the original sample nav entries are placeholder `#` links and a few point at pages that were never built; those are not fixtures.
+To refresh them from your local clones of the content repos (read via `git show origin/<branch>:<path>`, so nothing is checked out):
+
+ $ npm run import:fixtures
+
+Sources, branches and trims are listed in [.path]_preview-src/fixtures/manifest.yml_; imported commits are recorded in `manifest.lock.json`.
+
+==== Visual regression tests
+
+Playwright screenshots every preview page at desktop, tablet and mobile widths, with third-party requests blocked so runs are deterministic.
+`npm run test:visual` builds the preview and runs the tests in a scrubbed environment with fixed dummy search settings (`scripts/visual-test.js`), because variables such as `ALGOLIA_*`, `OPTANON_*`, `CHATBOT_*` and `CI` otherwise change the rendered pages (e.g. whether a search bar appears) and baselines would differ between shells.
+It warns if the FontAwesome Pro packages are not installed, since icons would then be missing (see the `.npmrc` token above).
+Baselines are not committed (they are about 50 MB) and are specific to the OS they were generated on.
+
+ $ npx playwright install chromium      # first time only
+ $ npm run test:visual:update           # record baselines from your working tree (a known-good state)
+ $ npm run test:visual                  # rebuild and compare; failures list the pages
+
+Each failing page gets `-expected.png`, `-actual.png` and `-diff.png` under `test-results/`; `npx playwright show-report` opens an HTML report with side-by-side and slider views.
+Accept intended changes with `npm run test:visual:update`.
+
+To compare against another ref instead, `npm run test:visual:baseline [ref]` (default `origin/master`) builds that ref's `src/` in a temporary worktree, using the current build tooling, and records its screenshots.
+Note that the tests block Google Fonts, so a ref that still loads them (before fonts were self-hosted) renders in fallback fonts and will differ on every page.
+
+==== Real Antora build
+
+`gulp preview` does not run Antora, so it cannot show real navigation, version selectors, nav groups or search metadata.
+To build a real site with this UI from the docs-site playbook:
+
+ $ node scripts/build-fixtures.js --subset      # ~14 sources, for quick local runs; omit --subset for all sources
+ $ node scripts/serve-public.js build/fixtures-site 5255
+
+This derives a playbook from [.path]_../docs-site/antora-playbook.preview2.yml_ (override the location with `DOCS_SITE_DIR`), resets any work-in-progress branches to those in the main playbook, uses your freshly built UI bundle, and enables the Chat UI.
+It needs network access to the content repositories, docs-site's `node_modules` (`npm install` in docs-site; Antora 3.2 or later is required and docs-site's copy is used, not any global one) and, for faithful icons, ripgrep (`rg`) plus the FontAwesome Pro packages in docs-site's `scripts` folder (the script runs docs-site's `scripts/populate-icon-defs` afterwards, like the real pipeline).
 
 === Package for Use with Antora
 

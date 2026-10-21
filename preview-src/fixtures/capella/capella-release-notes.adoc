@@ -1,0 +1,230 @@
+// FIXTURE capella-release-notes: docs-capella@main (4a71146a) modules/release-notes/pages/release-notes.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Couchbase Capella Release Notes
+:page-component-name: cloud
+:page-capella-type: Operational
+
+== October 2026 Changelog
+
+* Expanded AWS and Azure region availability
++
+Couchbase Capella nows supports 2 new regions:
++
+--
+* AWS
+** Asia Pacific (Osaka) -- `ap-northeast-3`
+* Azure
+** Italy North (Milan) -- `italynorth`
+--
+
+* New Organization Roles
++
+Capella adds 3 new organization-level roles:
+
+** xref:organizations:organization-user-roles.adoc#organization-billing-administrator[`Organization Billing Administrator`]: full access to *Billing*. 
+They can view billing and usage, manage payment methods, set up billing alerts, and create and view Billing support tickets. 
+They have no access to clusters, projects, or data.
+
+** xref:organizations:organization-user-roles.adoc#organization-billing-viewer[`Organization Billing Viewer`]: read-only access to *Billing* and *Support*. 
+They can view billing, usage reports, billing alerts, and Billing support tickets. 
+They cannot manage payment methods or create alerts.
+
+** xref:organizations:organization-user-roles.adoc#organization-read-only[`Organization Read-Only Member`]: read-only access to the organization's settings, users and projects, with no need for project membership.
+It does not give access to cluster data or billing.
+
++
+These roles let you give users access to billing or organization-wide visibility without making them an xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[`Organization Owner`] or adding them to projects.
+
+== September 2026 Changelog
+
+* Increased node limits for GCP and Azure operational clusters
++
+Couchbase Capella now supports scaling operational clusters on GCP and Azure beyond the previous 27-node limit up to 50 nodes. 
+Higher node counts can also be accommodated based on your workload requirements. 
++
+To raise the node limit for your organization, open a xref:support:manage-support.adoc#create-support-ticket[Support Ticket] with Couchbase Capella Support.
+
+* Couchbase Server 8.0.3
++
+Creating a new operational cluster with Couchbase Server 8.0 now deploys the Couchbase Server 8.0.3 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:8.0@server:release-notes:relnotes.adoc#release-8-0-3[Couchbase Server 8.0.3].
+
+== August 2026 Changelog
+
+* XDCR Conflict Logging
++
+Capella now supports conflict logging for replications between operational clusters running Couchbase Server 8.0 or later.
+You can enable conflict logging when you xref:clusters:xdcr/manage-xdcr-replications.adoc#between-capella-dbs[create] or xref:clusters:xdcr/manage-xdcr-replications.adoc#modify-replication[modify] a replication.
++
+For more information, see xref:clusters:xdcr/xdcr.adoc#conflict-logging[Conflict Logging].
+
+* Couchbase Server 7.6.12
++
+Creating a new operational cluster with Couchbase Server 7.6 now deploys the Couchbase Server 7.6.12 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:7.6@server:release-notes:relnotes.adoc#release-7612[Couchbase Server 7.6.12].
+
+== June 2026 Changelog
+
+* Couchbase Server 8.0.2
++
+Creating a new operational cluster with Couchbase Server 8.0 now deploys the Couchbase Server 8.0.2 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:8.0@server:release-notes:relnotes.adoc#release-802[Couchbase Server 8.0.2].
+
+* Slack and Microsoft Teams Integrations for Alerts
++
+Capella now supports native alert integrations for Slack and Microsoft Teams.
+You can send cluster and App Service xref:reference:alert-reference.adoc#metric-alerts[metric-based alerts] directly to your team's preferred Slack or Microsoft Teams channels by using the Capella UI or the Management REST API.
++
+Customize alert payloads with either standard or advanced templates for Slack and Microsoft Teams integrations.
+To configure an alert integration, see xref:clusters:monitoring/configure-slack-integration.adoc[]
+and xref:clusters:monitoring/configure-microsoft-integration.adoc[].
++
+For more information about alert integrations, see xref:clusters:monitoring/alert-integration.adoc[].
+
+== May 2026 Changelog 
+
+* Capella iQ Expands with AWS Bedrock Support
++
+Capella iQ now leverages multiple AI model providers to power its AI-assisted capabilities, delivering flexibility, improved reliability, and greater scalability.
+Support for AWS Bedrock-hosted models enables a more robust and performant experience across query generation and insights.
++
+This enhancement is fully managed and requires no changes to your existing workflows.
++
+For more information about model usage and configuration, see xref:get-started:capella-iq/work-with-capellaiq.adoc#model-provider[Work Faster with Capella IQ].
+
+* XDCR for Multi-Node Clusters Over Private Link on Azure
++
+Couchbase Capella's support for XDCR through private endpoint connectivity is now extended to clusters hosted on Azure.
+Replicate data between clusters entirely over a private network connection without exposing traffic to the public Internet.
++
+This feature is currently only available upon request from xref:support:manage-support.adoc#create-support-ticket[Couchbase Capella Support].
++
+For more information, see xref:clusters:xdcr/manage-xdcr-security.adoc#private-endpoints[Replicate Data Across a Private Endpoint Connection].
+
+* Prometheus for Multi-Node Clusters Over Private Link on Azure
++
+Couchbase Capella's native support for scraping Prometheus metrics endpoints through private endpoint connectivity is now extended to clusters hosted on Azure.
+This capability allows you to collect observability data from your internal resources without exposing endpoints to the public Internet.
++
+This feature is currently only available upon request from xref:support:manage-support.adoc#create-support-ticket[Couchbase Capella Support].
++
+For more information, see xref:clusters:monitoring/prometheus.adoc[].
+
+== April 2026 Changelog
+
+* Couchbase Server 7.6.11
++
+Creating a new operational cluster with Couchbase Server 7.6 now deploys the Couchbase Server 7.6.11 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:7.6@server:release-notes:relnotes.adoc#release-7611[Couchbase Server 7.6.11].
+
+* New AWS instance types available
++
+Additional compute and memory configurations are now available for Capella operational clusters hosted on AWS, including:
++
+--
+** 32 vCPUs with 64 GB of memory
+** 64 vCPUs with 128 GB of memory
+--
++
+For a full list of the available instance types for AWS, see xref:reference:aws.adoc#compute-and-memory[Amazon Web Services (AWS)].
+
+* Couchbase Server 8.0.1
++
+Creating a new operational cluster with Couchbase Server 8.0 now deploys the Couchbase Server 8.0.1 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:8.0@server:release-notes:relnotes.adoc#release-801[Couchbase Server 8.0.1].
+
+== March 2026 Changelog
+
+* Default Billing Alerts and Low Credit Warnings for Prepaid Accounts
++
+If you use pre-paid credits to pay for your usage in Capella, Capella now creates default billing alerts automatically when new pre-paid credits are applied to your account.
++
+When you xref:clusters:create-database.adoc[create a new cluster] or xref:billing:change-support-plan[change a cluster's Support Plan] and your pre-paid credit balance is depleted or running low, Capella also shows warnings to help you avoid unexpected xref:billing:billing.adoc#pay-as-you-go-credits[pay-as-you-go charges] and choose the right Support Plan with confidence.
++
+For more information, see xref:billing:about-billing-alerts.adoc#default-billing-alerts[Default Billing Alerts] and xref:billing:billing.adoc#low-credits[Low Credit Warning Calculations].
+
+== February 2026 Changelog
+
+* Couchbase Server 7.6.10
++
+Creating a new operational cluster with Couchbase Server 7.6 now deploys the Couchbase Server 7.6.10 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:7.6@server:release-notes:relnotes.adoc#release-7610[Couchbase Server 7.6.10].
+
+* Custom Subdomains in Capella Endpoints
++
+You can now customize endpoints for Capella resources, such as URLs for clusters, private links, and nodes, with unique identifiers.
+This option is now also available for GCP and Azure clusters through the xref:management-api-reference:index.adoc#tag/Organizations/operation/putOrganizationConfiguration[Capella Management API].
++
+This feature is currently only available upon request from xref:support:manage-support.adoc#create-support-ticket[Couchbase Capella Support].
+
+* Couchbase Capella Customer-Managed Encryption Keys (CMEK) for Azure now supports unique Entra ID applications per Capella project and is now generally available.
++
+You can now configure specific Azure Key Vault connections for each project individually, rather than relying on a single Entra ID application across your entire organization.
++
+For more information, see xref:security:cmek.adoc[].
+
+* Capella operational clusters now support fine-grained RBAC for cluster access credentials
++
+You can now define fine-grained Role-Based Access Control (RBAC) for cluster access using advanced access credentials.
+Advanced access credentials allow you to assign combinations of fine-grained privileges and roles to cluster access credentials at the bucket, scope, and collection levels.
++
+Basic access credentials that assign read, write, or read/write access at the bucket, scope, and collection level are still available.
++
+For more information about advanced access credentials, see xref:clusters:cluster-rbac.adoc[].
+
+* XDCR for Multi-Node Clusters Over Private Link
++
+Couchbase Capella has enhanced the security of your multi-cluster topology.
+Capella can now support XDCR through private endpoint connectivity, allowing you to replicate data between clusters entirely over a private network connection.
++
+This feature is currently only available upon request from xref:support:manage-support.adoc#create-support-ticket[Couchbase Capella Support].
++
+For more information, see xref:clusters:xdcr/manage-xdcr-security.adoc#private-endpoints[Replicate Data Across a Private Endpoint Connection].
+
+* Prometheus for Multi-Node Clusters Over Private Link
++
+Couchbase Capella is announcing native support for scraping Prometheus metrics endpoints through private endpoint connectivity.
+This capability allows you to collect observability data from your internal resources without exposing endpoints to the public Internet.
++
+This feature is currently only available upon request from xref:support:manage-support.adoc#create-support-ticket[Couchbase Capella Support].
++ 
+For more information, see xref:clusters:monitoring/prometheus.adoc[].
+
+== January 2026 Changelog
+
+* Couchbase Server 7.6.9
++
+Creating a new operational cluster with Couchbase Server 7.6 now deploys the Couchbase Server 7.6.9 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see xref:7.6@server:release-notes:relnotes.adoc#release-769[Couchbase Server 7.6.9].
+
+== December 2025 Changelog
+
+* Couchbase Capella now supports Customer-Managed Encryption Keys (CMEK) for clusters running in Microsoft Azure.
+With CMEK, you can use your own keys stored in Azure Key Vault to protect data-at-rest, giving you tighter control over your encryption lifecycle and compliance.
++
+This feature is currently only available upon request.
+For more information, see xref:security:cmek.adoc[].
+
+== November 2025 Changelog
+
+* Couchbase Server 7.6.8
++
+Creating a new operational cluster with Couchbase Server 7.6 now deploys the Couchbase Server 7.6.8 maintenance release.
+This version includes bug fixes.
++
+For more information about this version of Couchbase Server, see
+xref:7.6@server:release-notes:relnotes.adoc#release-768[Couchbase Server 7.6.8].

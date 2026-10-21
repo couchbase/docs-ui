@@ -1,0 +1,239 @@
+// FIXTURE analytics-tables: docs-enterprise-analytics@release/3.0 (d34ece0e) modules/sqlpp/pages/8_builtin.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Builtin Functions
+:page-topic-type: reference
+:page-toclevels: 2
+:table-caption!:
+:description: This section introduces the builtin {sqlppea} functions.
+
+[abstract]
+{description}
+
+For reference, a categorized list of all of the builtin functions follows. 
+Use the category linked at the end of each list for descriptions and examples of those functions.
+
+Some of the examples in this section assume that you're using a database called `sampleAnalytics` and a scope called `Commerce`.
+See xref:intro:connecting-to-data-sources.adoc#install-the-commerce-dataset-in-standalone-collections[] to install the Commerce dataset.
+
+== Numeric Functions
+
+|===
+|  |  |  |  |
+
+|abs
+|acos
+|asin
+|atan
+
+|atan2
+|ceil
+|cos
+|cosh
+
+|degrees
+|e
+|exp
+|floor
+
+|ln
+|log
+|pi
+|power
+
+|radians
+|round
+|sign
+|sin
+
+|sinh
+|sqrt
+|tan
+|tanh
+
+|trunc
+|random
+|
+|
+|===
+
+See xref:8_builtin_num.adoc[].
+
+== String Functions
+
+|===
+|  |  |  |  |
+
+|concat
+|contains
+|ends_with
+|initcap (or title)
+
+|length
+|lower
+|ltrim
+|position
+
+|regexp_contains
+|regexp_like
+|regexp_position
+|regexp_replace
+
+|repeat
+|replace
+|reverse
+|rtrim
+
+|split
+|starts_with
+|substr
+|trim
+
+|upper
+|concat2
+|
+|
+|===
+
+See xref:8_builtin_str.adoc[].
+
+== Temporal Functions
+
+|===
+|  |  |  |  |
+
+|now_local (clock_local)
+|now_millis (clock_millis)
+|now_str (clock_str)
+|now_tz (clock_tz)
+|now_utc (clock_utc)
+|date_add_millis
+|date_add_str
+|date_diff_millis
+|date_diff_str
+|date_format_str
+|date_part_millis
+|date_part_str
+|date_range_millis
+|date_range_str
+|date_trunc_millis
+|date_trunc_str
+|duration_to_str
+|millis
+|millis_to_str (millis_to_local)
+|millis_to_tz (millis_to_zone_name)
+|millis_to_utc
+|str_to_duration
+|str_to_millis
+|str_to_utc
+|str_to_tz (str_to_zone_name)
+|weekday_millis
+|weekday_str
+|===
+
+See xref:8_builtin_temp.adoc[].
+
+== Object Functions
+|===
+|  |  |  |  |
+
+|object_add
+|object_concat
+|object_length
+|object_names
+
+|object_pairs
+|object_put
+|object_rename
+|object_remove
+
+|object_replace
+|object_unwrap
+|object_values
+|
+|===
+
+See xref:8_builtin_obj.adoc[].
+
+== Aggregate Functions
+
+|===
+|  |  |  |  |
+
+|array_count
+|array_avg
+|array_sum
+|array_min
+
+|array_max
+|array_stddev_samp
+|array_stddev_pop
+|array_var_samp
+
+|array_var_pop
+|array_skewness
+|array_kurtosis
+|strict_count
+
+|strict_avg
+|strict_sum
+|strict_min
+|strict_max
+
+|strict_stddev_samp
+|strict_stddev_pop
+|strict_var_samp
+|strict_var_pop
+
+|strict_skewness
+|strict_kurtosis
+|
+|
+|===
+
+See xref:8_builtin_agg.adoc[].
+
+== Array Functions
+
+|===
+|  |  |  |  |
+
+|array_append
+|array_concat
+|array_contains
+|array_distinct
+
+|array_flatten
+|array_ifnull
+|array_insert
+|array_intersect
+
+|array_length
+|array_position
+|array_prepend
+|array_put
+
+|array_range
+|array_remove
+|array_repeat
+|array_replace
+
+|array_reverse
+|array_sort
+|array_star
+|array_symdiff
+
+|array_symdiffn
+|array_union
+|
+|
+|===
+
+See xref:8_builtin_arr.adoc[].
+
+== Comparison Functions
+
+greatest
+
+least
+
+See xref:8_builtin_comp.adoc[].

@@ -1,0 +1,40 @@
+# Real pages imported (trimmed and sanitised) from the content repos in
+# docs-site/antora-playbook.preview2.yml, to exercise the UI in `gulp preview`
+# and in the visual-regression suite. Refs match the MAIN playbook's branches.
+#
+#   node scripts/import-fixtures.js          # refresh from the local clones
+#
+# Fields: repo (clone under ../), ref (branch, read via `git show origin/<ref>:`,
+# no checkout needed), path, dest (under preview-src/fixtures/), attrs (extra
+# lines added after the title), maxLines (cut at the last heading before it),
+# inline (map of include target -> path in the same repo@ref, inlined verbatim).
+# Other include:: directives are replaced by a "[fixture] omitted" comment.
+defaults:
+  home: &home { repo: docs-site, ref: master }
+  styleguide: &styleguide { repo: docs-style-guide, ref: main }
+pages:
+  # --- landing pages (docs-site/home) ---
+  - { <<: *home, id: home-index, path: home/modules/ROOT/pages/index.adoc, dest: landing/home-index.adoc, attrs: [':page-component-name: home'] }
+  - { <<: *home, id: home-server, path: home/modules/ROOT/pages/server.adoc, dest: landing/home-server.adoc, attrs: [':page-component-name: home'] }
+  - { <<: *home, id: home-mobile, path: home/modules/ROOT/pages/mobile.adoc, dest: landing/home-mobile.adoc, attrs: [':page-component-name: home'] }
+  - { <<: *home, id: home-cloud, path: home/modules/ROOT/pages/cloud.adoc, dest: landing/home-cloud.adoc, attrs: [':page-component-name: home'] }
+  - { <<: *home, id: home-start-here, path: home/modules/ROOT/pages/start-here.adoc, dest: landing/home-start-here.adoc, attrs: [':page-component-name: home'] }
+  # --- style guide: self-contained component showcase ---
+  - { <<: *styleguide, id: sg-admonitions, path: styleguide/modules/ROOT/pages/admonitions.adoc, dest: components/sg-admonitions.adoc }
+  - { <<: *styleguide, id: sg-tabs, path: styleguide/modules/ROOT/pages/tabbed-content.adoc, dest: components/sg-tabs.adoc }
+  - { <<: *styleguide, id: sg-examples, path: styleguide/modules/ROOT/pages/examples.adoc, dest: components/sg-examples.adoc }
+  # --- page types ---
+  - { repo: docs-server, ref: release/8.0, id: server-concept-deep-toc, path: modules/manage/pages/manage-security/manage-users-and-roles.adoc, dest: pages/server-concept-deep-toc.adoc, maxLines: 420 }
+  - { repo: docs-server, ref: release/8.0, id: server-deprecated, path: modules/rest-api/pages/deprecated-security-apis/upload-retrieve-root-cert.adoc, dest: pages/server-deprecated.adoc }
+  - { repo: docs-sdk-java, ref: release/3.13, id: sdk-howto, path: modules/howtos/pages/kv-operations.adoc, dest: pages/sdk-howto.adoc }
+  - { repo: docs-couchbase-lite, ref: release/4.1, id: cbl-callouts, path: modules/csharp/pages/replication.adoc, dest: pages/cbl-callouts.adoc, maxLines: 520 }
+  - { repo: docs-enterprise-analytics, ref: release/3.0, id: analytics-tables, path: modules/sqlpp/pages/8_builtin.adoc, dest: pages/analytics-tables.adoc, maxLines: 260 }
+  - { repo: docs-devex, ref: release/8.0, id: devex-long-output, path: modules/indexes/pages/groupby-aggregate-performance.adoc, dest: pages/devex-long-output.adoc, maxLines: 420 }
+  # --- Capella / App Services / AI (labels come from component antora.yml in the real build) ---
+  - { repo: docs-capella, ref: main, id: capella-tutorial, path: modules/get-started/pages/create-account.adoc, dest: capella/capella-tutorial.adoc, attrs: [':page-component-name: cloud', ':page-capella-type: Operational'] }
+  - { repo: docs-capella, ref: main, id: capella-ui-macros, path: modules/organizations/pages/manage-organization-users.adoc, dest: capella/capella-ui-macros.adoc, attrs: [':page-component-name: cloud', ':page-capella-type: Operational'] }
+  - { repo: docs-capella, ref: main, id: capella-release-notes, path: modules/release-notes/pages/release-notes.adoc, dest: capella/capella-release-notes.adoc, attrs: [':page-component-name: cloud', ':page-capella-type: Operational'], maxLines: 320 }
+  - { repo: docs-capella-app-services, ref: main, id: app-services-tutorial, path: modules/ROOT/pages/get-started/configuring-app-services.adoc, dest: capella/app-services-tutorial.adoc, attrs: [':page-component-name: cloud', ':page-capella-type: App Services'] }
+  - { repo: docs-ai, ref: main, id: ai-guide, path: modules/build/pages/ai-functions.adoc, dest: capella/ai-guide.adoc, attrs: [':page-component-name: cloud', ':page-capella-type: AI'], maxLines: 300 }
+  # --- Redocly output: smallest committed partial, inlined (page-layout: rest-api) ---
+  - { repo: docs-capella-app-services, ref: main, id: redocly-metric, path: modules/ROOT/pages/references/rest_api_metric.adoc, dest: rest-api/redocly-metric.adoc, inline: { 'partial$capella-openapi-metric.html': modules/ROOT/partials/capella-openapi-metric.html } }
