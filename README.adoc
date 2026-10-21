@@ -62,7 +62,7 @@ This section offers a basic tutorial to learn how to set up the UI project, prev
 To preview and bundle the UI, you need the following software on your computer:
 
 * {url-git}[git] (command: `git`)
-* {url-node}[Node 10] (command: `node`)
+* {url-node}[Node 18.12 or later] (command: `node`; Node 20 is used for deploy previews)
 * {url-gulp}[Gulp CLI] (command: `gulp`)
 
 ==== git
@@ -73,31 +73,31 @@ First, make sure you have git installed.
 
 If not, {url-git-dl}[download and install] the git package for your system.
 
-==== Node 10
+==== Node 18+
 
-Next, make sure that you have Node 10 installed.
+Next, make sure that you have Node 18.12 or later installed (Node 20 is recommended).
 
  $ node -v
 
 If this command fails with an error, you don't have Node installed.
-If the command doesn't report a Node 10 version (e.g., v10.15.3), then you don't have a suitable version of Node installed.
+If the command doesn't report a Node 18 or later version (e.g., v20.11.0), then you don't have a suitable version of Node installed.
 
 While you can install Node from the official packages, we strongly recommend that you use {url-nvm}[nvm] (Node Version Manager) to install and manage Node.
 Follow the {url-nvm-install}[nvm installation instructions] to set up nvm on your machine.
 
-Once you've installed nvm, open a new terminal and install Node 10 using the following command:
+Once you've installed nvm, open a new terminal and install Node 20 using the following command:
 
- $ nvm install 10
+ $ nvm install 20
 
 You can switch to this version of Node at any time using the following command:
 
- $ nvm use 10
+ $ nvm use 20
 
-To make Node 10 the default in new terminals, type:
+To make Node 20 the default in new terminals, type:
 
- $ nvm alias default 10
+ $ nvm alias default 20
 
-Now that you have Node 10 installed, you can proceed with installing the Gulp CLI.
+Now that you have a suitable version of Node installed, you can proceed with installing the Gulp CLI.
 
 ==== Gulp CLI
 
@@ -198,6 +198,46 @@ Here's how that process works:
 
 The deploy preview works because there is a webhook on the repository that pings \https://api.netlify.com/hooks/github for the following events: push, pull_request, delete_branch.
 Netlify then runs the command specified in netlify.toml, deploys the site, and allocates a temporary URL for it.
+
+=== Test the UI Against Real Content
+
+The sample pages in [.path]_preview-src/_ are synthetic.
+Three further tools let you check changes against real pages without a full docs build.
+They were added as the foundation for the 2026 rebrand (see [.path]_design-decisions/0002-rebrand-2026-ambitious.md_).
+
+==== Fixture pages
+
+[.path]_preview-src/fixtures/_ holds about twenty real pages (landing pages, the style guide's component showcase, each page type, Capella/App Services/AI labels, release notes and a small Redocly API reference) imported from the content repos.
+They appear in `gulp preview` like any other preview page.
+To refresh them from your local clones of the content repos (read via `git show origin/<branch>:<path>`, so nothing is checked out):
+
+ $ npm run import:fixtures
+
+Sources, branches and trims are listed in [.path]_preview-src/fixtures/manifest.yml_; imported commits are recorded in `manifest.lock.json`.
+
+==== Visual regression tests
+
+Playwright screenshots every preview page at desktop, tablet and mobile widths, with third-party requests blocked so runs are deterministic.
+Baselines are not committed (they are about 50 MB).
+Generate them from a base ref, then compare your branch against them:
+
+ $ npx playwright install chromium      # first time only
+ $ npm run test:visual:baseline         # builds origin/master in a temporary worktree and records screenshots
+ $ npm run test:visual                  # builds your working tree and compares
+
+Pass another ref to the baseline script, e.g. `sh scripts/visual-baseline.sh my-branch`.
+Use `npm run test:visual:update` to accept your changes as the new baselines, and open `playwright-report/index.html` to see diffs.
+
+==== Real Antora build
+
+`gulp preview` does not run Antora, so it cannot show real navigation, version selectors, nav groups or search metadata.
+To build a real site with this UI from the docs-site playbook:
+
+ $ node scripts/build-fixtures.js --subset      # ~14 sources, for quick local runs; omit --subset for all sources
+ $ node scripts/serve-public.js build/fixtures-site 5255
+
+This derives a playbook from [.path]_../docs-site/antora-playbook.preview2.yml_ (override the location with `DOCS_SITE_DIR`), resets any work-in-progress branches to those in the main playbook, uses your freshly built UI bundle, and enables the Chat UI.
+It needs network access to the content repositories and docs-site's `node_modules` (`npm install` in docs-site).
 
 === Package for Use with Antora
 

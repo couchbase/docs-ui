@@ -1,6 +1,6 @@
 # 0002: Ambitious rebrand of docs-ui (staged plan)
 
-- **Status:** Approved plan; Phase 0 not started. Fonts are available in `fonts/` (untracked at time of writing).
+- **Status:** Approved plan. Phase 0 largely done on branch `rebrand-phase0` (see Progress log); Phase 1 onwards not started.
 - **Date:** 2026-10-21
 - **Follows:** [0001](0001-brand-guidelines-2026.md)
 - **To confirm:** Hakim to double-check the Centra No. 2 web licence covers docs.couchbase.com (assumed OK; not blocking).
@@ -94,3 +94,23 @@ P0 foundations -> P1 platform wins (can ship independently, no visual change) ->
 - Area colours for product-area accents (needs a small palette agreed with brand; keep within Red/Gold/Sand/Teal where possible).
 - Which Web design contact(s) to invite at the Phase 2 decision gate.
 - Whether to centralise Redocly theme distribution (script/shared repo) or keep manual copy.
+
+## Progress log
+
+### Phase 0 (2026-10-21, branch `rebrand-phase0`)
+Done:
+- **Fixtures (Tier 1):** 20 real pages in `preview-src/fixtures/` (manifest + `scripts/import-fixtures.js`, read via `git show`, pinned in `manifest.lock.json`). Includes the small Redocly partial from `docs-capella-app-services`. Known upstream quirks kept as-is: landing pages emit level-0 section and out-of-sequence heading warnings; `analytics-tables` has 5-column headers over 4-cell rows; callout lists whose code came from omitted includes warn "no callout found".
+- **Fixtures (Tier 2):** `scripts/build-fixtures.js` derives a playbook from `docs-site/antora-playbook.preview2.yml` (WIP branches reset to the main playbook's, local UI bundle, Chat UI enabled). `--subset` (14 sources) builds in about 2 minutes to ~4,800 pages / 590 MB under `build/fixtures-site`. The generated playbook is written to the OS temp dir because the same file inside `docs-ui/build/` made docs-site's `override-url-component.js` fail (`contentCatalog.createFile is not a function`); root cause unknown. Full (non-subset) run not yet tried.
+- **Visual regression:** Playwright suite, 99 screenshots (33 pages x desktop/tablet/mobile), deterministic across repeated runs, proven to detect a deliberate colour change. Baselines are not committed (~50 MB); `scripts/visual-baseline.sh <ref>` generates them from a base ref in a temporary worktree.
+- **Tooling (decision: PostCSS 8 stack, not lightningcss):** postcss 8, gulp-postcss 10, postcss-import 16, postcss-url 10, autoprefixer 10, cssnano 7, postcss-nesting. `postcss-custom-properties` and `postcss-calc` removed, so CSS variables now survive into the output (required for dark mode). Chosen because it keeps the repo's custom `postcss-url` and dependency-mtime logic; lightningcss remains an option later. Verified zero visual change (preview and minified production CSS). Node requirement raised to >= 18.12 and Netlify `NODE_VERSION` from 10 to 20: **check Netlify deploy previews still build**.
+- **Fonts self-hosted:** Open Sans (brand-supplied files), Source Sans Pro and Source Code Pro (`typeface-*` npm packages); Google Fonts imports removed (the CSP `font-src` in `head-first.hbs` still lists fonts.gstatic.com and can be tightened later). Inter and Centra No. 2 are declared in `typeface-brand-2026.css` but unused until Phase 2.
+- **Semantic token layer** added to `vars.css`; 46 exact-match hex colours replaced by tokens; three never-resolving variable references made explicit (`inherit`). One-off near-miss colours (`#1174e0`, `#ea2328`, `#fafafa`, ...) deliberately left for Phase 3.
+- Dead FA Light `::after` rule removed.
+
+Deliberately not done:
+- **Unreferenced images not deleted** (`logo.svg`, `logo.png`, `couchbase-logo.png`, `menu.svg`, `video-media.svg`, `landing-icon.svg`, `social-icon/*`, `landing-page-icon/{book-reader,sdk}-icon.svg`): not referenced in this repo or in 19 content repos, but external pages or uncloned content (e.g. tutorials) could hotlink `/_/img/...`. Revisit with web analytics or at a major version.
+- **`swagger-ui.css` kept:** earlier review thought it dead, but a Capella page uses the swagger-ui macro.
+
+Findings to act on:
+- **FontAwesome Pro token is needed for faithful builds.** Without it the header buttons (Ask AI, Downloads, Try Free) show a missing-icon placeholder in both the preview and real builds, and the visual baselines inherit that. CI and contributors need `FONTAWESOME_NPM_AUTH_TOKEN` (see README) before baselines are treated as the reference.
+- Visual baselines currently reflect the pre-rebrand look with self-hosted fonts; regenerate from `master` after this branch merges.
