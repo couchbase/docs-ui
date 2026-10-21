@@ -7,6 +7,13 @@
     "type": "git",
     "url": "https://github.com/couchbase/docs-ui"
   },
+  "scripts": {
+    "import:fixtures": "node scripts/import-fixtures.js",
+    "preview:build": "gulp preview:build",
+    "test:visual": "gulp preview:build && playwright test",
+    "test:visual:update": "gulp preview:build && playwright test --update-snapshots",
+    "test:visual:baseline": "sh scripts/visual-baseline.sh"
+  },
   "engines": {
     "node": ">= 10.0.0"
   },
@@ -22,6 +29,7 @@
     "@fortawesome/free-regular-svg-icons": "~5.13",
     "@fortawesome/free-solid-svg-icons": "~5.13",
     "@octokit/rest": "~18.0",
+    "@playwright/test": "^1.64.1",
     "algoliasearch": "~4.10",
     "autoprefixer": "~9.8",
     "browser-pack-flat": "~3.4",
