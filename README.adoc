@@ -62,7 +62,7 @@ This section offers a basic tutorial to learn how to set up the UI project, prev
 To preview and bundle the UI, you need the following software on your computer:
 
 * {url-git}[git] (command: `git`)
-* {url-node}[Node 18.12 or later] (command: `node`; Node 20 is used for deploy previews)
+* {url-node}[Node 18.12 or later] (command: `node`)
 * {url-gulp}[Gulp CLI] (command: `gulp`)
 
 ==== git
@@ -237,7 +237,7 @@ To build a real site with this UI from the docs-site playbook:
  $ node scripts/serve-public.js build/fixtures-site 5255
 
 This derives a playbook from [.path]_../docs-site/antora-playbook.preview2.yml_ (override the location with `DOCS_SITE_DIR`), resets any work-in-progress branches to those in the main playbook, uses your freshly built UI bundle, and enables the Chat UI.
-It needs network access to the content repositories and docs-site's `node_modules` (`npm install` in docs-site).
+It needs network access to the content repositories, docs-site's `node_modules` (`npm install` in docs-site; Antora 3.2 or later is required and docs-site's copy is used, not any global one) and, for faithful icons, ripgrep (`rg`) plus the FontAwesome Pro packages in docs-site's `scripts` folder (the script runs docs-site's `scripts/populate-icon-defs` afterwards, like the real pipeline).
 
 === Package for Use with Antora
 
