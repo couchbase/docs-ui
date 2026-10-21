@@ -113,7 +113,7 @@
   font-size: 1rem;
   line-height: 1.375rem;
   font-weight: var(--weight-semibold);
-  color: inherit; /* was var(--brand-color-gray1), a typo that never resolved */
+  color: inherit;
 }
 
 .menu_list.is-current-page > .menu_line {

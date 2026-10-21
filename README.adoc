@@ -62,7 +62,7 @@ This section offers a basic tutorial to learn how to set up the UI project, prev
 To preview and bundle the UI, you need the following software on your computer:
 
 * {url-git}[git] (command: `git`)
-* {url-node}[Node 18.12 or later] (command: `node`)
+* {url-node}[Node 24 (Active LTS) or later] (command: `node`)
 * {url-gulp}[Gulp CLI] (command: `gulp`)
 
 ==== git
@@ -73,29 +73,29 @@ First, make sure you have git installed.
 
 If not, {url-git-dl}[download and install] the git package for your system.
 
-==== Node 18+
+==== Node 24
 
-Next, make sure that you have Node 18.12 or later installed (Node 20 is recommended).
+Next, make sure that you have Node 24 (the current Active LTS) or later installed.
 
  $ node -v
 
 If this command fails with an error, you don't have Node installed.
-If the command doesn't report a Node 18 or later version (e.g., v20.11.0), then you don't have a suitable version of Node installed.
+If the command doesn't report a Node 24 or later version (e.g., v24.11.0), then you don't have a suitable version of Node installed.
 
 While you can install Node from the official packages, we strongly recommend that you use {url-nvm}[nvm] (Node Version Manager) to install and manage Node.
 Follow the {url-nvm-install}[nvm installation instructions] to set up nvm on your machine.
 
-Once you've installed nvm, open a new terminal and install Node 20 using the following command:
+Once you've installed nvm, open a new terminal and install Node 24 using the following command:
 
- $ nvm install 20
+ $ nvm install 24
 
 You can switch to this version of Node at any time using the following command:
 
- $ nvm use 20
+ $ nvm use 24
 
-To make Node 20 the default in new terminals, type:
+To make Node 24 the default in new terminals, type:
 
- $ nvm alias default 20
+ $ nvm alias default 24
 
 Now that you have a suitable version of Node installed, you can proceed with installing the Gulp CLI.
 
