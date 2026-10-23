@@ -70,7 +70,7 @@
 }
 
 .doc.landing-page-doc .filter-info span {
-  color: var(--color-brand-light-blue);
+  color: var(--link);
   border-radius: 8px;
   border: 1px solid var(--color-brand-light-blue);
   padding: 6px 10px;

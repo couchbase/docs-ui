@@ -15,7 +15,19 @@ module.exports = defineConfig({
   outputDir: 'test-results',
   fullyParallel: true,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
-  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.001, animations: 'disabled', caret: 'hide' } },
+  // Defaults were measured: on an unchanged tree the noisiest pages differ by about 240 pixels (0.013%), so allowing
+  // 0.03% of pixels is stable. The per-pixel colour distance (YIQ) must be tiny: it is almost blind to low-saturation
+  // changes, and 0.05 let a whole-footer shift from neutral grey to cream pass. (Playwright's own defaults, 0.2 and
+  // no pixel limit, let a link-colour change on every page pass.)
+  // Override with VISUAL_THRESHOLD (0-1) and VISUAL_RATIO (fraction of pixels).
+  expect: {
+    toHaveScreenshot: {
+      threshold: process.env.VISUAL_THRESHOLD === undefined ? 0.01 : Number(process.env.VISUAL_THRESHOLD),
+      maxDiffPixelRatio: process.env.VISUAL_RATIO === undefined ? 0.0003 : Number(process.env.VISUAL_RATIO),
+      animations: 'disabled',
+      caret: 'hide',
+    },
+  },
   use: {
     baseURL: `http://localhost:${PORT}`,
     locale: 'en-GB',

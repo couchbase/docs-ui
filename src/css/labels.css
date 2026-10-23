@@ -77,107 +77,77 @@
   background-color: var(--color-brand-light-blue);
 } */
 
-.doc .edition {
-  color: var(--color-brand-blue-secondary);
-  border: 1px solid var(--color-brand-blue-secondary);
+/* Label text is full strength so it meets contrast; the border is the same colour, softened. */
+.doc .edition,
+.doc .status,
+.doc .deprecated,
+.doc .concept,
+.doc .guide,
+.doc .tutorial,
+.doc .reference,
+.doc .columnar,
+.doc .operational,
+.doc .app-services,
+.doc .ai,
+.doc .edition.page-edition {
+  color: var(--label);
+  border: 1px solid color-mix(in sRGB, var(--label) 50%, var(--surface-page));
   border-radius: 3px;
-  opacity: 0.6;
+}
+
+.doc .edition {
+  --label: var(--label-edition);
 }
 
 .doc .status {
-  color: var(--color-brand-caution);
-  border: 1px solid var(--color-brand-caution);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-status);
 }
 
 .doc .deprecated {
-  color: var(--color-brand-red);
-  border: 1px solid var(--color-brand-red);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-deprecated);
 }
 
 .doc .concept {
-  color: var(--color-yellow);
-  border: 1px solid var(--color-yellow);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-concept);
 }
 
 .doc .guide {
-  color: var(--color-brand-pink);
-  border: 1px solid var(--color-brand-pink);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-guide);
 }
 
 .doc .tutorial {
-  color: var(--color-brand-green);
-  border: 1px solid var(--color-brand-green);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-tutorial);
 }
 
 .doc .reference {
-  color: var(--color-brand-purple);
-  border: 1px solid var(--color-brand-purple);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-reference);
 }
 
 /* Capella types: columnar,  operational, ai, app-services */
 .doc .columnar {
-  color: var(--color-brand-caution);
-  border: 1px solid var(--color-brand-caution);
-  border-radius: 3px;
-  opacity: 1;
+  --label: var(--label-columnar);
 }
 
 .doc .operational {
-  color: var(--color-brand-red);
-  border: 1px solid var(--color-brand-red);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-operational);
 }
 
 .doc .app-services {
-  color: var(--color-brand-purple-secondary);
-  border: 1px solid var(--color-brand-purple-secondary);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-app-services);
 }
 
 .doc .ai {
-  color: var(--color-brand-green-secondary);
-  border: 1px solid var(--color-brand-green-secondary);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-ai);
 }
 
 .doc .edition.page-edition {
-  color: var(--text-subtle);
-  border: 1px solid var(--text-subtle);
-  border-radius: 3px;
-  opacity: 0.6;
+  --label: var(--label-page-edition);
 }
 
-.doc .edition a {
-  color: var(--color-brand-blue-secondary);
-}
-
-.doc .status a {
-  color: var(--color-brand-caution);
-}
-
+.doc .edition a,
+.doc .status a,
 .doc .edition.page-edition a {
-  color: var(--text-subtle);
-}
-
-.doc .edition:hover,
-.doc .status:hover,
-.doc .edition.page-edition:hover {
-  opacity: 1;
+  color: var(--label);
 }
 
 /* .doc .labels span:first-child,

@@ -236,7 +236,9 @@ Two more checks run alongside the screenshots:
 
 The suite also fails any page that scrolls horizontally at the three widths (`tests/visual/layout.spec.js`; pages that already overflowed are listed there as expected failures).
 Each failing page gets `-expected.png`, `-actual.png` and `-diff.png` under `test-results/`; `npx playwright show-report` opens an HTML report with side-by-side and slider views.
-Accept intended changes with `npm run test:visual:update`.
+Accept intended changes with `npm run test:visual:update`, which records the exact current state (it compares at zero tolerance, because Playwright only rewrites screenshots that fail the tolerance and a small colour change would otherwise keep its old baseline).
+The comparison tolerances are deliberately tight (per-pixel distance 0.01, 0.03% of pixels), measured against the noise on an unchanged tree; Playwright's defaults let a link-colour change on every page pass.
+Override with `VISUAL_THRESHOLD` and `VISUAL_RATIO` if you need to.
 
 To compare against another ref instead, `npm run test:visual:baseline [ref]` (default `origin/master`) builds that ref's `src/` in a temporary worktree, using the current build tooling, and records its screenshots.
 Note that the tests block Google Fonts, so a ref that still loads them (before fonts were self-hosted) renders in fallback fonts and will differ on every page.

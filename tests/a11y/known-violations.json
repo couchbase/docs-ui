@@ -1,45 +1,19 @@
 {
-  "404.html": {
-    "link-in-text-block": 1
-  },
-  "fixtures/capella/ai-guide.html": {
-    "color-contrast": 11,
-    "link-in-text-block": 16
-  },
+  "404.html": {},
+  "fixtures/capella/ai-guide.html": {},
   "fixtures/capella/app-services-tutorial.html": {
-    "color-contrast": 25,
-    "link-in-text-block": 8
+    "color-contrast": 7
   },
-  "fixtures/capella/capella-release-notes.html": {
-    "color-contrast": 17,
-    "link-in-text-block": 30
-  },
-  "fixtures/capella/capella-tutorial.html": {
-    "color-contrast": 15,
-    "link-in-text-block": 27
-  },
-  "fixtures/capella/capella-ui-macros.html": {
-    "color-contrast": 13,
-    "link-in-text-block": 6
-  },
-  "fixtures/components/sg-admonitions.html": {
-    "color-contrast": 10,
-    "link-in-text-block": 3
-  },
+  "fixtures/capella/capella-release-notes.html": {},
+  "fixtures/capella/capella-tutorial.html": {},
+  "fixtures/capella/capella-ui-macros.html": {},
+  "fixtures/components/sg-admonitions.html": {},
   "fixtures/components/sg-examples.html": {
-    "color-contrast": 18,
-    "link-in-text-block": 3
+    "color-contrast": 8
   },
-  "fixtures/components/sg-tabs.html": {
-    "color-contrast": 5,
-    "link-in-text-block": 2
-  },
-  "fixtures/index.html": {
-    "color-contrast": 6
-  },
-  "fixtures/landing/home-cloud.html": {
-    "color-contrast": 22
-  },
+  "fixtures/components/sg-tabs.html": {},
+  "fixtures/index.html": {},
+  "fixtures/landing/home-cloud.html": {},
   "fixtures/landing/home-index.html": {
     "empty-heading": 19,
     "heading-order": 6
@@ -50,78 +24,55 @@
     "page-has-heading-one": 1
   },
   "fixtures/landing/home-server.html": {
-    "color-contrast": 71,
     "empty-heading": 11,
     "heading-order": 4
   },
-  "fixtures/landing/home-start-here.html": {
-    "color-contrast": 12
-  },
+  "fixtures/landing/home-start-here.html": {},
   "fixtures/pages/analytics-tables.html": {
-    "color-contrast": 13,
     "empty-table-header": 30
   },
   "fixtures/pages/cbl-callouts.html": {
-    "color-contrast": 44,
-    "link-in-text-block": 25
+    "color-contrast": 21
   },
   "fixtures/pages/devex-long-output.html": {
-    "color-contrast": 158,
-    "definition-list": 2,
-    "link-in-text-block": 1
+    "color-contrast": 128,
+    "definition-list": 2
   },
-  "fixtures/pages/sdk-howto.html": {
-    "color-contrast": 62,
-    "link-in-text-block": 6
-  },
-  "fixtures/pages/server-concept-deep-toc.html": {
-    "color-contrast": 17,
-    "link-in-text-block": 26
-  },
-  "fixtures/pages/server-deprecated.html": {
-    "color-contrast": 12,
-    "link-in-text-block": 7
-  },
+  "fixtures/pages/sdk-howto.html": {},
+  "fixtures/pages/server-concept-deep-toc.html": {},
+  "fixtures/pages/server-deprecated.html": {},
   "fixtures/rest-api/redocly-metric.html": {
     "landmark-unique": 1,
     "nested-interactive": 1,
     "select-name": 1
   },
   "home.html": {
-    "color-contrast": 18,
     "heading-order": 1
   },
   "index.html": {
-    "color-contrast": 106,
-    "link-in-text-block": 4
+    "color-contrast": 51
   },
   "landing-page-core-concept.html": {
-    "color-contrast": 11,
     "empty-heading": 6,
     "frame-title": 1,
     "heading-order": 2
   },
   "landing-page-sdk.html": {
-    "color-contrast": 6,
     "empty-heading": 10,
     "heading-order": 2
   },
   "landing-page-top-level-sdk.html": {
-    "color-contrast": 1,
     "empty-heading": 10,
     "heading-order": 2
   },
   "landing-page-tutorials.html": {
-    "color-contrast": 17,
     "empty-heading": 8,
     "heading-order": 8
   },
   "landing-page.html": {
     "page-has-heading-one": 1
   },
-  "noindex.html": {
-    "color-contrast": 4
-  },
+  "noindex.html": {},
   "rest-api.html": {
     "page-has-heading-one": 1
   },
@@ -129,11 +80,8 @@
     "color-contrast": 10,
     "page-has-heading-one": 1
   },
-  "tiles.html": {
-    "color-contrast": 8
-  },
+  "tiles.html": {},
   "tutorials.html": {
-    "color-contrast": 7,
     "empty-heading": 14,
     "region": 5
   }

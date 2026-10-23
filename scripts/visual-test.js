@@ -28,7 +28,7 @@ const env = {
   ALGOLIA_IDX_NAME: 'visual_test',
 }
 // test controls (not rendering inputs) that may be passed through
-for (const name of ['VISUAL_PORT', 'A11Y_UPDATE']) if (process.env[name]) env[name] = process.env[name]
+for (const name of ['VISUAL_PORT', 'A11Y_UPDATE', 'VISUAL_THRESHOLD', 'VISUAL_RATIO']) if (process.env[name]) env[name] = process.env[name]
 Object.keys(env).forEach((k) => env[k] === undefined && delete env[k])
 
 // Icons: the preview renders real icons only if the FontAwesome Pro packages are installed (see README).
@@ -37,6 +37,13 @@ if (!fs.existsSync(path.join(root, 'node_modules', '@fortawesome', 'pro-solid-sv
     'WARNING: FontAwesome Pro packages are not installed, so some icons will not render and screenshots will ' +
       'differ from baselines made with them. See the README for the .npmrc token.'
   )
+}
+
+// Accepting new baselines must record the exact current state: Playwright only rewrites screenshots that fail the
+// tolerance, so at the lenient defaults a change smaller than that (e.g. a colour tweak) would silently keep the old one.
+if (process.argv.includes('--update-snapshots')) {
+  env.VISUAL_THRESHOLD = '0'
+  env.VISUAL_RATIO = '0'
 }
 
 const run = (cmd, args) => {
