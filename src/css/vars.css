@@ -27,13 +27,16 @@
   --color-brand-accent-light: var(--color-brand-peach);
 
   /* secondary (we need these for docs semantics, despite brand guidelines) */
-  --color-brand-blue: #4287d6;
-  --color-brand-blue-secondary: #0074e0;
-  --color-brand-blue-secondary-light: #2689e5;
-  --color-brand-blue-secondary-extra-light: #73b3ee;
-  --color-link: var(--color-brand-blue-secondary);
-  --color-link-active: var(--color-brand-blue-secondary-light);
-  --color-link-hover: var(--color-brand-blue-secondary-extra-light);
+  /* One docs blue. --link is the single source: change it to change every link, and the blues derived from it.
+     #0068ca is at least 4.6:1 on white, the nav grey, cream and the sunken grey (the previous #0074e0 was 4.0-4.6). */
+  --link: #0068ca;
+  --link-hover: color-mix(in sRGB, var(--link) 80%, black);
+  --link-active: color-mix(in sRGB, var(--link) 65%, black);
+  --color-brand-blue: var(--link);
+  --color-brand-blue-secondary: var(--link);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-link-active: var(--link-active);
   --color-brand-green-secondary: #366407;
   --color-brand-purple-secondary: #76309e;
 
@@ -46,16 +49,18 @@
   --color-brand-purple: #b36cdb;
   --color-brand-purple-tint: #f4e9fa;
   --color-brand-tip: #2ca01c;
-  --color-brand-note: #0074e0;
+  --color-brand-note: var(--link);
   --color-brand-important: #b36cdb;
   --color-brand-warning: var(--color-brand-red);
   --color-brand-caution: #ff8f00;
+  --color-caution-border: #db7b00; /* 3:1 on white for admonition borders (orange #ff8f00 was 2.3:1) */
+  --color-caution-text: #ae6200; /* 4.6:1 on white */
   /* tertiary */
   --color-gray-rgb: 115, 118, 138;
   --color-brand-gray1: #292b36;
   --color-brand-gray2: #3d4151;
   --color-brand-gray3: #52566c;
-  --color-brand-gray4: #73768a;
+  --color-brand-gray4: #66687a; /* muted text: 4.9:1 or better on white, nav grey and cream (was #73768a, 4.48:1) */
   --color-brand-gray5: #c8cbdf;
   --color-brand-gray6: #eaebf1;
   --color-brand-gray7: #f9f9f9;
@@ -84,9 +89,23 @@
   --surface-code: #f1f7fe;
   --text-strong: var(--color-brand-gray1);
   --text-muted: var(--color-brand-gray4);
-  --text-subtle: #999; /* NOTE fails WCAG AA on white (2.85:1): revisit in the colour phase */
+  --text-subtle: #717171; /* 4.6:1 or better on white and the nav grey */
   --text-inverse: var(--color-brand-white);
   --border-subtle: var(--color-brand-gray8);
+
+  /* Label (pill) text colours, all at least 4.5:1 on white; borders are the same hue, softened where they are used */
+  --label-edition: var(--link);
+  --label-status: var(--color-caution-text);
+  --label-deprecated: var(--color-brand-red);
+  --label-concept: #8e7205;
+  --label-guide: #e4194b;
+  --label-tutorial: #008286;
+  --label-reference: #a34dd3;
+  --label-columnar: var(--color-caution-text);
+  --label-operational: var(--color-brand-red);
+  --label-app-services: var(--color-brand-purple-secondary);
+  --label-ai: var(--color-brand-green-secondary);
+  --label-page-edition: var(--text-subtle);
   --color-navbar-bg: var(--color-brand-black);
   --color-navbar-text: var(--color-brand-white);
   --color-footer-bg: var(--color-shade);
@@ -135,7 +154,7 @@
   --z-index-nav: 1;
 
   /* Color brand tabsets */
-  --color-active-tabset: #57a1ff;
+  --color-active-tabset: var(--link);
 
   /* New  design font style */
 

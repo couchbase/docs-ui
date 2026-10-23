@@ -86,7 +86,7 @@
 }
 
 .home .card {
-  color: var(--text-inverse);
+  color: var(--color-brand-black);
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;
@@ -299,7 +299,7 @@ mark {
 }
 
 .tutorials.body.tiles .sect1 > h2 {
-  color: white;
+  color: var(--color-brand-black);
   line-height: 2.2rem;
   min-width: 100%;
   text-align: center;

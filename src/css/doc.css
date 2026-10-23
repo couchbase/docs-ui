@@ -364,7 +364,7 @@ ul ul ul {
 }
 
 .doc .admonitionblock.caution tr {
-  border-left: 4px solid var(--color-brand-caution);
+  border-left: 4px solid var(--color-caution-border);
 }
 
 .doc .admonitionblock.important > table {
