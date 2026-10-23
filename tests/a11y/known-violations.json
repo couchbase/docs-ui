@@ -1,33 +1,17 @@
 {
-  "404.html": {
-    "link-in-text-block": 1
-  },
-  "fixtures/capella/ai-guide.html": {
-    "link-in-text-block": 16
-  },
+  "404.html": {},
+  "fixtures/capella/ai-guide.html": {},
   "fixtures/capella/app-services-tutorial.html": {
-    "color-contrast": 7,
-    "link-in-text-block": 8
+    "color-contrast": 7
   },
-  "fixtures/capella/capella-release-notes.html": {
-    "link-in-text-block": 30
-  },
-  "fixtures/capella/capella-tutorial.html": {
-    "link-in-text-block": 27
-  },
-  "fixtures/capella/capella-ui-macros.html": {
-    "link-in-text-block": 6
-  },
-  "fixtures/components/sg-admonitions.html": {
-    "link-in-text-block": 3
-  },
+  "fixtures/capella/capella-release-notes.html": {},
+  "fixtures/capella/capella-tutorial.html": {},
+  "fixtures/capella/capella-ui-macros.html": {},
+  "fixtures/components/sg-admonitions.html": {},
   "fixtures/components/sg-examples.html": {
-    "color-contrast": 8,
-    "link-in-text-block": 3
+    "color-contrast": 8
   },
-  "fixtures/components/sg-tabs.html": {
-    "link-in-text-block": 2
-  },
+  "fixtures/components/sg-tabs.html": {},
   "fixtures/index.html": {},
   "fixtures/landing/home-cloud.html": {},
   "fixtures/landing/home-index.html": {
@@ -48,23 +32,15 @@
     "empty-table-header": 30
   },
   "fixtures/pages/cbl-callouts.html": {
-    "color-contrast": 21,
-    "link-in-text-block": 26
+    "color-contrast": 21
   },
   "fixtures/pages/devex-long-output.html": {
     "color-contrast": 128,
-    "definition-list": 2,
-    "link-in-text-block": 1
+    "definition-list": 2
   },
-  "fixtures/pages/sdk-howto.html": {
-    "link-in-text-block": 6
-  },
-  "fixtures/pages/server-concept-deep-toc.html": {
-    "link-in-text-block": 26
-  },
-  "fixtures/pages/server-deprecated.html": {
-    "link-in-text-block": 7
-  },
+  "fixtures/pages/sdk-howto.html": {},
+  "fixtures/pages/server-concept-deep-toc.html": {},
+  "fixtures/pages/server-deprecated.html": {},
   "fixtures/rest-api/redocly-metric.html": {
     "landmark-unique": 1,
     "nested-interactive": 1,
@@ -74,8 +50,7 @@
     "heading-order": 1
   },
   "index.html": {
-    "color-contrast": 51,
-    "link-in-text-block": 4
+    "color-contrast": 51
   },
   "landing-page-core-concept.html": {
     "empty-heading": 6,
