@@ -32,10 +32,6 @@
   margin: 0;
 }
 
-.tablist > ul li:focus-visible {
-  outline: none;
-}
-
 .tablist.ulist {
   margin: 0;
 }

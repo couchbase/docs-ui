@@ -6,6 +6,17 @@
   cursor: pointer;
 }
 
+button.copy-code-button,
+button.run-code {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  line-height: inherit;
+  text-align: inherit;
+}
+
 .view-source-button:hover,
 .copy-code-button:hover {
   text-decoration: none;
@@ -14,7 +25,9 @@
 a.view-source-button:focus,
 a.view-source-button:hover,
 a.copy-code-button:focus,
-a.copy-code-button:hover {
+a.copy-code-button:hover,
+button.copy-code-button:focus,
+button.copy-code-button:hover {
   color: var(--color-brand-gray4);
 }
 
@@ -177,7 +190,8 @@ code::-webkit-scrollbar-thumb {
   margin-right: 5px;
 }
 
-.run-code {
+.run-code,
+button.run-code {
   background: var(--color-brand-blue-secondary);
   color: var(--text-inverse);
   cursor: pointer;

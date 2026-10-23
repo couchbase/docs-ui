@@ -19,16 +19,74 @@ body {
   font-family: var(--font-body);
   line-height: var(--line-height-body);
   margin: 0;
-  scroll-behavior: smooth;
 }
 
-body.rest-api {
-  scroll-behavior: initial;
+/* Anchor targets stop below the fixed header; the TOC scroll-spy reads this same value. */
+:root {
+  scroll-padding-top: var(--h2-heading-top-space);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Redoc positions its own anchors (see scrollYOffset in the generated theme) */
+:root:has(body.rest-api) {
+  scroll-padding-top: 0;
+  scroll-behavior: auto;
+}
+
+/* Keyboard focus is always visible; pointer clicks do not show it (:focus-visible). */
+:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+/* programmatic focus targets such as <main id="main-content" tabindex="-1"> */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+[type="checkbox"]:focus-visible + label::before {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: off-screen until it receives keyboard focus */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--color-brand-black);
+  color: var(--text-inverse);
+  font-weight: var(--weight-semibold);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+  color: var(--text-inverse);
+  text-decoration: none;
 }
 
 a {
   color: var(--color-link);
-  outline: none;
   text-decoration: none;
   font-family: var(--font-body);
 }
@@ -47,7 +105,6 @@ button,
 input,
 select {
   font-family: inherit;
-  outline: none;
 }
 
 button {
@@ -446,5 +503,16 @@ label::after {
 
   .mb-lg-5 {
     margin-bottom: var(--base-large-space) !important;   /* 32px */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -7,10 +7,22 @@
   var footer = document.querySelector('.footer')
 
   if (menuExpandToggle) {
+    var syncMenuExpandToggle = function () {
+      menuExpandToggle.setAttribute('aria-expanded', String(!nav.classList.contains('collapse-menu')))
+    }
+    syncMenuExpandToggle()
     menuExpandToggle.addEventListener('click', function (e) {
       e.preventDefault()
       nav.classList.toggle('collapse-menu')
       footer.classList.toggle('remove-margin')
+      syncMenuExpandToggle()
+    })
+    // role=button on a link: Space must activate it as well as Enter
+    menuExpandToggle.addEventListener('keydown', function (e) {
+      if (e.key === ' ') {
+        e.preventDefault()
+        menuExpandToggle.click()
+      }
     })
   }
 
@@ -155,6 +167,7 @@
           componentVersionSelectEl = pageVersions.content.querySelector('.version_list')
         } else {
           componentVersionSelectEl = createElement('select', 'version_list')
+          componentVersionSelectEl.setAttribute('aria-label', 'Version')
           componentNavData.versions.forEach(function (componentVersion) {
             var optionEl = createElement('option')
             optionEl.value = componentVersion.version

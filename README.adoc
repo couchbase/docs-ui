@@ -227,6 +227,13 @@ Baselines are not committed (they are about 50 MB) and are specific to the OS th
  $ npm run test:visual:update           # record baselines from your working tree (a known-good state)
  $ npm run test:visual                  # rebuild and compare; failures list the pages
 
+Two more checks run alongside the screenshots:
+
+* *Anchor behaviour* (`tests/behaviour/anchors.spec.js`): following a `#fragment`, on load or from the "On this page" TOC, must leave the heading visible below the fixed header, with the matching TOC entry highlighted. Screenshots cannot see scrolling.
+* *Header height* (`tests/behaviour/header-height.spec.js`): the fixed header grows when its nav wraps at some widths; content, side navs and anchor targets must clear it (the test adds nav items to force the wrap, since the preview's header has only two).
+* *Keyboard and assistive-technology behaviour* (`tests/behaviour/keyboard.spec.js`): the skip link, visible focus, the copy button working from the keyboard, labelled landmarks, toggle states and focusable scrolling code.
+* *Accessibility ratchet* (`tests/a11y/axe.spec.js`): axe-core runs on every page and the violating nodes per rule are compared with the committed `tests/a11y/known-violations.json`. A page fails if it gets worse; after improving things, re-record with `A11Y_UPDATE=1 node scripts/visual-test.js --project=behaviour --grep axe`. axe finds only what can be detected automatically, so it complements keyboard and screen-reader testing rather than replacing it.
+
 The suite also fails any page that scrolls horizontally at the three widths (`tests/visual/layout.spec.js`; pages that already overflowed are listed there as expected failures).
 Each failing page gets `-expected.png`, `-actual.png` and `-diff.png` under `test-results/`; `npx playwright show-report` opens an HTML report with side-by-side and slider views.
 Accept intended changes with `npm run test:visual:update`.

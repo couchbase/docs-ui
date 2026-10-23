@@ -26,8 +26,13 @@
     var sourceTypeBoxCol2 = document.createElement('div')
     sourceTypeBoxCol2.className = 'col-2 right-block'
 
-    var copyButton = document.createElement('a')
+    var copyButton = document.createElement('button')
+    copyButton.type = 'button'
     copyButton.className = 'copy-code-button'
+    copyButton.setAttribute('aria-label', 'Copy code to clipboard')
+    var copyStatus = document.createElement('span')
+    copyStatus.className = 'visually-hidden'
+    copyStatus.setAttribute('role', 'status')
     copyButton.dataset.title = 'Copy'
     copyButton.appendChild(document.createElement('i')).className = 'far fa-copy'
     var copyText = document.createTextNode('Copy')
@@ -40,6 +45,13 @@
     var fadeShadow = document.createElement('span')
     fadeShadow.className = 'fade-shadow'
 
+    function announce (message) {
+      copyStatus.textContent = message
+      setTimeout(function () {
+        copyStatus.textContent = ''
+      }, 2000)
+    }
+
     copyButton.addEventListener('click', function (e) {
       var bashText = codeBlock.innerText
       // remove '$' from copy to code functionality in code block console
@@ -49,30 +61,34 @@
         var spliceData = bashText.substring(2)
         navigator.clipboard.writeText(spliceData).then(
           function () {
-            /* Chrome doesn't seem to blur automatically,
-                leaving the button in a focused state. */
-            copyButton.blur()
+            /* Chrome doesn't seem to blur automatically after a click, leaving the button in a focused state;
+                keyboard users must keep their focus (e.detail is 0 for keyboard activation). */
+            if (e.detail > 0) copyButton.blur()
+            announce('Copied to clipboard')
             copyButton.dataset.title = 'Copied ✓'
             setTimeout(function () {
               copyButton.dataset.title = 'Copy'
             }, 2000)
           },
           function () {
+            announce('Copy failed')
             copyButton.dataset.title = 'Error'
           }
         )
       } else {
         navigator.clipboard.writeText(codeBlock.innerText).then(
           function () {
-            /* Chrome doesn't seem to blur automatically,
-                leaving the button in a focused state. */
-            copyButton.blur()
+            /* Chrome doesn't seem to blur automatically after a click, leaving the button in a focused state;
+                keyboard users must keep their focus (e.detail is 0 for keyboard activation). */
+            if (e.detail > 0) copyButton.blur()
+            announce('Copied to clipboard')
             copyButton.dataset.title = 'Copied ✓'
             setTimeout(function () {
               copyButton.dataset.title = 'Copy'
             }, 2000)
           },
           function () {
+            announce('Copy failed')
             copyButton.dataset.title = 'Error'
           }
         )
@@ -83,7 +99,8 @@
     if (codeBlock.matches('.listingblock.try-it code')) {
       codeBlock.contentEditable = true
       codeBlock.spellcheck = false
-      runCodeButton = document.createElement('a')
+      runCodeButton = document.createElement('button')
+      runCodeButton.type = 'button'
       runCodeButton.className = 'run-code'
       runCodeButton.dataset.title = 'Run Code'
       runCodeButton.appendChild(document.createElement('i')).className = 'fas fa-terminal'
@@ -111,8 +128,25 @@
     headingBox.appendChild(dataSource)
     if (viewSourceLink) sourceTypeBoxCol2.appendChild(viewSourceLink)
     sourceTypeBoxCol2.appendChild(copyButton)
+    sourceTypeBoxCol2.appendChild(copyStatus)
     if (runCodeButton) sourceTypeBoxCol2.appendChild(runCodeButton)
     pre.appendChild(fadeShadow)
+  })
+
+  // Code that scrolls sideways must be reachable by keyboard (WCAG 2.1.1): make it focusable only while it overflows.
+  function markScrollableCode () {
+    document.querySelectorAll('pre, pre > code').forEach(function (el) {
+      var scrolls = el.scrollWidth > el.clientWidth + 1 && /auto|scroll/.test(window.getComputedStyle(el).overflowX)
+      if (scrolls) el.setAttribute('tabindex', '0')
+      else if (el.getAttribute('tabindex') === '0') el.removeAttribute('tabindex')
+    })
+  }
+  markScrollableCode()
+  window.addEventListener('load', markScrollableCode)
+  var scrollableCodeTimer
+  window.addEventListener('resize', function () {
+    clearTimeout(scrollableCodeTimer)
+    scrollableCodeTimer = setTimeout(markScrollableCode, 150)
   })
 
   function createRunCodePanel (scope) {

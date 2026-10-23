@@ -1,7 +1,7 @@
 <div class="body container{{#with (or page.role page.attributes.role)}} {{{this}}}{{/with}}">
 {{> nav}}
 {{> toc}}
-<main class="article" data-ceiling="topbar">
+<main class="article" id="main-content" tabindex="-1" data-ceiling="topbar">
 {{> llms-guidance}}
 {{> watermark}}
 {{#unless (or (ne page.attributes.hide-view-latest undefined) (eq page.componentVersion page.component.latest))}}
