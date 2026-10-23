@@ -101,6 +101,13 @@ a:active {
   color: var(--color-link-active);
 }
 
+/* Search matches carried into a page: a gold tint rather than the browser's default yellow */
+mark {
+  background: color-mix(in sRGB, var(--color-brand-orange) 35%, var(--surface-page));
+  color: inherit;
+  border-radius: 2px;
+}
+
 button,
 input,
 select {
