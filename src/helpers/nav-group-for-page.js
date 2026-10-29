@@ -33,6 +33,8 @@ module.exports = (
     return
   }
 
-  return navGroupsAndSubgroups.find(
-    ({ components }) => ~components.indexOf(pageComponentName))
+  // prefer a subgroup over its parent (e.g. Capella Operational over Capella): the
+  // subgroup is the one that carries settings such as expandHeaderLevels
+  return [...subGroups, ...navGroups].find(
+    ({ components }) => components && ~components.indexOf(pageComponentName))
 }
