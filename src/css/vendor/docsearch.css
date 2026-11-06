@@ -524,9 +524,53 @@
   accent-color: var(--pill-color);
 }
 
+/* Disclosure arrow for a group's leaf list (see makeCollapsible). */
+.facet-toggle {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.facet-toggle::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 0.2rem auto 0;
+  border-left: 0.3rem solid transparent;
+  border-right: 0.3rem solid transparent;
+  border-top: 0.4rem solid currentColor;
+  transition: transform 0.15s;
+}
+
+.facet-group.is-collapsed > label .facet-toggle::before {
+  transform: rotate(-90deg);
+}
+
+span.facet-toggle::before {
+  content: none;
+}
+
+#component-list .facet-group.is-collapsed > ul {
+  display: none;
+}
+
+/* Children start under the parent's checkbox (past its arrow/spacer: 1rem
+ * wide + 0.4rem gap); leaf rows, which have no arrow of their own, get an
+ * extra step so they sit visibly inside their group. */
 #component-list .facet-group > ul {
   margin-top: 0.4rem;
-  margin-left: 1em;
+  margin-left: 1.4rem;
+}
+
+#component-list .facet-group > ul > .facet-item {
+  margin-left: 1rem;
 }
 
 .ais-Highlight-highlighted,

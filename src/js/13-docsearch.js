@@ -459,6 +459,46 @@
     },
   })
 
+  // Open/closed state of each leaf-holding facet group, keyed by group title.
+  // The tree is rebuilt on every query change, so this has to live outside
+  // the render. Groups default to collapsed, unless something inside is
+  // already selected (so an active filter is never hidden), until the user
+  // toggles them by hand.
+  var facetGroupOpen = new Map()
+
+  // Adds a disclosure arrow to a group's label and collapses its leaf list.
+  // The button sits inside the label but a <button> is interactive content,
+  // so clicking it doesn't also toggle the group's checkbox -- clicking the
+  // label text still does.
+  function makeCollapsible (li, label, key, hasRefined) {
+    var isOpen = facetGroupOpen.has(key) ? facetGroupOpen.get(key) : hasRefined
+    var button = document.createElement('button')
+    button.type = 'button'
+    button.className = 'facet-toggle'
+    button.setAttribute('aria-label', 'Toggle ' + key + ' components')
+    var sync = function () {
+      li.classList.toggle('is-collapsed', !isOpen)
+      button.setAttribute('aria-expanded', String(isOpen))
+    }
+    button.addEventListener('click', function (event) {
+      event.preventDefault()
+      isOpen = !isOpen
+      facetGroupOpen.set(key, isOpen)
+      sync()
+    })
+    sync()
+    label.insertBefore(button, label.firstChild)
+  }
+
+  // Groups with no arrow (header-only, or nothing matching) get an empty
+  // box the same size, so every group's checkbox lines up.
+  function addToggleSpacer (label) {
+    var spacer = document.createElement('span')
+    spacer.className = 'facet-toggle'
+    spacer.setAttribute('aria-hidden', 'true')
+    label.insertBefore(spacer, label.firstChild)
+  }
+
   var renderRefinementList = function (renderOptions, isFirstRender) {
     var items = renderOptions.items
     var refine = renderOptions.refine
@@ -630,6 +670,11 @@
         node.subGroups.forEach(function (sub) { innerUl.appendChild(renderGroupNode(sub, color)) })
       }
       li.appendChild(innerUl)
+      if (node.components && totalCount > 0) {
+        makeCollapsible(li, label, node.title, anyRefined)
+      } else {
+        addToggleSpacer(label)
+      }
       return li
     }
 
@@ -680,6 +725,7 @@
         if (wrapper.firstElementChild) otherUl.appendChild(wrapper.firstElementChild)
       })
       otherNode.appendChild(otherUl)
+      makeCollapsible(otherNode, otherLabel, 'Other', otherAnyRefined)
     }
 
     var targetUl = listContainer.querySelector('ul')
