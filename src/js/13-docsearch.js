@@ -678,7 +678,11 @@
       return li
     }
 
-    var groupNodes = componentCatalog.navGroups.map(function (node) { return renderGroupNode(node, FALLBACK_PILL_COLOR) })
+    // Header-only entries (a startPage with no components or subGroups, e.g.
+    // "Start Here") are landing pages: nothing to filter on, so no row.
+    var groupNodes = componentCatalog.navGroups
+      .filter(function (node) { return node.components || node.subGroups })
+      .map(function (node) { return renderGroupNode(node, FALLBACK_PILL_COLOR) })
 
     // Anything Algolia returns that isn't in the catalog at all (a brand new
     // component not yet added to any nav_groups config) still needs to show
@@ -906,7 +910,25 @@
       }
     })
 
-    return pills
+    // The catalog can list the same group title in more than one place
+    // (e.g. "Operational SDKs" under both Server and Capella). Show one pill
+    // per label -- first one's colour wins -- whose remove button clears
+    // every value from all the duplicates.
+    var merged = []
+    var byLabel = new Map()
+    pills.forEach(function (pill) {
+      var existing = byLabel.get(pill.label)
+      if (existing) {
+        pill.values.forEach(function (value) {
+          if (!existing.values.includes(value)) existing.values.push(value)
+        })
+      } else {
+        byLabel.set(pill.label, pill)
+        merged.push(pill)
+      }
+    })
+
+    return merged
   }
 
   // Every active component_version refinement, shown as a removable pill
