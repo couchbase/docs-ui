@@ -308,8 +308,17 @@
     if (node.subGroups) node.subGroups.forEach(function (sub) { indexCatalogComponents(sub, color) })
   })({ subGroups: componentCatalog.navGroups }, FALLBACK_PILL_COLOR)
 
-  var searchClient = algoliasearch(container.dataset.appId, container.dataset.apiKey)
-  var indexName = container.dataset.indexName
+  // Typesense takes over when the page was built with TYPESENSE_URL set (see
+  // search-panel.hbs and 12-typesense-client.js); otherwise Algolia, as
+  // before. Everything below this point is the same for both.
+  var useTypesense = !!(container.dataset.typesenseUrl && window.createTypesenseSearchClient)
+  var searchClient = useTypesense
+    ? window.createTypesenseSearchClient({
+      url: container.dataset.typesenseUrl,
+      apiKey: container.dataset.typesenseKey,
+    })
+    : algoliasearch(container.dataset.appId, container.dataset.apiKey)
+  var indexName = useTypesense ? container.dataset.typesenseCollection : container.dataset.indexName
 
   // The current page's own component/version (if any), and whichever
   // navGroup/subGroup (if any) has this page as its own landing/start page --
@@ -399,7 +408,8 @@
     indexName: indexName,
     searchClient: searchClient,
     future: { preserveSharedStateOnUnmount: true },
-    insights: true,
+    // click analytics go to Algolia, so they only make sense with Algolia
+    insights: !useTypesense,
     // Reflects query + refinements into the URL, so a search is shareable and
     // survives a reload. A plain `routing: true` hands the ENTIRE parsed
     // query string to InstantSearch's routing, which assumes every top-level

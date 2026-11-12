@@ -2,7 +2,7 @@
 <link rel="canonical" href="{{this}}">
 {{/with}}
 <link rel="stylesheet" href="{{{uiRootPath}}}/css/site.css">
-{{#if env.ALGOLIA_API_KEY}}
+{{#if (or env.ALGOLIA_API_KEY env.TYPESENSE_URL)}}
 <link rel="stylesheet" href="{{{uiRootPath}}}/css/vendor/docsearch.css">
 {{/if}}
 <script src="{{{uiRootPath}}}/js/vendor/jquery.js"></script>
