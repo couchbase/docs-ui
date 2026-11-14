@@ -1,0 +1,383 @@
+// FIXTURE sdk-howto: docs-sdk-java@release/3.13 (18f3b0b2) modules/howtos/pages/kv-operations.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Data Operations
+:description: The Data Service offers the simplest way to retrieve or mutate data where the key is known.
+:page-aliases: ROOT:document-operations.adoc,ROOT:documents-creating.adoc,ROOT:documents-updating.adoc,ROOT:documents-retrieving.adoc,ROOT:documents-deleting.adoc
+// :example-source: 3.13@java-sdk:devguide:example$java/Queries.java
+:page-toclevels: 3
+
+
+
+[abstract]
+{description}
+Here we cover CRUD operations, document expiration, and optimistic locking with CAS -- 
+as well as KV Range scan, for querying without an index.
+
+
+
+The complete code sample used on this page can be downloaded from https://github.com/couchbase/docs-sdk-java/blob/release/{sdk_dot_minor}/modules/devguide/examples/java/KvOperations.java[here].
+
+
+// intro
+// [fixture] omitted: include::{version-common}@sdk:shared:partial$data-service.adoc[tag=intro]
+
+
+////
+The code samples below will use these imports:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=imports]
+----
+////
+
+
+//{sqlpp} vs. Key-Value
+// [fixture] omitted: include::{version-common}@sdk:shared:partial$data-service.adoc[tag=sql-vs-kv]
+
+
+== JSON
+
+The Couchbase Server is a key-value store that's agnostic to what's stored, but it's very common to store JSON so most of the examples below will focus on that use-case.
+
+The Java SDK provides you with several options for working with JSON.
+
+If you pass any object (like the provided `JsonObject` and `JsonArray`), including `Map<String, Object>` or `List<Object>` into the APIs provided, 
+the SDK will use its internal JSON codec (utilizing https://github.com/FasterXML/jackson[Jackson]) to encode/decode those objects transparently. 
+The SDK also supports custom transcoders and serializers which are covered separately.
+
+
+== CRUD
+
+// Sub-Document Operations
+// [fixture] omitted: include::{version-common}@sdk:shared:partial$data-service.adoc[tag=subdoc]
+
+
+
+=== Upsert
+
+Here is a simple upsert operation, which will insert the document if it does not exist, or replace it if it does.
+
+We'll use the built-in JSON types for simplicity, but you can use different types if you want.
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=upsert,indent=0]
+----
+
+[NOTE]
+=====
+All the examples here use the Java SDK's simplest API, which blocks until the operation is performed. 
+There's also an asynchronous API that is based around Java's `CompletableFuture`, 
+and a reactive API built around https://projectreactor.io/[Project Reactor]. 
+They can be accessed like this:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=apis,indent=0]
+----
+=====
+
+=== Insert
+
+Insert works very similarly to upsert, but will fail if the document already exists with a `DocumentExistsException`:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=insert,indent=0]
+----
+
+=== Retrieving documents
+
+We've tried upserting and inserting documents into Couchbase Server, let's get them back:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=get-simple,indent=0]
+----
+
+Of course if we're getting a document we probably want to do something with the content:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=get,indent=0]
+----
+
+Once we have a `GetResult`, we can use `contentAsObject()` to turn the content back into a `JsonObject` like we inserted it in the examples before, 
+or use the more generic `contentAs(T.class)` equivalent to turn it back into other entity structures. 
+In fact, the `contentAsObject()` method is just a convenience method for `contentAs(JsonObject.class)`.
+
+=== Replace
+
+A very common sequence of operations is to `get` a document, modify its contents, and `replace` it.
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=replace,indent=0]
+----
+
+We `upsert` an initial version of the document. 
+We don't care about the exact details of the result, just whether it succeeded or not, so do not assign a return value. 
+Then we `get` it back into `doc` and pull out the document's content as a `JsonObject` using `contentAs`. 
+Afterwards, we update a field in the `JsonObject` with `put`.  `JsonObject` is mutable, we don't need to store the result of the `put`. 
+Finally, we `replace` the document with the updated content, and a CAS value, storing the final result as `result`.
+
+
+
+==== What is CAS?
+
+// [fixture] omitted: include::{version-common}@sdk:shared:partial$data-service.adoc[tag=cas]
+
+
+
+=== Retrying on CAS failures
+
+But if we get a CAS mismatch, we usually just want to retry the operation. 
+Let's see a more advanced `replace` example that shows one way to handle this:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=replace-retry,indent=0]
+----
+
+Note that this code is simplistic to show how CAS retry works in general. 
+If the `replace()` above never works, you would always get a CAS mismatch, and never break out of the loop - so 
+`for(int i = 0; i < maxAttempts; i++)` would be a reasonable alternative.
+
+In later chapters we cover more sophisticated approaches to this, including asynchronous retry, retry with backoff and bailing out after a maximum amount of tries. 
+All these should be in place for robust, production ready code.
+
+
+=== Removing
+
+Removing a document is straightforward:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=remove,indent=0]
+----
+
+Like `replace`, `remove` also optionally takes the CAS value if you want to make sure you are only removing the document if it hasn't changed since you last fetched it.
+
+
+
+== Durability
+
+Writes in Couchbase are written to a single node, and from there the Couchbase Server will take care of sending that mutation to any configured replicas.
+
+The optional `durability` parameter, which all mutating operations accept, allows the application to wait until this replication (or persistence) is successful before proceeding.
+
+It can be used like this:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=durability,indent=0]
+----
+
+If no argument is provided the application will report success back as soon as the primary node has acknowledged the mutation in its memory. 
+However, we recognize that there are times when the application needs that extra certainty that especially vital mutations have been successfully replicated, 
+and the other durability options provide the means to achieve this.
+
+If you need stronger durability guarantees,
+you can take advantage of the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[Durable Write] feature, 
+in which Couchbase Server (self-managed or Capella) will only return success to the SDK after the requested replication level has been achieved. 
+The three replication levels are:
+
+ * `Majority` -- The server will ensure that the change is available in memory on the majority of configured replicas.
+ * `MajorityAndPersistToActive` -- Majority level, plus persisted to disk on the active node.
+ * `PersistToMajority` -- Majority level, plus persisted to disk on the majority of configured replicas.
+
+The options are in increasing levels of safety. 
+Note that nothing comes for free -- for a given node, waiting for writes to storage is considerably slower than waiting for it to be available in-memory.
+These tradeoffs, as well as which settings may be tuned, are discussed in the xref:concept-docs:durability-replication-failure-considerations.adoc#durable-writes[durability page].
+
+
+
+
+This durability is enforced by the cluster.
+A client verified durability API was necessary with older, no longer supported version of Couchbase Server.
+This API is still avaialable, but there are few cases where you would want to use this less performant option.
+Details can be found 
+https://docs-archive.couchbase.com/java-sdk/3.3/concept-docs/durability-replication-failure-considerations.html#older-server-versions[in our archived docs].
+
+
+
+To stress, durability is a useful feature but should not be the default for most applications, as there is a performance consideration, 
+and the default level of safety provided by Couchbase will be reasonable for the majority of situations.
+
+
+== Document Expiration
+
+Couchbase Server includes an option to have particular documents automatically expire after a set time. 
+This can be useful for some use-cases, such as user sessions, caches, or other temporary documents.
+
+You can set an expiry value from a `Duration` when creating a document:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=expiry-insert,indent=0]
+----
+
+The expiry may be specified as a `Duration` only if the provided value is less than 50 years.
+
+For expiration more than 50 years in the future, or if you have already calculated when a document should expire, you can specify the expiry as an `Instant`:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=expiry-insert-instant,indent=0]
+----
+
+When getting a document from Couchbase Server, the expiry is not included by default, but it can be requested
+by setting the `withExpiry` option to true:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=expiry-get,indent=0]
+----
+
+Note that when updating the document, special care must be taken to avoid resetting the expiry to zero. 
+Set the `preserveExpiry` option when updating the document:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=preserve-expiry,indent=0]
+----
+
+Some applications may find `getAndTouch` useful, which fetches a document while updating its expiry field. 
+It can be used like this:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=expiry-touch,indent=0]
+----
+
+
+== Atomic Counters
+
+The value of a document can be increased or decreased atomically using `collecion.binary().increment()` and `collection.binary().decrement()`.
+
+////
+.Increment
+[source,csharp]
+----
+// [fixture] omitted: include::example$KvOperations.cs[tag=binaryincrement,indent=0]
+----
+
+.Increment (with options)
+[source,csharp]
+----
+// [fixture] omitted: include::example$KvOperations.cs[tag=binaryincrementwithoptions,indent=0]
+----
+
+.Decrement
+[source,csharp]
+----
+// [fixture] omitted: include::example$KvOperations.cs[tag=binarydecrement,indent=0]
+----
+
+.Decrement (with options)
+[source,csharp]
+----
+// [fixture] omitted: include::example$KvOperations.cs[tag=binarydecrementwithoptions,indent=0]
+----
+////
+
+NOTE: Increment & Decrement are considered part of the "binary" API and as such may still be subject to change
+
+See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/kv/Increment.html[API Reference] for full details.
+
+TIP: Setting the document expiry time only works when a document is created, and it is not possible to update the expiry time of an existing counter document with the Increment method -- to do this during an increment, use with the `Touch()` method.
+
+
+
+// Atomicity Across Data Centers
+
+// [fixture] omitted: include::{version-common}@sdk:shared:partial$atomic.adoc[tag=xdcr]
+
+
+== Scoped KV Operations
+
+It is possible to perform scoped key-value operations on named xref:{version-server}@server:learn:data/scopes-and-collections.adoc[`Collections`].
+See the https://docs.couchbase.com/sdk-api/couchbase-java-client/com/couchbase/client/java/Collection.html[API docs] for more information.
+
+Here is an example showing an upsert in the `users` collection, which lives in the `travel-sample.tenant_agent_00` keyspace:
+
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=named-collection-upsert,indent=0]
+----
+
+
+[#kv-range-scan]
+== KV Range Scan
+
+A range scan gives you documents from a collection, even if you don't know the document IDs.
+This feature requires Couchbase Server 7.6 or newer.
+
+TIP: KV range scan is suitable for use cases that require relatively low concurrency and tolerate relatively high latency.
+If your application does many scans at once, or requires low latency results, we recommend using {sqlpp} (with a primary index on the collection) instead of KV range scan.
+
+
+[#kv-range-scan-range]
+=== Range scan
+
+Here's an example of a KV range scan that gets all documents in a collection:
+
+.KV Range Scan for all documents in a collection
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=rangeScanAllDocuments,indent=0]
+----
+<1> The `ScanType.rangeScan()` method has two nullable parameters: `from` and `to`.
+If you pass null like in this example, you'll get all documents in the collection.
+These parameters are for advanced use cases; you probably won't need to specify them.
+Instead, it's more common to use the "prefix" scan type shown in the next example.
+
+[#kv-range-scan-prefix]
+=== Prefix scan
+
+KV range scan can also give you all documents whose IDs start with the same prefix.
+
+Imagine you have a collection where documents are named like this: `<username>::<uuid>`.
+In other words, the document ID starts with the name of the user associated with the document, followed by a delimiter, and then a UUID.
+If you use this document naming scheme, you can use a prefix range scan to get all documents associated with a user.
+
+For example, to get all documents associated with user "alice", you would write:
+
+.KV Range Scan for all documents in a collection whose IDs start with "alice::"
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=rangeScanPrefix,indent=0]
+----
+<1> Note the scan type is *prefixScan*.
+
+[#kv-range-scan-sample]
+=== Sample scan
+
+If you want to get random documents from a collection, use a sample scan.
+
+.KV Range Scan for 100 random documents
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=rangeScanSample,indent=0]
+----
+<1> In this example, no more than `100` documents are returned.
+
+[#kv-range-scan-only-ids]
+=== Get IDs instead of full document
+
+If you only want the document IDs, set the `idsOnly` option to true, like this:
+
+.KV Range Scan for all document IDs in a collection
+[source,java]
+----
+// [fixture] omitted: include::devguide:example$java/KvOperations.java[tag=rangeScanAllDocumentIds,indent=0]
+----
+<1> The returned `ScanResult` objects throw `NoSuchElementException` if you try to access any property other than `id`.
+
+Setting `idsOnly` to true also works with the other scan types described above.
+
+
+== Additional resources
+
+// [fixture] omitted: include::{version-common}@sdk:shared:partial$data-service.adoc[tag=resources]

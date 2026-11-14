@@ -164,5 +164,5 @@ ul.frame-dropdown-list li:last-child,
 
 .frame-dropdown .column {
   display: flex;
-  box-shadow: 0 3px 10px 0 #e5e5e5;
+  box-shadow: 0 3px 10px 0 var(--border-subtle);
 }

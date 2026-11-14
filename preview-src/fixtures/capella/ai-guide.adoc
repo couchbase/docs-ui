@@ -1,0 +1,250 @@
+// FIXTURE ai-guide: docs-ai@main (400d2ef9) modules/build/pages/ai-functions.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Use {ai-long} AI Functions
+:page-component-name: cloud
+:page-capella-type: AI
+:page-topic-type: guide
+:page-toclevels: 4
+:description: Use AI Functions to summarize text, classify content, detect sentiment, explain patterns, and more — all within your {sqlpp} queries.
+
+[abstract]
+{description}
+
+{ai-long} AI Functions combine {sqlpp} with language models to analyze your data.
+Use large language models (LLMs) such as OpenAI, Bedrock, or models hosted in the xref:build:model-service/deploy-llm-model.adoc[{ai} Model Service] to run task-based functions using familiar {sqlpp} queries directly within Capella's query editor.
+
+The following {ai} AI Functions are available:
+
+* *Sentiment Analysis*: Determines text sentiment, such as positive, negative, neutral, or mixed.
+* *Summarization*: Condenses lengthy text into key insights.
+* *Classification*: Classifies data based on specified labels to improve organization and decision-making.
+* *Entity Extraction*: Identifies user specified labels or entities. 
+For example, you can extract entities such as persons, locations, organizations, and more from text or images.
+* *Grammar Correction*: Fixes grammatical errors in the input text.
+* *Text Generation*: Produces text from a prompt.
+* *Masking*: Hides personally identifiable information (PII) like names and emails.
+* *Similarity*: Compares texts and generates scores indicating how similar they are to each other.
+* *Translation*: Converts text between languages.
+* *Completion*: Allows you to define your own tasks using prompts and generates tailored responses. 
+Combine with AI Guardrails for safe content generation. 
+
+NOTE: When you use AI Functions, Capella charges based on your Model Service usage and Query Service usage.
+If you're using external LLMs such as OpenAI and Amazon Bedrock, you incur charges from those model service providers. 
+
+== Prerequisites
+
+* You have deployed a xref:cloud:clusters:create-database.adoc[paid] Capella operational cluster with:
+
+** Couchbase Server version 8.0 or later.
+To upgrade your operational cluster, see xref:cloud:clusters:upgrade-database.adoc[].
+
+** The xref:cloud:clusters:databases.adoc#couchbase-services[Query Service] enabled on 1 of your nodes. 
+
+** The xref:cloud:billing:billing.adoc#dev-pro[Developer Pro] or xref:cloud:billing:billing.adoc#enterprise[Enterprise] Support Plan. 
+
+** xref:cloud:clusters:databases.adoc#availability[Multiple Availability Zones] (AZ).
+
+** A bucket with scopes, collections, and JSON documents.
+For more information about how to upload data to Capella, see xref:cloud:guides:load.adoc[].
++
+If you do not have a dataset, use the `travel-sample` dataset. 
+
+* To enable and update AI Functions in the Capella UI, you need 1 of the following organization or project roles:
+
+** xref:cloud:organizations:organization-user-roles.adoc#organization-role-organization-owner[`Organization Owner`]
+
+** xref:cloud:projects:project-roles.adoc#project-owner-role[`Project Owner`]
+
+** xref:cloud:projects:project-roles.adoc#project-cluster-manager-role[`Cluster Manager`]
+
+** xref:cloud:projects:project-roles.adoc#project-cluster-data-reader-writer[`Data Writer`]
+
+* To view and run AI Functions:
+
+** In the Capella UI Query tab, you must have 1 of the following project roles:
+
+*** xref:cloud:projects:project-roles.adoc#project-cluster-viewer-role[`Cluster Viewer`]
+
+*** xref:cloud:projects:project-roles.adoc#project-cluster-data-reader[`Data Reader`]
+
+** Your application must connect using 1 of the following types of cluster access credentials:
+
+*** xref:cloud:clusters:cluster-rbac.adoc#basic-access-credentials[`Basic access credentials`]
+
+*** xref:cloud:clusters:cluster-rbac.adoc#advanced-access-credentials[`Advanced access credentials`] assigned with a role that includes the `Query Curl Access` xref:cloud:clusters:cluster-rbac.adoc#privileges-for-advanced-access-credentials[privilege].
+
+* A deployed LLM with:
+
+** The xref:build:model-service/deploy-llm-model.adoc[{ai} Model Service]
+** https://openai.com/[OpenAI^]
+** https://aws.amazon.com/bedrock/[Amazon Bedrock^]
+
+* (Recommended) If you have a production workload, xref:security:add-aws-privatelink.adoc[enable private networking] to use AI Functions.
++
+NOTE: If you want to enable private networking for your AI Functions, your {ai} model and Capella operational cluster need to be deployed within the same AWS region. 
+
+* (Recommended) You have guardrails selected for your chosen model.
+This includes keyword filtering and jailbreak detection. 
+Guardrails are important to have when you use the completion function. 
+For more information, see xref:build:model-service/deploy-llm-model.adoc[].
+
+[#enable-ai-functions]
+== Enable AI Functions
+
+You can enable AI Functions on any of your Capella operational clusters.
+Enabling AI Functions on 1 cluster does not automatically enable it on your other clusters.
+You need to enable AI Functions individually for each cluster.
+
+To enable {ai} AI Functions:
+
+. Do 1 of the following:
+
+.. Go to menu:{ai}[AI Functions].
+
+.. On the *Operational* tab, click the name of the cluster where you want to enable AI Functions.
+
+... Go to *AI Functions*.
+
+. Click btn:[Enable AI Functions].
+
+. Select the functions you want to use, and click btn:[Next].
+
+. Select 1 of the model options:
++ 
+NOTE: Private networking is only available for {ai} models. 
+
++
+[{tabs}]
+====
+{ai} Model::
+. Select *Capella Model*.
++
+. Choose your {ai} model.
++
+. Enter your *API Key ID* and *API Key Token*, or upload your `.txt` credentials file.
+For more information about API keys for {ai} models, see xref:api-guide:api-start.adoc[].
++
+. Click btn:[Next].
++
+. Choose a Capella operational cluster for your functions.
++
+. (Optional) If your {ai} model and your Capella operational cluster have the same AWS region, choose whether you want to enable private networking for your functions.
+This enables private networking between your LLM's AWS region and your Capella operational cluster.
++
+NOTE: You cannot disable private networking later. 
+
+OpenAI Model::
+. Select *OpenAI Model*.
++
+. Choose your OpenAI model.
++
+. (Optional) To use a new OpenAI API key, click btn:[Add New OpenAI API Key].
+.. Click btn:[Add API Key]
+.. Enter a name to identify your API Key in Capella.
+.. Enter your *OpenAI API Key* from OpenAI.
+.. Click btn:[Add Key].
++
+. Choose your OpenAI API Key.
++
+. Click btn:[Next].
++
+. Choose a Capella operational cluster for your functions.
+
+AWS Bedrock Model::
+. Select *AWS Bedrock Model*.
++
+. Enter your *Model ID* and choose your AWS *Region*.
++
+. (Optional) To use a new Amazon Bedrock key, click btn:[New Bedrock Credentials].
+.. Click btn:[Add Credentials]
+.. Enter a name to identify your credential in Capella.
+.. Enter your *Access Key ID* and *Secret Access Key* from Amazon Bedrock.
+.. Click btn:[Add Credentials].
++
+. Choose your Bedrock credentials.
++
+. Click btn:[Next].
++
+. Choose a Capella operational cluster for your functions.
+====
+
+. Click btn:[Complete Setup].
+
+== Run an AI Function
+
+Run AI Functions like any other {sqlpp} query using the xref:cloud:clusters:query-service/query-workbench.adoc[Query tab] on the operational cluster where you have configured AI Functions.
+
+IMPORTANT: When using input prompts with {ai}, Bedrock, or OpenAI LLMs, turn on model guardrails for security.
+
+Experiment with AI Functions with your own data or by loading a sample query into the Query tab of your operational cluster.
+The following sample queries require the `travel-sample` dataset on the same cluster where you configured your AI Functions LLM.
+
+For more information about how to load the `travel-sample` into your operational cluster, see xref:cloud:clusters:data-service/import-data-documents.adoc#import-sample-data[Import Sample Data].
+
+To load a sample query:
+
+. Copy a <<sample-queries,sample query>> from the list of {ai} AI Functions available. 
+For example, copy the sample query for <<sentiment-analysis,>>.
+
+. In your Capella operational cluster, go to menu:Data Tools[Query].
+
+. In the query editor, replace the existing text with the sample query you copied. 
+
+. Press kbd:[Enter] or click btn:[Run]. The query results are automatically displayed in JSON format.
+
+Test these functions using your own data, queries, and prompts. 
+You can specify a prompt in the {sqlpp} statement for prompt engineering to guide the LLM.
+Use prompts to capture language, output format, examples, and other nuances that the LLM requires to perform these functions.
+
+AI Function performance depends on the number and size of query nodes, data volume, and query complexity. 
+Larger or more complex queries may require xref:cloud:clusters:scale-database.adoc[scaling your cluster] to maintain performance. 
+
+NOTE: If you receive an error code `3000` after running your query, it indicates the function you're using is not enabled or associated with an LLM.
+You need to <<enable-ai-functions,enable the function>> and try again.
+For more information about {sqlpp} error codes, see xref:cloud:n1ql:n1ql-language-reference/n1ql-error-codes.adoc[]. 
+
+== View AI Functions
+
+To view a list of AI Functions in your organization and their associated operational clusters:
+
+. Go to menu:{ai}[AI Functions].
+. (Optional) Filter the list of AI Functions by their associated operational cluster, function name, and model service provider.
+
+To view more details about the AI Functions associated with an operational cluster, do 1 of the following:
+
+. Go to *Operational* and click the name of the cluster.
+.. Go to *AI Functions*.
+. From menu:{ai}[AI Functions], click the name of an operational cluster.
+
+You can view the status of each of your AI Functions and <<change-model-association,change their associated model>>.
+Click the name of the associated model to get more information. 
+
+The status of your AI Function can be dependent on the status of its associated model.
+An AI function can have 1 of the following statuses:
+
+|====
+| Status | Description
+
+| Healthy
+a| The model associated to your AI Functions is in a healthy state. 
+
+| Unhealthy
+a| The model associated to your AI Functions is in an unhealthy state.
+
+| Deploying
+a| After you enable your AI Functions, they enter a deploying state. 
+
+This may take some time.
+You can use your AI Functions when the status changes to *Healthy*. 
+
+| Deployment Failed
+a| Your AI Functions failed to deploy. 
+
+| Updating
+a| Your AI Functions are updating after you changed the associated model. 
+
+This may take some time.
+You can use your AI Functions when the status changes to *Healthy*. 
+|====
+
+[#change-model-association]

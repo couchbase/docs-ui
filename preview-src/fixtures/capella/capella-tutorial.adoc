@@ -1,0 +1,289 @@
+// FIXTURE capella-tutorial: docs-capella@main (4a71146a) modules/get-started/pages/create-account.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Create an Account and Deploy Your Free Tier Operational Cluster
+:page-component-name: cloud
+:page-capella-type: Operational
+:description: Create an account and start managing your data with Couchbase Capella.
+:page-aliases: create-app-services-account.adoc, get-started.adoc, own-account.adoc, azure-cloud:azure-cloud-connection-prerequisites.adoc, deploy-first-cluster.adoc, configure-cluster-access.adoc, tutorials:create-couchbase-cluster.adoc
+:page-topic-type: tutorial
+:page-pagination: next
+
+[abstract]
+{description}
+
+To get started with Couchbase Capella, create an account and use it to deploy a forever free tier operational cluster.
+This account provides you with an environment where you can explore and learn about Capella with no time constraint.
+
+With a perpetual offering, you have the freedom to work with your active free tier operational cluster at your own pace and try out the Couchbase Capella software.
+
+With an active and working free tier operational cluster, there is no pressure of expiration dates or incurring additional costs.
+
+NOTE: You cannot deploy a free tier cluster in Operational Insights.
+This free tier offering is only available in Capella Operational.
+
+[#sign-up-free-tier]
+== Create an Account
+
+To create an account, go to the https://cloud.couchbase.com/sign-up[Couchbase Capella Sign-up page] and choose one of the following sign-up options:
+
+[{tabs}]
+====
+Email Address::
++
+--
+.Procedure
+. Enter the following information:
+** Your *Full Name*
+** Your *Email Address*
+** A *Password* that contains:
++
+* At least 12 characters
+* Uppercase characters (A-Z)
+* Lowercase characters (a-z)
+* Numbers (0-9)
+* Special characters, such as @, #, or $
++
+. Click btn:[Get Started]. Couchbase sends an email to the email address you provided with a confirmation code for your account.
+. Enter the confirmation code into the provided field.
+. Review and agree to the https://www.couchbase.com/capella-terms[Terms of Service^] and the https://www.couchbase.com/privacy-policy[Privacy Policy^].
+. (Optional) Subscribe to offers, products, and services from Couchbase.
+. Click btn:[Create Account].
+
+--
+
+GitHub Account::
++
+--
+.Prerequisites
+* In GitHub, make sure that your primary email address is https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/verifying-your-email-address[verified].
+* In GitHub, make sure your primary email address is public.
++
+To set a public GitHub email address:
+
+. Log into GitHub, and on your profile menu, click btn:[Settings].
++
+Your Public profile page should display.
+
+. In the navigation pane, click *Emails*.
+
+. Clear *Keep my email addresses private*.
+
+. Return to the *Public Profile* page and select your primary email address from the *Public email* list.
+
+.. Click btn:[Update profile] to save the changes.
+
+.Procedure
+. Click btn:[GitHub].
+. Follow the GitHub prompts to sign in to your GitHub account.
+. Review and agree to the https://www.couchbase.com/capella-terms[Terms of Service^] and the https://www.couchbase.com/privacy-policy[Privacy Policy^].
+. (Optional) Subscribe to offers, products, and services from Couchbase.
+. Click btn:[Create Account].
+
+--
+
+Google Account::
++
+--
+.Prerequisites
+* If your Google account uses a non-Google email, make sure that your account is https://support.google.com/accounts/answer/63950?sjid=12585803331733388295-NA[verified].
+
+.Procedure
+. Click btn:[Google].
+. Follow the Google prompts to sign in to your Google Account.
+. Review and agree to the https://www.couchbase.com/capella-terms[Terms of Service^] and the https://www.couchbase.com/privacy-policy[Privacy Policy^].
+. (Optional) Subscribe to offers, products, and services from Couchbase.
+. Click btn:[Create Account].
+--
+====
+
+
+[NOTE]
+====
+For 30-day Capella free trial users:
+
+* If your free trial account has not yet expired, your account is automatically converted to the free tier plan after your 30-day trial period if over.
+To deploy a free tier operational cluster, go to menu:Operational[] and xref:create-account.adoc#getting-started[create and deploy your free tier operational cluster].
+* If your free trial account has already expired, log in to your account and click btn:[Activate Free Tier].
+Proceed to deploy a free tier operational cluster or xref:create-account.adoc#upgrade-to-paid-account[upgrade to a paid plan] to continue using Capella operational.
+====
+
+== Choose Your Setup Method
+
+Couchbase Capella offers two ways to deploy your free tier operational cluster:
+
+. <<guided-setup,Guided Setup>> - Recommended for new users with step-by-step guidance and sample data.
+. <<getting-started,Getting Started>> - For users who prefer to configure settings manually.
+
+
+[#guided-setup]
+== Get Started with Guided Setup
+
+If you're new to Capella and want to see how operational clusters work with App Services, Capella provides an interactive guided setup that provisions both infrastructure types with sample data.
+
+The guided setup creates:
+
+* A free tier operational cluster with sample data.
+* App Services infrastructure.
+* A working demonstration of both services integrated together.
+
+Follow the guided setup:
+
+. Go to menu:App Services[].
+. Click btn:[Start Guided Setup].
+. Click btn:[Create Free Tier Operational Cluster] to deploy a cluster.
+. Select *Import sample data* into the cluster.
+. Click btn:[Create App Service] to proceed to the App Services page.
+In the btn:[Create App Services] page:
+. Add an *App Service User Name* and *App Endpoint Name*.
+. In the *App User Credentials* section, enter a username and password for the App Service.
+. Click btn:[Create App Service].
+On the *Guided Setup* page, click btn:[Connect] to finish your setup.
+
+After completing the guided setup, you can connect your App Endpoint to your application.
+For more information about connecting mobile applications, see xref:get-started:configuring-app-services.adoc#access-endpoint[Connect App Services Endpoint].
+
+NOTE: The guided setup creates a cluster with pre-configured travel-sample data and optimized settings for new users.
+If you prefer to set up a cluster manually or import your own data, see <<getting-started,Create and Deploy Your Free Tier Operational cluster>>.
+
+
+[#getting-started]
+== Create and Deploy Your Free Tier Operational cluster
+
+After you create your account, Couchbase creates your organization and sets a default project labeled *My First Project*.
+
+NOTE: Only 1 free tier operational cluster is available per organization and it automatically turns off after 72 hours of inactivity.
+For more information, see xref:create-account.adoc#turn-cluster-on-off[Turn Operational Cluster On and Off].
+
+Create and deploy your first operational cluster:
+
+. Click btn:[Create Cluster].
+. Select *My First Project* as the project for your cluster.
+. Under *Cluster Option*, select btn:[Free].
+. In the *Name* field, enter a name for your cluster or accept the default option.
+. (Optional) Provide a description of your cluster.
+. Select one of the available cloud service providers:
+* xref:reference:aws.adoc[AWS]
+* xref:reference:gcp.adoc[Google Cloud]
+* xref:reference:azure.adoc[Azure]
+. Select an available geographic region for your cluster.
+. Enter a *CIDR Block* for your cluster, or accept the default.
+For more information about how to configure a CIDR block, see xref:clusters:databases.adoc#cloud-provider[Cloud Service Provider, Region, and CIDR Block].
+. Click btn:[Create Cluster] to deploy your free tier operational cluster with Capella.
+
+NOTE: Accounts with a paid plan can deploy a free tier operational cluster alongside their paid operational clusters.
+
+[#turn-cluster-on-off]
+=== Turn Your Operational Cluster On and Off
+
+If there's no activity in your free tier operational cluster for more than 72 hours, Couchbase turns off the cluster and any linked App Services.
+This removes the cluster's compute resources, but preserves it's data and state.
+This also removes any linked App Service nodes and associated infrastructure, but preserves the state.
+
+You can also turn off your free tier operational cluster using the UI:
+
+. In the *Operational* tab, find your free tier cluster:
+
+.. Click btn:[︙].
+
+.. Click btn:[Turn Off]
+
+. Confirm the cluster turn off request:
+
+.. In the confirmation field, type `yes`.
+
+.. Click btn:[Yes, Proceed] to turn off your cluster.
+
+
+To turn your free tier operational cluster back on, go to menu:Operational[Home] and click btn:[Turn On Cluster].
+
+When you resume activity in your operational cluster, any linked App Services are also turned back on.
+If you're unable to resume activity in your cluster, https://www.couchbase.com/contact/[contact Couchbase support^].
+
+To create or turn on an operational cluster, you must have the xref:organizations:organization-user-roles.adoc#organization-role-organization-owner[Organization Owner] or xref:organizations:organization-user-roles.adoc#organization-role-project-creator[Project Creator] role.
+
+=== Monitor Your Free Tier Operational Cluster
+
+You can monitor your free tier operational cluster in Capella using the built-in Monitoring Dashboards. 
+These tools help you identify performance issues and analyze runtime outliers.
+You can adjust the metric timeframes and resolutions according to your monitoring needs. 
+
+To view your monitoring dashboards, go to *Monitoring* and select 1 of the dashboards:
+
+* Cluster Overview 
+* Workload Monitoring
+** Data Service
+** Index Service
+** Query Service
+** Node Overview
+* Metrics Explorer
+
+For more information, see xref:clusters:monitoring/metrics-dashboard.adoc[]. 
+
+NOTE: The Health Advisor dashboard is not available for free tier operational clusters. 
+xref:billing:upgrade-account.adoc[Upgrade] to a *Developer Pro or Enterprise plan to get expert advice on your cluster.
+
+=== Delete Your Free Tier Operational Cluster
+
+If there's no activity in your free tier operational cluster for more than 30 days, Couchbase deletes the operational cluster and any linked App Services.
+Couchbase sends periodic emails after 72 hours of inactivity warning you that your free tier cluster is turned off and will delete after 30 days.
+
+To recreate your free tier operational cluster, see xref:create-account.adoc#getting-started[create and deploy your free tier operational cluster].
+
+
+[#app-services]
+== Deploy Capella Free Tier App Services
+
+You can use Capella App Services to:
+
+* Sync your data between Capella operational buckets and mobile or edge devices running xref:couchbase-lite:ROOT:index.adoc[Couchbase Lite].
+* Authenticate and manage mobile and edge users
+
+To deploy free tier App Services for mobile development:
+
+. In the *App Services* tab, click btn:[Create App Service].
+. Enter a name for your App Service.
+. Select your free tier operational cluster to link to your App Service.
+. Click btn:[Create App Service].
+
+[NOTE]
+====
+Your free tier App Service automatically links to your free tier operational cluster.
+====
+
+For more information about how to configure App Services, see xref:get-started:configuring-app-services.adoc[].
+
+[#upgrade-to-paid-account]
+== Upgrade to a Paid Account
+
+You need to xref:billing:upgrade-account.adoc#add-activation-id[add an activation ID] to upgrade to a paid Support plan and gain access to all the Capella operational features.
+For more information about the available Support Plans for Couchbase Capella, see xref:billing:billing.adoc#paid-plan[About Cluster and Service Support Plans].
+
+Free tier operational clusters do not automatically migrate to paid operational clusters after an the upgrade.
+Capella allows only one free tier operational cluster per organization at any time.
+
+WARNING: When upgrading from a free tier plan to a paid Support plan, Couchbase deletes your existing free tier operational cluster.
+
+When you upgrade to a paid Support plan, you can choose to deploy another free tier operational cluster alongside your provisioned operational cluster.
+To back up and transfer your data from your existing free tier operational cluster to a new free tier or paid operational cluster, you must use the `cbbackupmgr` tool.
+
+For more information about using the `cbbackupmgr` tool, see xref:clusters:cli-backup-restore.adoc#backup-free-cluster[Backup a Free Tier Capella Operational Cluster].
+
+
+== Free Tier Plan Features
+
+For more information, use the Capella UI to learn more about the free tier features and compare to other Couchbase Capella plans:
+
+. In the *Operational* tab, choose your operational cluster to go to your cluster's page.
+. Click the *Settings* tab.
+. In the navigation menu, click btn:[Plan].
+. Select, compare and review your Couchbase Capella plan.
+
+
+== Next Steps
+
+After you create an account and deploy an operational cluster, you can:
+
+* xref:get-started:configuring-app-services.adoc[]
+* xref:get-started:run-first-queries.adoc[Run your first query]
+* xref:get-started:sdk-playground.adoc[Try out Couchbase SDKs]
+* xref:cloud:clusters:data-service/import-data-documents.adoc[Import your own data]

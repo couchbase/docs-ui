@@ -1,0 +1,166 @@
+// FIXTURE home-start-here: docs-site@master (4776c38a) home/modules/ROOT/pages/start-here.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Get Started with Couchbase
+:page-component-name: home
+:page-layout: landing-page-capella
+:page-rank: 90
+:!sectids:
+
+
+// [fixture] omitted: include::partial$info-banner.adoc[]
+
+
+
+= Get Started with Couchbase
+
+The Developer Data Platform for Critical Applications in Our AI World.
+
+Couchbase is a multipurpose NoSQL platform for operational, analytical, mobile, and AI applications.
+Use it fully managed in Capella, or self-manage it in your own environment.
+
+
+[.centered.card-container]
+== Explore the Platform
+
+[.card-box]
+=== icon:database[] Run Operational Workloads with Couchbase Server
+
+Use Couchbase Server as a fully managed service in Capella, or deploy it yourself:
+
+* https://cloud.couchbase.com/sign-up[Sign up for Capella^], the fully managed cloud service and the quickest start
+* xref:server:install:install-intro.adoc[Install Couchbase Server] to self-manage it in your data center or private cloud
+* xref:operator::overview.adoc[Deploy with Couchbase Autonomous Operator] for a self-managed, cloud-native deployment on Kubernetes or OpenShift
+
+Connect your application to Capella or Couchbase Server with the xref:sdk.adoc[Couchbase Operational SDKs].
+
+[.card-box]
+=== icon:chart-line[] Run Real-Time Analytics with Operational Insights
+
+Use Operational Insights as a fully managed service in Capella, or deploy it yourself:
+
+* xref:analytics:intro:intro.adoc[Operational Insights Capella], the fully managed analytics database
+* xref:enterprise-analytics:intro:intro.adoc[Operational Insights Enterprise], the self-managed analytics database
+
+Connect your application with the Operational Insights SDKs for xref:columnar-sdk.adoc[Capella] or xref:operational-insights-sdk.adoc[Enterprise].
+
+
+[.card-box]
+=== icon:mobile[] Develop for Mobile and the Edge
+
+Sync data from your mobile and edge apps, fully managed in Capella, self-managed in your own data center or at the edge, or directly between devices:
+
+* xref:app-services::index.adoc[Capella App Services], the fully managed sync service
+* xref:sync-gateway::introduction.adoc[Sync Gateway], the self-managed sync service for Couchbase Server
+* xref:couchbase-edge-server:introduction:intro.adoc[Edge Server], a lightweight database that syncs Couchbase Lite apps in resource-constrained edge environments
+* xref:couchbase-lite:android:p2psync-websocket.adoc[Peer-to-peer sync] directly between devices
+
+Build offline-first apps with Couchbase Lite for your platform:
+
+xref:couchbase-lite:android:quickstart.adoc[Android in Java or Kotlin]
+| xref:couchbase-lite:swift:quickstart.adoc[iOS Swift]
+| xref:couchbase-lite:objc:quickstart.adoc[iOS Objective-C]
+| xref:couchbase-lite:c:quickstart.adoc[Edge devices in C]
+| xref:couchbase-lite:csharp:quickstart.adoc[C# .NET]
+| xref:couchbase-lite:java:quickstart.adoc[Java]
+| xref:couchbase-lite-javascript::introduction.adoc[JavaScript]
+| xref:cbl-reactnative::intro.adoc[React Native]
+
+
+[.card-box]
+=== icon:stars[] Develop Agentic AI Applications
+
+Build agentic and RAG applications with hosted models, persistent agent memory, Model Context Protocol (MCP) tools, and more:
+
+* xref:ai:get-started:intro.adoc[AI Data Plane], with hosted models, data vectorization, AI Functions, and Agent Catalog
+* xref:agent-mem::about-agent-mem.adoc[Agent Memory], a persistent memory layer for agents
+* xref:mcp-server:get-started:overview.adoc[MCP Server], to connect AI agents to your Couchbase data
+
+Retrieve relevant context for your AI applications with Hyperscale, Composite, and Search vector indexes in xref:cloud:vector-index:vectors-and-indexes-overview.adoc[Capella] or xref:server:vector-index:vectors-and-indexes-overview.adoc[Couchbase Server].
+
+
+
+
+
+
+////
+[.centered.card-container]
+== A Multipurpose NoSQL Platform for Transactional, Analytical, Mobile / Edge, and AI Applications
+
+[.card-box]
+=== icon:rocket[] Transactional Workloads -- in the Cloud or Your Datacenter
+
+Explore {sqlpp}, or the fast CRUD interface of the Data Service.
+
+
+* Capella Operational -- 
+** https://cloud.couchbase.com/sign-up[Sign Up to Capella^]
+** xref:cloud:get-started:intro.adoc[Read the Capella Docs]
+**  https://docs.couchbase.com/cloud/develop/intro.html[Develop for Capella]
+* Self-managed xref:server:getting-started:start-here.adoc[Couchbase Server]
+** xref:operator::overview.adoc[Couchbase Autonomous Operator for Kubernetes]
+** xref:7.6@develop:develop:intro.adoc[Develop for Couchbase Server]
+** xref:server:tutorials:couchbase-tutorial-student-records.adoc[NoSQL for RDBMS users]
+* xref:sdk.adoc[Operational SDKs]:
++
+xref:c-sdk:hello-world:start-using-sdk.adoc[C]
+| xref:cxx-sdk:hello-world:start-using-sdk.adoc[{cpp}]
+| xref:dotnet-sdk:hello-world:start-using-sdk.adoc[.NET]
+| xref:go-sdk:hello-world:start-using-sdk.adoc[Go]
+| xref:java-sdk:hello-world:start-using-sdk.adoc[Java]
+| xref:kotlin-sdk:hello-world:start-using-sdk.adoc[Kotlin]
+| xref:nodejs-sdk:hello-world:start-using-sdk.adoc[Node.js]
+| xref:php-sdk:hello-world:start-using-sdk.adoc[PHP]
+| xref:python-sdk:hello-world:start-using-sdk.adoc[Python]
+| xref:ruby-sdk:hello-world:start-using-sdk.adoc[Ruby]
+| xref:rust-sdk:hello-world:start-using-sdk.adoc[Rust]
+| xref:scala-sdk:hello-world:start-using-sdk.adoc[Scala]
+* xref:cloud:third-party:integrations.adoc[Integrations, Connectors, and Tools]
+// * Multi-Document ACID Transactions
+// * xref:cloud:develop:intro.adoc[Capella Operational Developer Intro]
+
+
+
+[.card-box]
+=== icon:rocket[] Real Time Analytics with Analytics SDKs
+
+Enterprise Analytics brings the power of NoSQL to the world of analytics -- self-managed, or in Capella.
+
+* xref:enterprise-analytics:intro:intro.adoc[Enterprise Analytics]
+** xref:home::analytics-sdk.adoc[Enterprise Analytics SDK pages]
+* xref:analytics:intro:intro.adoc[Capella Analytics] 
+** xref:home::columnar-sdk.adoc[Capella Analytics SDK pages]
+* xref:server/current/analytics/introduction.adoc[CBAS] -- traditional row-based analytics in the operational database
+** xref:java-sdk:howtos:analytics-using-sdk.adoc[CBAS from the SDK]
+
+
+[.card-box]
+=== icon:mobile[] Develop for Mobile and the Edge
+
+Build your app in Couchbase Lite (CBL) for offline-first connectivity, then sync to Couchbase Server with Capella App Services (or self-managed Sync Gateway) -- or run peer-to-peer.
+
+
+* Couchbase Lite for xref:couchbase-lite:android:quickstart.adoc[Android in Java or Kotlin] |
+xref:couchbase-lite:swift:quickstart.adoc[iOS Swift]
+and xref:couchbase-lite:objc:quickstart.adoc[iOS Objective-C] |
+xref:couchbase-lite:c:quickstart.adoc[Edge devices in C] |
+xref:couchbase-lite:csharp:quickstart.adoc[C# .NET] | 
+xref:couchbase-lite:java:quickstart.adoc[Java] | 
+xref:couchbase-lite:javascript:quickstart.adoc[JavaScript -- Ionic and React]
+* Sync your data with:
+** xref:cloud:mobile-guides:intro.adoc[Capella App Services]
+** xref:sync-gateway::introduction.adoc[Self-managed SyncGateway]
+** xref:couchbase-edge-server:introduction:intro.adoc[Edge Server]
+** xref:couchbase-lite:android:p2psync-websocket.adoc[peer-to-peer]
+
+
+[.card-box]
+=== icon:rocket[] Develop RAG and Agentic AI Applications
+
+Vector Query facilitates RAG applications speedily and at scale.
+Vector Search Service offers the ability to combine searches with our sophisticated Search API.
+
+* xref:cloud:vector-search:vector-search.adoc[Vector Search in Capella Operational]
+* xref:server:vector-search:vector-search.adoc[Vector Search in self-managed Couchbase Server]
+
+Explore AI Services and build Agentic Apps (https://info.couchbase.com/capella-ai-services-signup[currently in Private Preview]).
+////

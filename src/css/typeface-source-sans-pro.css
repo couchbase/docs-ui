@@ -1,0 +1,33 @@
+/* Source Sans Pro, self-hosted via the typeface-source-sans-pro npm package. */
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(~typeface-source-sans-pro/files/source-sans-pro-latin-300.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(~typeface-source-sans-pro/files/source-sans-pro-latin-400.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(~typeface-source-sans-pro/files/source-sans-pro-latin-600.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(~typeface-source-sans-pro/files/source-sans-pro-latin-700.woff2) format("woff2");
+}

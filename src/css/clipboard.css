@@ -92,10 +92,10 @@ a.copy-code-button:hover {
     transparent
     linear-gradient(
       180deg,
-      #f1f7fe0d 0%,
-      #f1f7fe40 18%,
-      #f1f7fe 68%,
-      #f1f7fe 100%
+      color-mix(in sRGB, var(--surface-code) 5%, transparent) 0%,
+      color-mix(in sRGB, var(--surface-code) 25%, transparent) 18%,
+      var(--surface-code) 68%,
+      var(--surface-code) 100%
     )
     0% 0% no-repeat padding-box;
   width: 65px;
@@ -130,14 +130,14 @@ code::-webkit-scrollbar-thumb {
 /* New style code block */
 .source-type-box {
   padding-left: 6px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border-subtle);
   border-bottom: none;
   border-radius: 3px 3px 0 0;
   display: flex;
   justify-content: space-between;
   font-size: 14px;
   line-height: 20px;
-  color: #73768a;
+  color: var(--text-muted);
   font-family: 'Source Code Pro', monospace;
   z-index: 1;
   position: relative;
@@ -155,7 +155,7 @@ code::-webkit-scrollbar-thumb {
 }
 
 .source-type-box .right-block > * {
-  border-left: 1px solid #e5e5e5;
+  border-left: 1px solid var(--border-subtle);
   padding: 4px 10px;
   display: flex;
   align-items: center;
@@ -178,12 +178,12 @@ code::-webkit-scrollbar-thumb {
 }
 
 .run-code {
-  background: #0074e0;
-  color: #fff;
+  background: var(--color-brand-blue-secondary);
+  color: var(--text-inverse);
   cursor: pointer;
 }
 
 .run-code:hover {
   text-decoration: none;
-  color: #fff;
+  color: var(--text-inverse);
 }

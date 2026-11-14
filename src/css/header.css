@@ -95,7 +95,7 @@
   margin-top: 8px;
   padding-inline-start: 0;
   position: absolute;
-  background-color: #333; /* var(--color-brand-black); */
+  background-color: var(--color-brand-gray-dark); /* var(--color-brand-black); */
   z-index: 1000;
 }
 
@@ -125,13 +125,13 @@
   font-weight: var(--weight-semibold);
   text-decoration: none;
   opacity: 1;
-  color: #fff;
+  color: var(--text-inverse);
 }
 
 .nav-link:focus,
 .nav-link:hover {
   text-decoration: none;
-  color: #fff;
+  color: var(--text-inverse);
 }
 
 .primary-action {
@@ -417,14 +417,14 @@
     padding: 7px;
     font-size: 15px;
     line-height: 21px;
-    border: 1px solid #ffffffbf;
+    border: 1px solid color-mix(in sRGB, var(--color-brand-white) 75%, transparent);
     border-radius: 4px;
     margin-right: 5px;
   }
 
   .search .fa-search {
     font-size: 18px;
-    color: #ffffffbf;
+    color: color-mix(in sRGB, var(--color-brand-white) 75%, transparent);
   }
   /* .parent-site {
     border-left: none;

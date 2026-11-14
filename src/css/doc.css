@@ -637,7 +637,7 @@ ul ul ul {
 .doc pre:not(.highlight)::after{
   content: '';
   display: inline-block;
-  background: transparent linear-gradient(180deg, #F1F7FE0D 0%, #F1F7FE40 18%, #F1F7FE 68%, #F1F7FE 100%) 0% 0% no-repeat padding-box;
+  background: transparent linear-gradient(180deg, color-mix(in sRGB, var(--surface-code) 5%, transparent) 0%, color-mix(in sRGB, var(--surface-code) 25%, transparent) 18%, var(--surface-code) 68%, var(--surface-code) 100%) 0% 0% no-repeat padding-box;
   width: 65px;
   height: 100%;
   position: absolute;
@@ -816,7 +816,7 @@ table.tableblock pre code.language-bash.hljs {
   background-color: #fafafa;
   border: 1px solid var(--color-border);
   border-radius: 0.25em;
-  box-shadow: 0 1px 0 var(--color-border), 0 0 0 0.1em #fff inset;
+  box-shadow: 0 1px 0 var(--color-border), 0 0 0 0.1em var(--color-brand-white) inset;
   padding: 0.25em 0.5em;
   vertical-align: text-bottom;
   white-space: nowrap;

@@ -1,0 +1,477 @@
+// FIXTURE cbl-callouts: docs-couchbase-lite@release/4.1 (7b72a31c) modules/csharp/pages/replication.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+
+= Data Sync using Sync Gateway
+:page-aliases: learn/csharp-replication.adoc
+:page-role:
+:description: Couchbase Lite for C# -- Synchronizing data changes between local and remote databases using Sync Gateway
+
+[abstract]
+--
+Description -- _{description}_ +
+Related Content -- xref:csharp:conflict.adoc[] | xref:csharp:dbreplica.adoc[Intra-Device] | xref:csharp:replication:p2psync-websocket.adoc[Peer-to-Peer]
+--
+
+
+.Code Snippets
+[NOTE]
+All code examples are indicative only.
+They demonstrate the basic concepts and approaches to using a feature.
+Use them as inspiration and adapt these examples to best practice when developing applications for your platform.
+
+
+[#introduction]
+== Introduction
+
+
+Couchbase Lite for C#.Net provides API support for secure, bi-directional, synchronization of data changes between mobile applications and a central server database.
+It does so by using a _replicator_ to interact with Sync Gateway.
+
+The _replicator_ is designed to manage replication of documents and-or document changes between a source and a target database.
+For example, between a local Couchbase Lite database and remote Sync Gateway database, which is ultimately mapped to a bucket in a Couchbase Server instance in the cloud or on a server.
+
+This page shows sample code and configuration examples covering the implementation of a replication using Sync Gateway.
+
+Your application runs a replicator (also referred to here as a client), which  will initiate connection with a Sync Gateway (also referred to here as a server) and participate in the replication of database changes to bring both local and remote databases into sync.
+
+Subsequent sections provide additional details and examples for the main configuration options.
+
+[#replication-concepts]
+== Replication Concepts
+
+Couchbase Lite allows for one database for each application running on the mobile device.
+This database can contain one or more scopes.
+Each scope can contain one or more collections.
+
+To learn about Scopes and Collections, see xref:csharp:database.adoc[]
+
+You can set up a replication scheme across these data levels:
+
+Database:: The `_default` collection is synced.
+
+Collection:: A specific collection or a set of collections is synced.
+
+As part of the syncing setup, the Gateway has to map the Couchbase Lite database to the database being synced on Capella.
+
+
+[#replication-protocol]
+== Replication Protocol
+
+[#scheme]
+=== Scheme
+
+Couchbase Mobile uses a replication protocol based on WebSockets for replication.
+To use this protocol the replication URL should specify WebSockets as the URL scheme (see the <<lbl-cfg-tgt>> section below).
+
+Incompatibilities::
+Couchbase Lite's replication protocol is *incompatible* with CouchDB-based databases.
+And since Couchbase Lite 2.x+ only supports the new protocol, you will need to run a version of Sync Gateway that supports it -- see: xref:csharp:compatibility.adoc[].
+
+Legacy Compatibility::
+Clients using Couchbase Lite 1.x can continue to use `http` as the URL scheme.
+Sync Gateway 2.x+ will automatically use:
+* The 1.x replication protocol when a Couchbase Lite 1.x client connects through `\http://localhost:4984/db`
+* The 2.0 replication protocol when a Couchbase Lite 2.0 client connects through `ws://localhost:4984/db`.
+
+You can find further information in our blog: https://blog.couchbase.com/data-replication-couchbase-mobile/[Introducing the Data Replication Protocol].
+
+[#lbl-repl-ord]
+=== Ordering
+
+To optimize for speed, the replication protocol doesn't guarantee that documents will be received in a particular order.
+So we don't recommend to rely on that when using the replication or database change listeners for example.
+
+
+[#scopes-and-collections]
+== Scopes and Collections
+
+Scopes and Collections allow you to organize your documents in Couchbase Lite.
+
+When syncing, you can configure the collections to be synced.
+
+The collections specified in the Couchbase Lite replicator setup must exist (both scope and collection name must be identical) on the Sync Gateway side, otherwise starting the Couchbase Lite replicator will result in an error.
+
+During replication:
+
+. If Sync Gateway config (or server) is updated to remove a collection that is being synced, the client replicator will be offline and will be stopped after the first retry. An error will be reported.
+
+. If Sync Gateway config is updated to add a collection to a scope that is being synchronized, the replication will ignore the collection. The added collection will not automatically sync until the Couchbase Lite replicator's configuration is updated.
+
+[#default-collection]
+=== Default Collection
+
+When upgrading Couchbase Lite to 3.1, the existing documents in the database will be automatically migrated to the default collection.
+
+For backward compatibility with the code prior to 3.1, when you set up the replicator with the database, the default collection will be set up to sync with the default collection on Sync Gateway.
+
+.Sync Couchbase Lite database with the default collection on Sync Gateway
+image:ROOT:cbl-replication-scopes-collections-1.png[Sync Couchbase Lite database with the default collection on Sync Gateway,500,,align="left"]
+
+
+.Sync Couchbase Lite default collection with default collection on Sync Gateway
+image:ROOT:cbl-replication-scopes-collections-2.png[Sync Couchbase Lite default collection with default collection on Sync Gateway,500,,align="left"]
+
+
+[#user-defined-collections]
+=== User-Defined Collections
+
+The user-defined collections specified in the Couchbase Lite replicator setup must exist (and be identical) on the Sync Gateway side to sync.
+
+.Syncing scope with user-defined collections.
+image:ROOT:cbl-replication-scopes-collections-3.png["Syncing scope with user-defined collections.",500,,align="left"]
+
+.Syncing scope with user-defined collections. Couchbase Lite has more collections than the Sync Gateway configuration (with collection filters)
+image:ROOT:cbl-replication-scopes-collections-4.png["Syncing scope with user-defined collections. Couchbase Lite has more collections than the Sync Gateway configuration (with collection filters)",500,,align="left"]
+
+
+// tag::replicator-config-sample[]
+[#configuration-summary]
+== Configuration Summary
+
+
+You should configure and initialize a replicator for each Couchbase Lite database instance you want to sync.
+<<ex-simple-repl>> shows the configuration and initialization process.
+
+NOTE: You need Couchbase Lite 3.1+ and Sync Gateway 3.1+ to use `custom` Scopes and Collections. +
+If you’re using Capella App Services or Sync Gateway releases that are older than version 3.1, you won’t be able to access `custom` Scopes and Collections.
+To use Couchbase Lite 3.1+ with these older versions, you can use the `default` Collection as a backup option.
+
+Click the *GitHub* tab in the code examples for further details.
+
+// Example 1
+[#ex-simple-repl]
+.Replication configuration and initialization
+[#ex-simple-repl]
+====
+// include ::csharp:example$code_snippets/Program.cs[tags="p2p-act-rep-func", indent=0]
+// Show Main Snippet
+[source, C#]
+----
+// . . . preceding code. for example . . .
+private static ListenerToken _thisListenerToken;
+var Database thisDB;
+// . . . other code . . .
+// initialize the replicator configuration
+
+var thisUrl = new URLEndpoint("wss://listener.com:4984/otherDB"); <1>
+var config = new ReplicatorConfiguration(thisDB, thisUrl);
+
+
+// Set replicator type
+thisConfig.ReplicatorType = ReplicatorType.PushAndPull;
+
+// Set autopurge option
+// here we override its default
+thisConfig.EnableAutoPurge = false; <2>
+
+// Configure Sync Mode
+thisConfig.Continuous = true; // default value
+
+// Configure Server Security -- only accept self-signed certs
+thisConfig.AcceptOnlySelfSignedServerCertificate = true; <3>
+
+// Configure Client Security <4>
+// Configure basic auth using user credentials
+thisConfig.Authenticator = new BasicAuthenticator("Our Username", "Our Password");
+
+/* Optionally set a conflict resolver call back */ <5>
+// Use built-in resolver
+thisConfig.ConflictResolver = new LocalWinConflictResolver();  //
+
+// optionally use custom resolver
+thisConfig.ConflictResolver = new ConflictResolver(
+  (conflict) => {
+    /* define resolver function */
+  }
+); //
+
+// Initialize and start a replicator
+// Initialize replicator with configuration data
+var thisReplicator = new Replicator(thisConfig); <6>
+
+//Optionally add a change listener <7>
+_thisListenerToken =
+  thisReplicator.AddChangeListener((sender, args) =>
+    {
+      if (args.Status.Activity == ReplicatorActivityLevel.Stopped) {
+          Console.WriteLine("Replication stopped");
+      }
+    });
+
+// Start replicator
+thisReplicator.Start(); <8>
+----
+====
+
+
+*Notes on Example*
+
+<.> get endpoint for target DB
+<.> Use the https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html[ReplicatorConfiguration] class's constructor -- https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration__ctor_Couchbase_Lite_Database_Couchbase_Lite_Sync_IEndpoint[ReplicatorConfiguration(Database database, IEndpoint target)] -- to initialize the replicator configuration with the local database -- see also: <<lbl-cfg-tgt>>
+<.> The default is to auto-purge documents that this user no longer has access to -- see: <<anchor-auto-purge-on-revoke>>.
+Here we over-ride this behavior by setting its flag false.
+
+<.> Configure how the client will authenticate the server.
+Here we say connect only to servers presenting a self-signed certificate.
+By default, clients accept only servers presenting certificates that can be verified using the OS bundled Root CA Certificates -- see: <<lbl-svr-auth>>.
+<.> Configure the client-authentication credentials (if required).
+These are the credential the client will present to pass:q,a[sync{nbsp}gateway] if requested to do so. +
+Here we configure to provide _Basic Authentication_ credentials.
+Other options are available -- see: <<lbl-client-auth>>.
+
+<.> Configure how the replication should handle conflict resolution -- see: xref:csharp:conflict.adoc[] topic for mor on conflict resolution.
+
+<.> Initialize the replicator using your configuration -- see: <<lbl-init-repl>>.
+
+<.> Optionally, register an observer, which will notify you of changes to the replication status -- see: <<lbl-repl-mon>>
+
+<.> Start the replicator  -- see: <<lbl-repl-start>>.
+
+
+[#lbl-cfg-repl]
+== Configure
+
+
+In this section::
++
+--
+<<lbl-cfg-tgt>>
+|  <<lbl-cfg-sync>>
+|  <<lbl-cfg-keep-alive>>
+|  <<lbl-user-auth>>
+|  <<lbl-svr-auth>>
+|  <<lbl-client-auth>>
+|  <<lbl-repl-evnts>>
+|  <<lbl-repl-hdrs>>
+|  <<lbl-repl-ckpt>>
+|  <<lbl-repl-fltrs>>
+|  <<lbl-repl-chan>>
+|  <<anchor-auto-purge-on-revoke>>
+|  <<lbl-repl-delta>>
+--
+
+[#lbl-cfg-tgt]
+=== Configure Target
+
+Use the
+Initialize and define the replication configuration with local and remote database locations using the https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html[ReplicatorConfiguration] object.
+
+The constructor provides:
+
+* the name of the local database to be sync'd
+* the server's URL (including the port number and the name of the remote database to sync with)
++
+--
+It is expected that the app will identify the IP address and URL and append the remote database name to the URL endpoint, producing for example: `wss://10.0.2.2:4984/travel-sample`
+
+The URL scheme for web socket URLs uses `ws:` (non-TLS) or `wss:` (SSL/TLS) prefixes.
+--
+
+// Example 2
+.Add Target to Configuration
+====
+
+
+// Show Main Snippet
+// include ::csharp:example$code_snippets/Program.cs[tags="sgw-act-rep-initialize", indent=0]
+[source, C#]
+----
+// initialize the replicator configuration
+
+var url = new URLEndpoint(new Uri("wss://10.0.2.2:4984/anotherDB")); // <.>
+var replConfig = new ReplicatorConfiguration(url);
+// Add collections to the config now
+----
+
+
+// close example block
+
+====
+
+// Tidy-up atttibutes created
+// END -- block_show_snippet.doc
+<.> Note use of the scheme prefix (`wss://`
+to ensure TLS encryption -- strongly recommended in production -- or `ws://`)
+// END -- inclusion -- common-sgw-replication-cfg-tgt.adoc
+
+
+[#lbl-network-interface]
+
+
+[#lbl-cfg-sync]
+=== Sync Mode
+
+
+Here we define the direction and type of replication we want to initiate.
+
+We use `https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html[ReplicatorConfiguration]` class's https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_ReplicatorType[ReplicatorType] and
+`https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_Continuous[Continuous]` parameters, to tell the replicator:
+
+* The type (or direction) of the replication:
+`*pushAndPull*`; `pull`; `push`
+
+* The replication mode, that is either of:
+
+** Continuous -- remaining active indefinitely to replicate changed documents (`continuous=true`).
+
+** Ad-hoc -- a one-shot replication of changed documents (`continuous=false`).
+
+// Example 3
+[#ex-repl-sync]
+.Configure replicator type and mode
+
+[#ex-repl-sync]
+====
+
+
+// Show Main Snippet
+// include ::csharp:example$code_snippets/Program.cs[tags="p2p-act-rep-config-type;p2p-act-rep-config-cont", indent=0]
+[source, C#]
+----
+// Set replicator type
+thisConfig.ReplicatorType = ReplicatorType.PushAndPull;
+
+// Configure Sync Mode
+thisConfig.Continuous = true; // default value
+----
+====
+
+[TIP]
+--
+Unless there is a solid use-case not to, always initiate a single `PUSH_AND_PULL` replication rather than identical separate `PUSH` and `PULL` replications.
+
+This prevents the replications generating the same checkpoint `docID` resulting in multiple conflicts.
+--
+
+[#lbl-cfg-keep-alive]
+=== Retry Configuration
+
+
+Couchbase Lite for C#.Net's replication retry logic assures a resilient connection.
+
+The replicator minimizes the chance and impact of dropped connections by maintaining a heartbeat; essentially pinging the Sync Gateway at a configurable interval to ensure the connection remains alive.
+
+In the event it detects a transient error, the replicator will attempt to reconnect, stopping only when the connection is re-established, or the number of retries exceeds the retry limit (9 times for a single-shot replication and unlimited for a continuous replication).
+
+On each retry the interval between attempts is increased exponentially (exponential backoff) up to the maximum wait time limit (5 minutes).
+
+The REST API provides configurable control over this replication retry logic using a set of configiurable properties -- see: <<tbl-repl-retry>>.
+
+.Replication Retry Configuration Properties
+[#tbl-repl-retry,cols="2,3,5"]
+|===
+
+h|Property
+h|Use cases
+h|Description
+
+|https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_Heartbeat[Heartbeat()]
+a|* Reduce to detect connection errors sooner
+* Align to load-balancer or proxy `keep-alive` interval -- see Sync Gateway's topic xref:sync-gateway::load-balancer.adoc#websocket-connection[Load Balancer - Keep Alive]
+a|The interval (in seconds) between the heartbeat pulses.
+
+Default: The replicator pings the Sync Gateway every 300 seconds.
+
+|https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_MaxAttempts[MaxAttempts()]
+|Change this to limit or extend the number of retry attempts.
+a| The maximum number of retry attempts
+
+* Set to zero (0) to use default values
+* Set to zero (1) to prevent any retry attempt
+* The retry attempt count is reset when the replicator is able to connect and replicate
+* Default values are:
+** Single-shot replication = 9;
+** Continuous replication = maximum integer value
+* Negative values generate a Couchbase exception `InvalidArgumentException`
+
+|https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_MaxAttemptWaitTime[MaxAttemptWaitTime()]
+|Change this to adjust the interval between retries.
+a|The maximum interval between retry attempts
+
+While you can configure the *maximum permitted* wait time,  the replicator's exponential backoff algorithm calculates each individual interval which is not configurable.
+
+* Default value: 300 seconds (5 minutes)
+* Zero sets the maximum interval between retries to the default of 300 seconds
+* 300 sets the maximum interval between retries to the default of 300 seconds
+* A negative value generates a Couchbase exception, `InvalidArgumentException`
+
+|===
+
+When necessary you can adjust any or all of those configurable values -- see: <<ex-repl-retry>> for how to do this.
+
+.Configuring Replication Retries
+[#ex-repl-retry]
+
+[#ex-repl-retry]
+====
+
+
+// Show Main Snippet
+// include ::csharp:example$code_snippets/Program.cs[tags="replication-retry-config", indent=0]
+
+[source, C#]
+----
+            var url = new Uri("ws://localhost:4984/mydatabase");
+            var target = new URLEndpoint(url);
+
+            var config = new ReplicatorConfiguration(target);
+
+            //  other config as required . . .
+
+            config.Heartbeat = TimeSpan.FromSeconds(120); //  <.>
+            config.MaxAttempts = 20; //  <.>
+            config.MaxAttemptsWaitTime = TimeSpan.FromSeconds(600); //  <.>
+
+            //  other config as required . . .
+
+            var replicator = new Replicator(config);
+
+----
+
+
+// close example block
+
+====
+
+// Tidy-up atttibutes created
+// END -- block_show_snippet.doc
+<.> Here we use https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_Heartbeat[Heartbeat()] to set the required interval (in seconds) between the heartbeat pulses
+<.> Here we use https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_MaxAttempts[MaxAttempts()] to set the required number of retry attempts
+<.> Here we use https://docs.couchbase.com/mobile/{major}.{minor}.{maintenance-net}{empty}/couchbase-lite-net/api/Couchbase.Lite.Sync.ReplicatorConfiguration.html#Couchbase_Lite_Sync_ReplicatorConfiguration_MaxAttemptWaitTime[MaxAttemptWaitTime()] to set the required interval between retry attempts.
+
+// END -- inclusion -- common-sgw-replication-cfg-retryadoc
+
+[#lbl-user-auth]
+=== User Authorization
+
+// include::ROOT:partial$authorization.adoc[]
+
+By default, Sync Gateway does not enable user authorization.
+This makes it easier to get up and running with synchronization.
+
+You can enable authorization in the pass:q,a[sync{nbsp}gateway] configuration file, as shown in <<example-enable-authorization>>.
+
+.Enable Authorization
+[#example-enable-authorization]
+====
+[source,json]
+----
+{
+  "databases": {
+    "mydatabase": {
+      "users": {
+        "GUEST": {"disabled": true}
+      }
+    }
+  }
+}
+----
+====
+
+To authorize with Sync Gateway, an associated user must first be created.
+Sync Gateway users can be created through the
+xref:sync-gateway:ROOT:refer/rest-api-admin.adoc#/user/post\__db___user_[`+POST /{tkn-db}/_user+`]
+endpoint on the Admin REST API.
+
+
+[#lbl-svr-auth]

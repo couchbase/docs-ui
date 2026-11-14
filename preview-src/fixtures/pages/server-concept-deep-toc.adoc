@@ -1,0 +1,384 @@
+// FIXTURE server-concept-deep-toc: docs-server@release/8.0 (bd86dd39) modules/manage/pages/manage-security/manage-users-and-roles.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Manage Users, Groups, and Roles
+:description: pass:q[Couchbase Server lets you assign roles to individual users, which grant access to resources. You can also create groups of users and assign roles to each group. Each user automatically inherits the roles of the groups they belong to.]
+:page-aliases: security:security-rbac-user-management,security:security-rbac-for-admins-and-apps
+:page-toclevels: 2
+
+[abstract]
+{description}
+
+[#creating-and-managing-users]
+== Creating and Managing Users and Groups
+
+The administrator, who installs and configures Couchbase Server, is granted the Full Administrator role, with complete access to the system, including read and write privileges.
+After the initial configuration is complete, the Full Administrator can add other users and assign roles to define their privileges.
+
+[NOTE]
+====
+* A cluster running Couchbase Server Enterprise Edition can have any number of users.
+* A cluster running Couchbase Server Community Edition supports a maximum of 20 users.
+====
+
+As a Full Administrator, you can add users and groups to Couchbase Server by using the xref:manage:manage-security/manage-users-and-roles.adoc#manage-users-with-the-ui[Couchbase Web Console UI], the xref:manage:manage-security/manage-users-and-roles.adoc#manage-users-with-the-cli[CLI], or the xref:manage:manage-security/manage-users-and-roles.adoc#manage-users-with-the-rest-api[REST API], as described in the following sections.
+
+IMPORTANT: All explanations and examples on this page are for the Couchbase Server cluster user with the Full Administrator role, unless otherwise noted.
+
+For more information about the Couchbase Server authorization, see xref:learn:security/authorization-overview.adoc[Authorization].
+
+For more information about roles and corresponding privileges, see xref:learn:security/roles.adoc[Roles].
+
+[#manage-users-with-the-ui]
+== Manage Users and Groups from the UI
+
+Manage users and groups in Couchbase Server through the Couchbase Web Console.
+
+To see the Security screen, do the following:
+
+. Open the [.ui]*Couchbase Web Console*.
+
+. On the [.ui]*Dashboard*, go to the [.ui]*Security* tab, and select [.ui]*Users & Groups*.
+
+[#security_view]
+image::manage-security/securityView.png[,820,align=left]
+
+[#users-and-groups-panel]
+From the *Users & Groups* tab, you can do the following:
+
+* xref:manage:manage-security/manage-users-and-roles.adoc#manage-groups-from-ui[Manage groups].
+* xref:manage:manage-security/manage-users-and-roles.adoc#manage-users-from-ui[Manage users].
+* Assign roles to users and groups.
+
+[#external_auth_not_enabled]
+The Full Administrator, who created the cluster, is not listed in the *Users & Groups* tab.
+
+The following notification is displayed on the screen when LDAP or SAML are not enabled: LDAP/SAML is not enabled.
+This indicates that the external authentication, using either `saslauthd` or `LDAP`, has not been enabled.
+To enable LDAP, see the 1st step in the procedure xref:manage:manage-security/configure-saslauthd.adoc#getting-started-with-saslauthd-and-ldap[Getting Started with saslauthd and LDAP].
+
+For more information about the external authentication, see xref:learn:security/authentication-domains.adoc[Authentication Domains].
+
+[#manage-groups-from-ui]
+== Manage Groups from the UI
+
+Add, edit, or delete groups in Couchbase Server through the Couchbase Web Console.
+
+[#add-a-group]
+=== Add a Group
+
+Create user groups and assign roles to them.
+Add users to the group, which automatically grants users the group’s roles.
+Groups provide an efficient way to manage role assignments when the number of users is large.
+
+To create a group from the UI, do the following:
+
+. On the [.ui]*Security* screen, select the [.ui]*Add Group* tab.
++
+The Add New Group dialog is displayed.
++
+[#add-new-group-dialog]
+image::manage-security/addNewGroupDialog71.png[,420,align=left]
+
+. Select or enter the necessary values in the following fields:
+
+** [.ui]*Group Name*: The name for the user group in the current cluster.
+** [.ui]*Description*: An optional description for the user group.
+** [.ui]*Map to LDAP Group*: The name of an existing LDAP group to which this group must be mapped.
+For more information, see xref:manage:manage-security/configure-ldap.adoc#map-ldap-groups-to-couchbase-server-roles[Map LDAP Groups to Couchbase Server Roles].
+** [.ui]*Roles*: The list of role (categories) to associate with the group.
+To see the roles, expand each role category.
++
+The first category is [.ui]*Administrative* roles, which grants access to cluster-wide features.
++
+The [.ui]*Administrative* role category is followed by the [.ui]*Bucket*, [.ui]*Data*, [.ui]*Views*, [.ui]*Query & Index*, [.ui]*Search*, [.ui]*Analytics*, [.ui]*Eventing*, [.ui]*XDCR*, [.ui]*Backup*, and [.ui]*Mobile* role categories.
++
+You can apply the roles to some or all buckets of the cluster.
+Within any given bucket, the assigned role can apply to all or to a subset of xref:learn:data/scopes-and-collections.adoc[scopes and collections] defined for that bucket.
+
+. Select btn:[Save] to save the details.
+
+[#create-a-group-with-an-administrative-role]
+==== Create a Group with an Administrative Role
+
+For example, to create a `ClusterAdmin` group where all members are granted the Cluster Admin role, do the following:
+
+. In the [.ui]*Add New Group* dialog, enter a [.ui]*Group Name*.
+
+. Select [.ui]*Cluster Admin* from the Roles section.
++
+[#add-new-group-dialog-no-mapping]
+image::manage-security/addNewGroupDialogNoMapping70.png[,420,align=left]
++
+In this example, LDAP group mapping is not required.
+The group is intended only for users defined on Couchbase Server as local or external.
+For an explanation of LDAP group mappings, see xref:manage:manage-security/configure-ldap.adoc#map-ldap-groups-to-couchbase-server-roles[Map LDAP Groups to Couchbase Server Roles].
+
+. Select btn:[Save] to save the details.
+The group is created and listed in the [.ui]*Groups* section of the [.ui]*Users & Groups* tab.
+
+[#create-a-group-with-a-data-access-role]
+==== Create a Group with a Data-Access Role
+
+Within each bucket, Couchbase Server organizes data into scopes and collections.
+For more information, see xref:learn:data/scopes-and-collections.adoc[Scopes and Collections].
+You must assign appropriate roles because Role-Based Access Control (RBAC) protects access to each bucket, scope, and collection.
+
+To create a group with a data-access role, for example, [.ui]*Data Reader*, do the following:
+
+. In the [.ui]*Add New Group* dialog, enter a [.ui]*Group Name*.
+
+. Expand the [.ui]*Data* category in the [.ui]*Roles* section, which lists the [.ui]*Data* roles.
++
+image::manage-security/dataCategoryOpen70.png[,240,align=left]
+
+. Select [.ui]*Data Reader* to list the role-assignment options.
++
+image::manage-security/dataReaderRoleAssignmentInitial.png[,280,align=left]
++
+You can select a bucket, its associated scope, and its associated collection.
+In each case, the default selection is a wild-card symbol (*) indicating that all values are selected by default.
++
+image::manage-security/selectBucketForRoleAssignment.png[,280,align=left]
++
+Select the bucket field that lists the available 3 buckets *demoBucket*, *exampleBucket*, and *testBucket*.
+Select [.ui]*testBucket*.
++
+image::manage-security/selectScopeForRoleAssignment.png[,280,align=left]
+
+. Select the scope field that lists the available *MyScope* and *_default*.
+Select *MyScope*.
++
+image::manage-security/selectCollectionForRoleAssignment.png[,280,align=left]
+
+. Select the collection field that lists the available *MyCollection*.
+Select *MyCollection*.
+
+. Select btn:[Save] to save the role assignment.
+The role is assigned and listed in the [.ui]*Groups* section of the [.ui]*Users & Groups* tab.
++
+image::manage-security/addedGroupForDataReader.png[,720,align=left]
+
+Repeat the procedure for any additional roles you want to assign to the same or a different group.
+You can assign multiple roles in one go and save the changes.
+
+NOTE: Some roles apply to all data in the bucket, some to all collections in a specified scope within a specified bucket, and some to all documents in a specified collection within a specified scope and bucket.
+
+=== Edit a Group
+
+To make additional changes to an existing group's role assignments, do the following:
+
+. In the [.ui]*Users & Groups* tab, select [.ui]*Groups*.
+
+. Select btn:[Edit] associated with the group you want to edit.
+The [.ui]*Edit Group* dialog is displayed.
+
+. Make the necessary changes to the group's role assignments.
+
+. Select btn:[Save] to save the changes.
+
+=== Delete a Role Assignment
+
+To delete a role assignment, do the following:
+
+. In the [.ui]*Users & Groups* tab, select [.ui]*Groups*.
+
+. In the *Add New Group* dialog, select btn:[X] associated with the role definition you want to remove.
+
+. Select btn:[Save] to save the changes.
+
+=== Delete a Group
+
+To delete a group, do the following:
+
+. In the [.ui]*Users & Groups* tab, select [.ui]*Groups*.
+
+. Select the group you want to remove, and then select btn:[Delete Group].
+
+. To confirm the deletion, select btn:[Delete Group].
+
+[#manage-users-from-ui]
+== Manage Users from the UI
+
+You can add, edit, or delete users in Couchbase Server through the Couchbase Web Console.
+As an administrator, you can also reset the password for users, force them to change password, and lock/unlock user accounts.
+
+[#add-a-user]
+=== Add a User
+
+You can add a user to the local domain or an external domain, from the UI.
+
+[#add-a-locally-authenticated-user]
+==== Add a Locally Authenticated User
+
+To add a locally authenticated user from the UI, do the following:
+
+. On the [.ui]*Security* screen, select the [.ui]*Add User* tab.
+The [.ui]*Add New User* dialog is displayed.
++
+[#manage_user_new]
+image::manage-security/addNewUserDialogInitial72.png[,420,align=left]
+
+. Select or enter the necessary values in the following fields:
+
+** [.ui]*Username*: The name for the user in the current cluster, based preferably on the role type.
+** [.ui]*Full Name*: An optional full name for the user.
+** [.ui]*Password*: The temporary password for the user.
++
+For more information about username and password authentication, see xref:learn:security/usernames-and-passwords.adoc[Usernames and Passwords].
+** [.ui]*Verify Password*: To verify the temporary password for the user.
+** [.ui]*Force Password Update*: To force the user to change their assigned temporary password on next login, enable this option.
+For more information about forcing password changes, see xref:manage:manage-security/manage-passwords.adoc#force-password-update[Force Password Update].
+** [.ui]*Roles*: The list of role (categories) to associate with the user.
+You can assign the user to one or more specific roles, or to one or more groups so that the user inherits the group's assigned roles, or both.
++
+To see the roles, expand each role category.
+The first category is [.ui]*Administrative* roles, which grants access to cluster-wide features.
+The [.ui]*Administrative* role category is followed by the [.ui]*Bucket*, [.ui]*Data*, [.ui]*Views*, [.ui]*Query & Index*, [.ui]*Search*, [.ui]*Analytics*, [.ui]*Eventing*, [.ui]*XDCR*, [.ui]*Backup*, and [.ui]*Mobile* role categories.
++
+For more information about assigning roles, see xref:manage:manage-security/manage-users-and-roles.adoc#adding-roles[Assign Roles to a User].
++
+You can apply the roles to some or all buckets of the cluster.
+Within any given bucket, the assigned role can apply to all or to a subset of xref:learn:data/scopes-and-collections.adoc[scopes and collections] defined for that bucket.
+** [.ui]*Groups*: The list of groups to associate with the user.
+You can assign the user to one or more groups so that the user inherits the group's assigned roles.
+
+. Select btn:[Save] to save the details.
+
+If Native LDAP or `saslauthd` is enabled, the [.ui]*Add New User* dialog displays the Authentication Domain section.
+Authentication Domain has the following options:
+
+* [.ui]*Couchbase*: By default, this option is enabled.
+The user is defined locally.
+The password for the user must be created.
+* [.ui]*External*: The user is defined externally, and no password is created.
+For more information about adding an external user, see xref:manage:manage-security/manage-users-and-roles.adoc#adding-an-externally-authenticated-user[Add an Externally Authenticated User].
+
+[#adding-roles]
+==== Assign Roles to a User
+
+You can assign roles to users from the UI by using one of the following methods:
+
+* When adding a user, as explained in the xref:manage:manage-security/manage-users-and-roles.adoc#add-a-locally-authenticated-user[Add a Locally Authenticated User].
+
+* For an existing user, by editing their role details.
+
+To assign a role, for example, [.ui]*Query Curl Access*, to an existing user, do the following:
+
+. On the [.ui]*Security* screen, select [.ui]*Users & Groups*, and then select [.ui]*Users*.
+
+. Select the user from the list you want to assign a role and select btn:[Edit] associated with that user.
+The [.ui]*Edit User* dialog is displayed.
+
+. In the [.ui]*Edit User* dialog, in the [.ui]*Roles* section, expand the [.ui]*Query & Index* category that lists the Query roles.
+
+. Select or assign the *Query CURL Access* role.
++
+image::manage-security/addQueryCurlAccessRole70.png[,420,align=left]
+
+. Select btn:[Save Changes] to save the details.
+
+You can see the newly assigned role in the [.ui]*Users* list.
+
+Now, you can continue the user-definition process by assigning the user to a group.
+
+[#assigning-groups]
+=== Assign a User to a Group
+
+You can assign a user to one or more groups.
+You can either continue the user-definition process by assigning the user to a group while xref:manage:manage-security/manage-users-and-roles.adoc#add-a-locally-authenticated-user[adding the user], or you can edit the user's details later to assign them to a group.
+
+To assign a user to a group, when adding the user, do the following:
+
+. In the [.ui]*Add New User* dialog, select the *Groups* tab.
+The available groups are listed.
+
+. Select the group(s) to which you want to assign the user.
+
+. Select btn:[Add User] to save the changes.
+
+[#editing-users-and-groups]
+==== Change User's Group
+
+To change a user's group or assign a user to a group, by editing the user's details, do the following:
+
+. On the [.ui]*Security* screen, select [.ui]*Users & Groups*, and then select [.ui]*Users*.
+
+. Select the user from the list you want to assign a group and select btn:[Edit] associated with that user.
+The [.ui]*Edit User* dialog is displayed.
+
+. In the [.ui]*Edit User* dialog, select the *Groups* tab.
+The available groups are listed.
++
+For example, add user to the `ClusterAdmin` user group by selecting the associated checkbox.
++
+image::manage-security/groupsPanel2.png[,420,align=left]
+
+. Select btn:[Save Changes] to save the details.
+
+You can see the result in the [.ui]*Users* list:
+
+image::manage-security/securityScreenWithLocalUser.png[,800,align=left]
+
+The user `localuser` is defined and granted the following roles:
+
+* The `Query CURL Access` role was assigned directly.
+
+* The `Cluster Admin` role is inherited from the `ClusterAdmin` group.
+
+The `auth domain` for the user is `Couchbase`, indicating that this is a locally defined user.
+
+[#adding-an-externally-authenticated-user]
+=== Add an Externally Authenticated User
+
+An externally authenticated user is not authenticated on Couchbase Server.
+Instead, the user is authenticated on a server outside the cluster.
+The user’s password is defined and maintained by the external system.
+
+External authentication must be supported by xref:learn:security/authentication-domains.adoc#native-ldap-support[Native LDAP], xref:learn:security/authentication-domains.adoc#using-saslauthd[saslauthd], or xref:learn:security/authentication-domains.adoc#introduction-to-pam-based-authentication[PAM].
+
+*Prerequisite*::
+
+To add externally authenticated users, you must complete the required setup.
+For detailed steps to configure external authentication using Native LDAP, which is the recommended method, see xref:manage:manage-security/configure-ldap.adoc[Configure LDAP].
+
+*Procedure*::
+
+To add an externally authenticated user, do the following:
+
+. On the [.ui]*Security* screen, select the [.ui]*Add User* tab.
+The [.ui]*Add New User* dialog is displayed.
+
+. In the [.ui]*Add New User* dialog, select the [.ui]*External* authentication domain type.
+Password fields are not displayed as they're not necessary to add an externally authenticated user.
++
+image::manage-security/externalUserRadioButton.png[,420,align=left]
++
+. The steps to set up [.ui]*Username*, [.ui]*Roles*, and [.ui]*Groups* are same as in the sections xref:manage:manage-security/manage-users-and-roles.adoc#add-a-locally-authenticated-user[Add a Locally Authenticated User], xref:manage:manage-security/manage-users-and-roles.adoc#adding-roles[Assign Roles to a User], and xref:manage:manage-security/manage-users-and-roles.adoc#assigning-groups[Assign a User to a Group] respectively.
++
+For example, assign the [.ui]*Query System Catalog* role to the external user.
+Then add the external user to the `ClusterAdmin` group, where it inherits the *Cluster Admin* role.
+
+After the definition process is complete, the external user and its associated roles are listed in the [.ui]*Users* tab.
+
+image::manage-security/usersSecurityRows.png[,800,align=left]
+
+From the example, the externally authenticated user `externalUser` has the roles `Query System Catalog` and `Cluster Admin`.
+The auth domain is `External`, indicating that the user is authenticated on an external server.
+
+NOTE: You can authenticate the external users only using the `PLAIN` method.
+By default, the Couchbase SDK uses PLAIN only when connecting over TLS ports.
+Therefore, external users must connect through TLS ports.
+For more information about the authentication methods, see xref:learn:security/authentication-overview.adoc#authentication-for-applications[Understanding Authentication].
+
+=== Delete a User
+
+To delete a user, do the following:
+
+. In the [.ui]*Users & Groups* tab, select [.ui]*Users*.
+
+. Select the user you want to remove, and then select btn:[Delete].
+The [.ui]*Confirm Delete User* dialog is displayed.
+
+. To confirm the deletion, select btn:[Delete User].
+
+[#lock-and-unlock-user-accounts]

@@ -12,10 +12,9 @@ const merge = require('merge-stream')
 const ospath = require('path')
 const path = ospath.posix
 const postcss = require('gulp-postcss')
-const postcssCalc = require('postcss-calc')
 const postcssImport = require('postcss-import')
 const postcssUrl = require('postcss-url')
-const postcssVar = require('postcss-custom-properties')
+const postcssNesting = require('postcss-nesting')
 const uglify = require('gulp-uglify')
 const vfs = require('vinyl-fs')
 
@@ -47,9 +46,8 @@ module.exports = (src, dest, preview) => () => {
         },
       },
     ]),
-    // NOTE importFrom is for use in supplemental CSS files
-    postcssVar({ importFrom: path.join(src, 'css', 'vars.css'), preserve: preview }),
-    preview ? postcssCalc : () => {},
+    // NOTE custom properties are preserved in the output (not inlined) so they can be themed at runtime (e.g. dark mode)
+    postcssNesting,
     autoprefixer,
     preview ? () => {} : cssnano({ preset: 'default' }),
   ]

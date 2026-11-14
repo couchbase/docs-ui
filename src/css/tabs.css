@@ -21,7 +21,7 @@
 
 .tablist > ul li {
   align-items: center;
-  background-color: #fff;
+  background-color: var(--surface-page);
   cursor: pointer;
   display: flex;
   color: #262626;
@@ -64,7 +64,7 @@
 }
 
 .tabpanel {
-  background-color: #fff;
+  background-color: var(--surface-page);
   padding: 1.25em;
 }
 

@@ -4,3 +4,6 @@
 .npmrc
 package-lock.json
 
+/tests/visual/__screenshots__/
+/test-results/
+/playwright-report/

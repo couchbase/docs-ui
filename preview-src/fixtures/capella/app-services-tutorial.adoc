@@ -1,0 +1,268 @@
+// FIXTURE app-services-tutorial: docs-capella-app-services@main (d8bb5759) modules/ROOT/pages/get-started/configuring-app-services.adoc
+// Imported, trimmed and sanitised by scripts/import-fixtures.js. Do not edit by hand.
+= Configure Your Free Tier App Services (Mobile sync)
+:page-component-name: cloud
+:page-capella-type: App Services
+:description: Configure App Services to test out a mobile application with your free tier operational cluster.
+:page-topic-type: tutorial
+:page-pagination: prev
+:page-aliases: cloud:get-started:configuring-app-services.adoc
+
+[abstract]
+{description}
+
+== Capella App Services
+
+Capella App Services is a fully managed application backend designed for mobile and edge applications.
+You can use Capella App Services with an embedded xref:couchbase-lite::index.adoc[Couchbase Lite] database in your applications.
+
+With Capella App Services, you can:
+
+* Sync application data from linked collections in your App Endpoint on Capella and any mobile or edge device.
+* Sync data directly between devices without a network connection to Capella App Services with xref:couchbase-lite:android:p2psync-websocket.adoc[Peer-to-Peer].
+* Authenticate and manage mobile and edge users through App Services Endpoints.
+
+
+== Prerequisites
+
+* You deployed a Couchbase Capella free tier operational cluster.
+For more information, see xref:cloud:get-started:create-account.adoc#getting-started[Deploy Your Free Tier Operational Cluster].
+* Your free tier operational cluster has the `travel-sample` bucket.
+For more information, see xref:cloud:clusters:data-service/import-data-documents.adoc[].
+* You deployed your free tier App Services.
+For more information, see xref:cloud:get-started:create-account.adoc#app-services[Deploy Capella Free Tier App Services].
+* You have a REST Client, such as https://www.postman.com/[Postman^] or https://httpie.io/[HTTPie^] installed and configured.
+
+
+[#create-app-endpoint]
+== Create an App Endpoint for Your Free Tier App Service
+
+To create an App Endpoint:
+
+. Go to menu:App Services[] and select the App Service you want to create an endpoint for.
+. Go to menu:App Endpoints[] and click btn:[Create App Endpoint].
+. In the *App Endpoint Name* field, enter *travel-sample-appservice*.
+. In the *Linked Bucket* list, select *travel-sample*.
+. In the *Scope* list, select *inventory*.
+. Go to the menu:Linked Collections[] table and link the *airline* collection.
+. Click btn:[Create App Endpoint].
+
+
+If you link a large number of collections at one time, an initializing state occurs.
+During this phase, you can update general configuration, link, or unlink more collections, or change Auth Providers or the Access Control Function.
+After the linking of collections completes, the App Endpoint's status shows as *Offline*.
+You can resume the endpoint by selecting the desired endpoint from the menu:App Endpoints[] menu and clicking the btn:[Resume App Endpoint] button in App Endpoint settings.
+
+[#configure-app-access]
+== Configure the App Endpoint with an Access Control Policy
+
+To configure access control for your new App Endpoint:
+
+. Go to *App Services* and select an App Service.
+. Go to menu:App Endpoints[] and select *travel-sample-appservice*.
+. Go to menu:Security[Access and Validation].
+. Click the *airline* collection.
+. In the text editor, replace the existing text with the following JavaScript code:
+[source,javascript]
++
+----
+function (doc, oldDoc, meta) {
+  if (doc.channels) {
+      // If channels list is specified in document, assign doc to the channels
+     channel(doc.channels);
+  }
+  else {
+    // assign to public channel (which is accessible to all users)
+    channel ("!")
+  }
+}
+----
++
+. Click btn:[Save].
+
+
+[#create-app-role]
+== Create an App Role for the App Endpoint
+
+To add an App Role for the App Endpoint:
+
+. Go to menu:Security[App Roles].
+. Click btn:[Create App Role].
+. In the *App Role Name* field, enter `admin`.
+. In the *Admin Channels* field of the *airline* collection, enter an asterix (*) and press kbd:[Enter].
+. Click btn:[Save].
+
+
+[#create-app-user]
+== Create an App User for the App Endpoint
+
+To create a user for the App Endpoint:
+
+. Go to menu:Security[App Users].
+. Click btn:[Create App User].
+. In the *Create App User* page, do the following:
+.. In the *App User name* field, enter a username for the new app user.
+.. In the *Password* field, enter a password for the new app user.
+... (Optional) Click the *Configure Access Grants* list.
+... (Optional) In the *Assigned App Roles* field, select `admin` from the list.
+... (Optional) In the *Assign Channels* field, enter an asterix (*) and press kbd:[Enter].
+.. Click btn:[Create App User].
+
+NOTE: App Users can inherit their assigned channels directly from roles or be specifically assigned channels on a per user basis.
+
+[#access-endpoint]
+== Connect to the App Services
+
+Follow these steps to connect to the App Services via Couchbase Lite, Public REST API, or Admin REST API:
+
+[tabs]
+====
+Public REST API::
++
+--
+You can use a REST client to connect to the App Services Public REST API.
+
+To retrieve a document from the `travel-sample` bucket through the App Services Public REST API:
+
+. Go to menu:Connect[].
+. Select *Connect via Public REST API*.
+. Next to the *Public Endpoint* field, click btn:[Copy].
+. In your REST Client, create a GET request.
+. Paste the Public Connection URL and change `wss` to `https`.
+. Add `/airline_10` to the end of the URL. Your URL should look similar to `\https://123456789.apps.capella.com:4984/travel-sample-appservice.inventory.airline/airline_10`.
+. Under the *Test: Fetch a Sample Document* section, enter the username and password for the <<create-app-user, App User you created>>.
+. Under *Keyspace*, select airline collection.
+. Send the GET request to receive the contents of the document `airline_10` as the response.
+
+For more information about the Public REST API, see xref:sync-gateway::rest-api.adoc[].
+--
+
+Couchbase Lite::
++
+--
+[#connect-couchbase-lite]
+Couchbase Lite is an embedded database.
+You can use it to embed data processing and storage in applications that run on mobile and IoT devices, allowing apps to locally store and access data without an Internet connection.
+
+Couchbase Lite embedded apps can connect to App Endpoints and sync data with each other and the Couchbase Capella backend over a websockets-based data sync protocol.
+
+To connect Couchbase Lite to your App Endpoint:
+
+. Go to menu:App Services[] and select an App Service.
+. Go to menu:App Endpoints[] and select *travel-sample-appservice*.
+. Go to menu:Connect[].
+. Select *Connect via Couchbase Lite*.
+. Next to the *Public Connection* field, click btn:[Copy].
+. Select *App Services Credentials* from the list to choose the credentials you want to use to connect to your Capella Cluster.
+To create App Services user credentials, go to <<add-app-services-user,App User>>.
+
+. Under Choose a Couchbase Lite SDK, select the SDK you're using or plan to use for your applications from the Language list.
+* xref:couchbase-lite:swift:gs-install.adoc[Swift (iOS, macOS)]:
+Replace the `URLEndpoint` in the sample code with your App Endpoint Public Connection URL.
+* xref:couchbase-lite:android:gs-install.adoc[Kotlin (Android)]:
+Replace the `URLEndpoint` in the sample code with your App Endpoint Public Connection URL.
+* xref:couchbase-lite:android:gs-install.adoc[Java (Android)]:
+Replace the `URLEndpoint` in the sample code with your App Endpoint Public Connection URL.
+* xref:couchbase-lite:csharp:gs-install.adoc[.Net (Desktop, Xamarin)]:
+Replace the `URLEndpoint` in the sample code with your App Endpoint Public Connection URL.
+* xref:couchbase-lite:java:gs-install.adoc[Java (Desktop)]:
+Replace the `URLEndpoint` in the sample code with your App Endpoint Public Connection URL.
+* xref:couchbase-lite:c:gs-install.adoc[C (Desktop, Mobile, Embedded)]:
+Replace the `CBLEndpoint_CreateWithURL` in the sample code with your App Endpoint Public Connection URL.
+--
+
+Admin REST API::
++
+--
+[#connect-admin-endpoint]
+You can use a REST client to connect to the App Services Admin REST API:
+
+. Go to menu:App Services[] and select an App Service.
+. Go to menu:App Endpoints[] and click *travel-sample-appservice*.
+. Go to menu:Connect[].
+. Next to the *Admin Connection URL* field, click btn:[Copy].
+. In your REST client, create a GET request.
+. Paste the Admin Connection URL.
+. Add `/_user/` to the end of the URL.
+Your URL should look similar to `\https://123456789.apps.capella.com:4985/travel-sample-appservice/_user/`.
+. Select *Basic Authentication*.
+. Enter the <<allowed-ip-admin-cred,admin credential you created>>.
+. Send the GET request to receive the <<create-app-user,App User you created>> earlier.
+--
+====
+
+
+[#add-app-services-user]
+=== Add an App Services User
+
+To add a new App Services User with the App Services Admin REST API:
+
+. In your REST client, create a POST request.
+. Paste the Admin Connection URL.
+. Add `/_user/` to the end of the URL.
+  Your URL should look similar to `\https://123456789.apps.capella.com:4985/travel-sample-appservice/_user/`.
+. Select *Basic Authentication*.
+. Enter the <<allowed-ip-admin-cred,admin credential you created>>.
+. In the request body, add the following JSON code:
++
+[source,json]
+----
+{
+  "name": "demo2@example.com",
+  "password": "password",
+  "admin_channels": [
+    "string"
+  ],
+  "disabled": false
+}
+----
++
+. Send the POST request.
+. Go to menu:App Services[] and select an App Service.
+. Go to menu:App Endpoints[] and click *travel-sample-appservice*.
+. Go to menu:Security[App Users] and fill in the *App Username* and *App User Password*.
+. Click btn:[Create App User].
+
+For more information about the Admin REST API, see xref:sync-gateway::rest-api-admin.adoc[].
+
+[#admin-api]
+=== Administer App Users with the App Services REST API (Optional)
+
+You can use the App Services Admin REST API to add new users and return a list of users.
+
+To use the App Services Admin REST API:
+
+* <<allowed-ip-admin-cred,Add an allowed IP address and create an admin credential>>
+* <<add-app-services-user,Add an App Services user>>
+* <<access-endpoint,Connect to the endpoint>>
+
+
+[#allowed-ip-admin-cred]
+=== Add an Allowed IP and Create an Admin Credential
+
+To add an allowed IP address and create an admin credential:
+
+. Go to menu:App Services[] and select an App Service.
+. Go to menu:App Endpoints[] and click *travel-sample-appservice*.
+. Go to menu:Connect[].
+. Select *Connect via Admin REST API*.
+. Under *Allowed IP Addresses*, click btn:[Go to Allowed IP Addresses].
+. Click btn:[Add Allowed IP Address].
+. In the *Add Allowed IP* page, click btn:[Add Allowed IP Address].
+. In the *Add Allowed IP Address* page, you can either:
+* Click btn:[Add Current IP Address] to populate the *Allowed IP / CIDR Block* field with your IP address.
+* Click btn:[Allow Access from Anywhere] to allow any IP address to connect to your cluster.
+* Enter an IP address or IP address range in CIDR notation in the *Allowed IP / CIDR Block* field.
+. Select a *time to retain* from the list.
+. Click btn:[Add Allowed IP].
+. Go to menu:App Endpoints[] and click *travel-sample-appservice*.
+. Go to menu:Connect[].
+. Under *Connect for Admin REST*, click btn:[Manage Admin Credentials].
+. Click btn:[Create Admin Credential].
+. In the *Create Admin Credential* page, do the following:
+.. In the *Username* field, enter `admin`.
+.. In the *Password* field, enter a password for the admin credential.
+.. Toggle the checkmark under *App Endpoint* to *Apply to all current and future App Endpoints within this App Service*.
+.. Click btn:[Create Admin Credential].
+
+CAUTION: You cannot change the Username and Password after creating the admin credential.
