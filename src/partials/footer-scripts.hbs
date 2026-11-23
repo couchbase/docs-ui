@@ -11,7 +11,7 @@
 {{> terminal}}
 </template>
 
-{{#if (or env.ALGOLIA_API_KEY env.TYPESENSE_URL)}}
+{{#if (or env.ALGOLIA_API_KEY (or env.TYPESENSE_URL env.PAGEFIND_URL))}}
 {{!-- the real, Antora-driven catalog of navGroups/components/colors that drives the search facet tree --}}
 <script id="search-catalog" type="application/json">
 {{{stringify (search-catalog (nav-groups))}}}

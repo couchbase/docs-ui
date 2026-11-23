@@ -311,14 +311,20 @@
   // Typesense takes over when the page was built with TYPESENSE_URL set (see
   // search-panel.hbs and 12-typesense-client.js); otherwise Algolia, as
   // before. Everything below this point is the same for both.
-  var useTypesense = !!(container.dataset.typesenseUrl && window.createTypesenseSearchClient)
-  var searchClient = useTypesense
-    ? window.createTypesenseSearchClient({
-      url: container.dataset.typesenseUrl,
-      apiKey: container.dataset.typesenseKey,
-    })
-    : algoliasearch(container.dataset.appId, container.dataset.apiKey)
-  var indexName = useTypesense ? container.dataset.typesenseCollection : container.dataset.indexName
+  // Pagefind likewise, when built with PAGEFIND_URL (12-pagefind-client.js).
+  var usePagefind = !!(container.dataset.pagefindUrl && window.createPagefindSearchClient)
+  var useTypesense = !usePagefind && !!(container.dataset.typesenseUrl && window.createTypesenseSearchClient)
+  var searchClient = usePagefind
+    ? window.createPagefindSearchClient({ url: container.dataset.pagefindUrl })
+    : useTypesense
+      ? window.createTypesenseSearchClient({
+        url: container.dataset.typesenseUrl,
+        apiKey: container.dataset.typesenseKey,
+      })
+      : algoliasearch(container.dataset.appId, container.dataset.apiKey)
+  var indexName = usePagefind
+    ? 'pagefind'
+    : useTypesense ? container.dataset.typesenseCollection : container.dataset.indexName
 
   // The current page's own component/version (if any), and whichever
   // navGroup/subGroup (if any) has this page as its own landing/start page --
@@ -409,7 +415,7 @@
     searchClient: searchClient,
     future: { preserveSharedStateOnUnmount: true },
     // click analytics go to Algolia, so they only make sense with Algolia
-    insights: !useTypesense,
+    insights: !useTypesense && !usePagefind,
     // Reflects query + refinements into the URL, so a search is shareable and
     // survives a reload. A plain `routing: true` hands the ENTIRE parsed
     // query string to InstantSearch's routing, which assumes every top-level
