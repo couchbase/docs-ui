@@ -308,7 +308,47 @@
     if (node.subGroups) node.subGroups.forEach(function (sub) { indexCatalogComponents(sub, color) })
   })({ subGroups: componentCatalog.navGroups }, FALLBACK_PILL_COLOR)
 
-  var searchClient = algoliasearch(container.dataset.appId, container.dataset.apiKey)
+  // The dedicated search-page layout (see src/layouts/search-page.hbs)
+  // embeds this same widget inline, always visible. Everywhere else it's the
+  // header's dropdown, whose results panel stays hidden until the reader
+  // types something (see the 'render' handler further down).
+  var isFullPage = container.classList.contains('search-container--page')
+
+  // The header dropdown is on every docs page, so anything it sends on load
+  // is sent once per page view. InstantSearch's start() runs an initial
+  // search, and every clear or click-away runs another, all with an empty
+  // query whose results the hidden panel never shows, and Algolia bills each
+  // one as a search request (AV-153434: 99.9% of docs-search-v2 searches
+  // were empty). So in header mode, a batch where every query is empty is
+  // answered locally with empty results instead of going to Algolia, using
+  // Algolia's own "conditional requests" pattern for InstantSearch.js. The
+  // dedicated search page keeps the unwrapped client, since landing there
+  // means the reader wants results.
+  var algoliaClient = algoliasearch(container.dataset.appId, container.dataset.apiKey)
+  var searchClient = isFullPage ? algoliaClient : Object.assign({}, algoliaClient, {
+    search: function (requests) {
+      var allEmpty = requests.every(function (request) { return !(request.params && request.params.query) })
+      if (allEmpty) {
+        return Promise.resolve({
+          results: requests.map(function () {
+            return {
+              hits: [],
+              nbHits: 0,
+              nbPages: 0,
+              page: 0,
+              processingTimeMS: 0,
+              hitsPerPage: 0,
+              exhaustiveNbHits: false,
+              query: '',
+              params: '',
+            }
+          }),
+        })
+      }
+      loadDefaultVersions()
+      return algoliaClient.search(requests)
+    },
+  })
   var indexName = container.dataset.indexName
 
   // The current page's own component/version (if any), and whichever
@@ -370,30 +410,44 @@
   // zero results, since a zero-result query's own facet response comes back
   // with no component_version data at all to judge "all versions selected"
   // against.
+  //
+  // Only needed once the reader has typed something, so the header dropdown
+  // defers it to the first non-empty query (see the searchClient wrapper
+  // above) rather than sending it on every page load. The dedicated search
+  // page still loads it straight away. Either way it's sent at most once per
+  // page view, always through the unwrapped client, since its own query is
+  // deliberately empty. Until it resolves, collectComponentNames and
+  // buildRefinementPills already fall back to the unfiltered lists.
   var defaultVersionByComponent = {}
   var allVersionsByComponent = {}
   var defaultVersionsLoaded = false
-  searchClient.search([{
-    indexName: indexName,
-    params: { query: '', facets: ['component_version'], hitsPerPage: 0, maxValuesPerFacet: 1000 },
-  }]).then(function (response) {
-    var results = response.results
-    var facetCounts = (results[0] && results[0].facets && results[0].facets.component_version) || {}
-    var versionsByComponent = {}
-    Object.keys(facetCounts).forEach(function (value) {
-      var parts = value.split('@')
-      var component = parts[0]
-      var version = parts[1]
-      if (!versionsByComponent[component]) versionsByComponent[component] = []
-      versionsByComponent[component].push({ value: value, version: version })
+  var defaultVersionsRequested = false
+  function loadDefaultVersions () {
+    if (defaultVersionsRequested) return
+    defaultVersionsRequested = true
+    algoliaClient.search([{
+      indexName: indexName,
+      params: { query: '', facets: ['component_version'], hitsPerPage: 0, maxValuesPerFacet: 1000 },
+    }]).then(function (response) {
+      var results = response.results
+      var facetCounts = (results[0] && results[0].facets && results[0].facets.component_version) || {}
+      var versionsByComponent = {}
+      Object.keys(facetCounts).forEach(function (value) {
+        var parts = value.split('@')
+        var component = parts[0]
+        var version = parts[1]
+        if (!versionsByComponent[component]) versionsByComponent[component] = []
+        versionsByComponent[component].push({ value: value, version: version })
+      })
+      Object.keys(versionsByComponent).forEach(function (component) {
+        versionsByComponent[component].sort(function (a, b) { return compareVersionsDescending(a.version, b.version) })
+        defaultVersionByComponent[component] = versionsByComponent[component][0].value
+      })
+      allVersionsByComponent = versionsByComponent
+      defaultVersionsLoaded = true
     })
-    Object.keys(versionsByComponent).forEach(function (component) {
-      versionsByComponent[component].sort(function (a, b) { return compareVersionsDescending(a.version, b.version) })
-      defaultVersionByComponent[component] = versionsByComponent[component][0].value
-    })
-    allVersionsByComponent = versionsByComponent
-    defaultVersionsLoaded = true
-  })
+  }
+  if (isFullPage) loadDefaultVersions()
 
   var search = instantsearch({
     indexName: indexName,
@@ -1261,12 +1315,10 @@
 
   var searchPanel = document.querySelector('.search-panel')
 
-  // The dedicated search-page layout (see src/layouts/search-page.hbs)
-  // embeds this same widget inline, always visible, with nothing "outside"
-  // it to click away to -- the show-on-type/hide-on-clear-or-click-away
-  // behavior below only makes sense for the header's dropdown instance.
-  var isFullPage = container.classList.contains('search-container--page')
-
+  // On the dedicated search page (isFullPage, above) the widget is always
+  // visible, with nothing "outside" it to click away to -- the
+  // show-on-type/hide-on-clear-or-click-away behavior below only makes sense
+  // for the header's dropdown instance.
   search.on('render', function () {
     if (isFullPage) return
     var query = search.renderState[indexName]?.searchBox?.query
