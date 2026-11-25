@@ -345,8 +345,15 @@
           }),
         })
       }
-      loadDefaultVersions()
-      return algoliaClient.search(requests)
+      // Both requests go out in parallel, but the results are only handed
+      // to InstantSearch once the facet lookup has settled -- otherwise the
+      // first render could run against an empty defaultVersionByComponent
+      // (disabled checkboxes, unfiltered category lists) and nothing would
+      // re-render it until the next search.
+      var defaultVersions = loadDefaultVersions()
+      return algoliaClient.search(requests).then(function (response) {
+        return defaultVersions.then(function () { return response })
+      })
     },
   })
   var indexName = container.dataset.indexName
@@ -416,16 +423,17 @@
   // above) rather than sending it on every page load. The dedicated search
   // page still loads it straight away. Either way it's sent at most once per
   // page view, always through the unwrapped client, since its own query is
-  // deliberately empty. Until it resolves, collectComponentNames and
-  // buildRefinementPills already fall back to the unfiltered lists.
+  // deliberately empty. The header wrapper holds back the first results
+  // until this settles, so the first render already has it. Returns the same
+  // promise every time; it never rejects, so a failed lookup just leaves the
+  // unfiltered fallbacks in collectComponentNames and buildRefinementPills.
   var defaultVersionByComponent = {}
   var allVersionsByComponent = {}
   var defaultVersionsLoaded = false
-  var defaultVersionsRequested = false
+  var defaultVersionsPromise = null
   function loadDefaultVersions () {
-    if (defaultVersionsRequested) return
-    defaultVersionsRequested = true
-    algoliaClient.search([{
+    if (defaultVersionsPromise) return defaultVersionsPromise
+    defaultVersionsPromise = algoliaClient.search([{
       indexName: indexName,
       params: { query: '', facets: ['component_version'], hitsPerPage: 0, maxValuesPerFacet: 1000 },
     }]).then(function (response) {
@@ -445,7 +453,8 @@
       })
       allVersionsByComponent = versionsByComponent
       defaultVersionsLoaded = true
-    })
+    }).catch(function () {})
+    return defaultVersionsPromise
   }
   if (isFullPage) loadDefaultVersions()
 
